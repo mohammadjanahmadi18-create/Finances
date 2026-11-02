@@ -497,8 +497,9 @@ function normalize(obj){
   const k=pair[0],e=pair[1];if(!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(k)||!e||typeof e!=='object')return;
   const d=fromKey(k);if(isNaN(d.getTime())||dateKey(d)!==k||!validMoney(e.earned))return;
   const to=e.targetOverride;if(to!=null&&!validMoney(to,1000000))return;
-  const expenses=(Array.isArray(e.expenses)?e.expenses:[]).slice(0,100).filter(x=>x&&CATS.includes(x.category)&&validMoney(x.amount,1000000)).map(x=>({category:x.category,amount:round(x.amount),...(x.category==='Charging'&&validMoney(x.kwh,1000000)&&Number(x.kwh)>0?{kwh:round(x.kwh)}:{})}));
+  const expenses=(Array.isArray(e.expenses)?e.expenses:[]).slice(0,100).filter(x=>x&&CATS.includes(x.category)&&validMoney(x.amount,1000000)).map(x=>({category:x.category,amount:round(x.amount),...(x.category==='Charging'&&validMoney(x.kwh,1000000)&&Number(x.kwh)>0?{kwh:round(x.kwh)}:{}),...(x.category==='Other'&&x.dailySummary===true?{dailySummary:true}:{})}));
   out.entries[k]={earned:round(e.earned),targetOverride:to==null?null:round(to),expenses:expenses,note:String(e.note||'').slice(0,400)};
+  if(e.coverEarned!==undefined&&validMoney(e.coverEarned,10000000))out.entries[k].coverEarned=Math.min(round(e.earned),round(e.coverEarned));
  });
  return out;
 }
@@ -511,12 +512,15 @@ function dataFor(k){
  const e=entryFor(k),goal=targetFor(k),earned=e?e.earned:0,spent=e?round(e.expenses.reduce((n,x)=>n+x.amount,0)):0,net=round(earned-spent);
  const charge=e?round(e.expenses.filter(x=>x.category==='Charging').reduce((n,x)=>n+x.amount,0)):0;
  const kwh=e?round(e.expenses.filter(x=>x.category==='Charging').reduce((n,x)=>n+(x.kwh||0),0)):0;
- const extra=Math.max(0,round(earned-goal)),covered=Math.min(extra,spent),due=round(spent-covered);
+ const manual=!!e&&e.coverEarned!==undefined;
+ // Newly tracked days use designated extra earnings; older days retain automatic surplus recovery.
+ const extra=manual?e.coverEarned:Math.max(0,round(earned-goal));
+ const baseIncome=round(earned-extra),covered=Math.min(extra,spent),due=round(spent-covered);
  const chargeCovered=Math.min(charge,covered),chargeDue=round(charge-chargeCovered),gap=Math.max(0,round(goal-net));
  const secured=!!e&&goal>0&&net>=goal;
  const ratio=goal>0?earned/goal:1;let status='blank';
  if(e){if(goal===0)status='rest';else if(secured&&(state.settings.expenseBudget==null||spent<=state.settings.expenseBudget))status='hit';else if(earned>=goal||ratio>=.8)status='close';else status='miss';}
- return {key:k,date:fromKey(k),entry:e,goal,earned,spent,net,charge,kwh,extra,covered,due,chargeCovered,chargeDue,gap,secured,ratio,status,delta:round(earned-goal)};
+ return {key:k,date:fromKey(k),entry:e,goal,earned,spent,net,charge,kwh,baseIncome,manual,extra,covered,due,chargeCovered,chargeDue,gap,secured,ratio,status,delta:round(earned-goal)};
 }
 function monthDays(y,m){const count=new Date(y,m+1,0).getDate(),a=[];for(let d=1;d<=count;d++)a.push(dataFor(dateKey(new Date(y,m,d))));return a;}
 function monthInfo(y,m){
@@ -557,12 +561,12 @@ function showRecovery(d){
  $('recoverCosts').textContent=money2(d.spent);$('recoverCovered').textContent=money2(d.covered);$('recoverDue').textContent=money2(d.due);
  $('recover').classList.toggle('complete',d.spent>0&&d.due===0&&d.earned>=d.goal);
  $('recoverTitle').textContent=d.spent===0?'Keep your earnings.':d.due===0?'Costs recovered!':'Earn back your costs.';
- $('recoverSubtitle').textContent='Surplus beyond '+money(d.goal)+' gross target is applied to expenses.';
+ $('recoverSubtitle').textContent=d.manual?'Your extra income assigned to expenses is tracked separately.':'Surplus beyond '+money(d.goal)+' gross target is applied to expenses.';
  let message;
  if(!d.entry)message='Log earnings and expenses to start the recovery game.';
  else if(d.spent===0)message=d.secured?'Net target protected. No expenses to recover.':'No expenses recorded yet. Keep growing your earnings.';
  else if(d.due===0&&d.earned>=d.goal)message='🏆 You recovered all '+money2(d.spent)+' of today’s costs!'+(d.net>d.goal?' Bonus take-home above goal: '+money2(d.net-d.goal)+'.':' Net goal protected!');
- else if(d.extra===0)message=d.earned>=d.goal?'Gross goal reached. Earn '+money2(d.due)+' extra to recover the expenses.':'Earn '+money2(d.goal-d.earned)+' to reach gross target, then '+money2(d.spent)+' extra to cover costs.';
+ else if(d.extra===0)message=d.manual?'No extra income assigned to expenses yet. Record it in your daily check-in.':d.earned>=d.goal?'Gross goal reached. Earn '+money2(d.due)+' extra to recover the expenses.':'Earn '+money2(d.goal-d.earned)+' to reach gross target, then '+money2(d.spent)+' extra to cover costs.';
  else message='You have recovered '+money2(d.covered)+' with extra earnings. Just '+money2(d.gap)+' more protects your net target.';
  $('recoverText').textContent=message;$('recoverEmoji').textContent=d.due===0&&d.spent>0?'🏆':'🛡️';$('recoveryMission').textContent=d.secured?'＋ Bank another fare':d.gap>0?'＋ Next mission: earn '+money2(d.gap):'＋ Log more earnings';
 }
@@ -716,10 +720,10 @@ function fillSheet(){
  $('sheetSub').textContent=edit?'Everything for '+shortDate(d.date)+'.':expense?'Small costs matter. Keep the net honest.':'Every fare brings your target closer.';
  let s=dateInput();
  if(sheetType==='income'){
-  s+='<div class="segment"><button data-mode="add" class="'+(incomeMode==='add'?'selected':'')+'">+ Add a fare</button><button data-mode="total" class="'+(incomeMode==='total'?'selected':'')+'">Set day total</button></div>';
-  s+='<label for="sheetAmount">'+(incomeMode==='add'?'Fare amount':'Total earned today')+'</label><div class="money-input"><span>£</span><input id="sheetAmount" type="number" min="0" max="10000000" step=".01" placeholder="0.00" inputmode="decimal" value="'+(incomeMode==='total'?d.earned:'')+'"></div>';
+  s+='<div class="segment checkin-income-modes"><button data-mode="add" class="'+(incomeMode==='add'?'selected':'')+'">+ Add a fare</button><button data-mode="cover" class="'+(incomeMode==='cover'?'selected':'')+'">For expenses</button><button data-mode="total" class="'+(incomeMode==='total'?'selected':'')+'">Set total</button></div>';
+  s+='<label for="sheetAmount">'+(incomeMode==='add'?'Fare amount':incomeMode==='cover'?'Extra income for expenses':'Total earned today')+'</label><div class="money-input"><span>£</span><input id="sheetAmount" type="number" min="0" max="10000000" step=".01" placeholder="0.00" inputmode="decimal" value="'+(incomeMode==='total'?d.earned:'')+'"></div>';
   s+='<div class="amount-chips"><button data-amount="10">£10</button><button data-amount="20">£20</button><button data-amount="30">£30</button><button data-amount="50">£50</button><button data-amount="100">£100</button></div>';
-  s+='<p class="privacy">'+(incomeMode==='add'?'Current total '+money(d.earned)+' — this fare will be added to it.':'This replaces the earned amount for the selected day.')+'</p>';
+  s+='<p class="privacy">'+(incomeMode==='add'?'This fare adds to the current gross '+money2(d.earned)+'.':incomeMode==='cover'?'This must be extra income, NOT already entered. It adds to gross exactly once and is allocated to expenses.':'This replaces the entire gross total, including extra income, without duplicating earnings.')+'</p>';
  }else if(expense){
   s+='<label>What was it for?</label><div class="category-list">'+CATS.map(c=>'<button class="category-chip '+(selectedCat===c?'active':'')+'" data-cat="'+c+'"><span>'+EMOJI[c]+'</span>'+c+'</button>').join('')+'</div>';
   s+='<div class="charge-kwh" id="chargeKwhBlock"'+(selectedCat==='Charging'?'':' hidden')+'><label for="chargeKwh">Energy added (kWh) · optional</label><div class="money-input"><input id="chargeKwh" type="number" min="0" max="1000000" step=".01" inputmode="decimal" placeholder="e.g. 42.5"></div></div>';
@@ -727,7 +731,7 @@ function fillSheet(){
   s+='<div class="amount-chips"><button data-amount="5">£5</button><button data-amount="10">£10</button><button data-amount="15">£15</button><button data-amount="20">£20</button><button data-amount="30">£30</button></div>';
  }else{
   s+=sheetRecovery(d);
-  s+='<div class="editor-two"><div><label for="editEarned">Gross earned (£)</label><input id="editEarned" type="number" min="0" max="10000000" step=".01" inputmode="decimal" value="'+d.earned+'"></div><div><label for="editTarget">Daily goal (£)</label><input id="editTarget" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+d.goal+'"></div></div>';
+  s+='<div class="editor-two"><div><label for="editEarned">Gross earned incl. extra (£)</label><input id="editEarned" type="number" min="0" max="10000000" step=".01" inputmode="decimal" value="'+d.earned+'"></div><div><label for="editTarget">Daily goal (£)</label><input id="editTarget" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+d.goal+'"></div></div>';
   s+='<label for="editNote">Note (optional)</label><textarea id="editNote" maxlength="400" placeholder="A quick memory of today...">'+safe(d.entry?d.entry.note:'')+'</textarea>';
   s+='<label>Expenses</label><div id="existingExpenses">'+(d.entry&&d.entry.expenses.length?d.entry.expenses.map((e,i)=>'<div class="expense-line"><span>'+EMOJI[e.category]+' '+e.category+(e.kwh?' · '+e.kwh+' kWh':'')+'</span><b>'+money2(e.amount)+'</b><button class="remove" data-remove="'+i+'" aria-label="Remove expense '+safe(e.category)+'">×</button></div>').join(''):'<p class="sub">No expenses logged.</p>')+'</div>';
   s+='<button class="secondary-btn" id="addExpenseFromEdit" type="button" style="margin-top:12px">+ Add an expense</button>';
@@ -742,12 +746,12 @@ function saveSheet(){
  if(sheetType==='edit'){
   const gross=$('editEarned').value,goal=$('editTarget').value;
   if(!validMoney(gross)||!validMoney(goal,1000000)){toast('Enter valid non-negative amounts.');return;}
-  const e=ensureEntry(k);e.earned=round(gross);e.targetOverride=round(goal)===state.settings.weekdayTargets[weekday(fromKey(k))]?null:round(goal);e.note=$('editNote').value.trim().slice(0,400);
+  const e=ensureEntry(k);e.earned=round(gross);if(e.coverEarned!==undefined)e.coverEarned=Math.min(e.coverEarned,e.earned);e.targetOverride=round(goal)===state.settings.weekdayTargets[weekday(fromKey(k))]?null:round(goal);e.note=$('editNote').value.trim().slice(0,400);
  }else{
   const field=$('sheetAmount');if(!field||!validMoney(field.value,sheetType==='income'?10000000:1000000)){toast('Enter a valid amount.');return;}
   if(sheetType==='expense'&&value<=0){toast('Enter an expense greater than £0.');return;}
   const e=ensureEntry(k);
-  if(sheetType==='income'){const next=incomeMode==='add'?round(e.earned+value):round(value);if(!validMoney(next)){toast('Income exceeds the maximum amount.');return;}e.earned=next;}
+  if(sheetType==='income'){const next=incomeMode==='total'?round(value):round(e.earned+value);if(!validMoney(next)){toast('Income exceeds the maximum amount.');return;}if(incomeMode==='cover')e.coverEarned=round(Math.min(next,(e.coverEarned===undefined?Math.max(0,e.earned-targetFor(k)):e.coverEarned)+value));else if(e.coverEarned!==undefined&&next<e.coverEarned)e.coverEarned=next;e.earned=next;}
   else{if(e.expenses.length>=100){toast('Expense limit for this day reached.');return;}const k=$('chargeKwh'),kv=k?k.value.trim():'';if(selectedCat==='Charging'&&kv!==''&&!validMoney(kv,1000000)){toast('Invalid energy value.');return;}e.expenses.push({category:selectedCat,amount:round(value),...(selectedCat==='Charging'&&kv!==''&&Number(kv)>0?{kwh:round(kv)}:{})});}
  }
  if(!persist())return;
