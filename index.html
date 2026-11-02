@@ -591,24 +591,19 @@ function showMiniLevel(score){
  $('miniXpFill').style.width=(score.xp%500/500*100)+'%';
 }
 function renderMissions(d){
- const gross=d.entry&&d.goal>0&&d.earned>=d.goal;
- const charge=d.entry&&d.charge>0&&d.chargeDue===0&&d.earned>=d.goal;
- const net=d.entry&&d.secured;
- const all=[{
-  done:gross,icon:'🎯',title:gross?'Gross target reached':'Hit your gross target',
-  desc:gross?'Your gross earnings have reached '+money2(d.goal)+'.':'Earn '+money2(Math.max(0,d.goal-d.earned))+' to hit '+money2(d.goal)+'.',
-  action:'income'
- },{
-  done:charge,icon:'⚡',title:charge?'EV cost recovered':'Charge recovery',
-  desc:d.charge>0?(charge?'Your charging expense is covered by extras.':money2(d.chargeDue)+' more beyond your gross target would cover charging.'):'No charge logged yet. Log a charge only when you actually spend.',
-  action:d.charge>0?'income':'expense',charging:d.charge===0
- },{
-  done:net,icon:'🛡️',title:net?'Your net goal is protected':'Protect your net goal',
-  desc:net?'Your take-home is at least '+money2(d.goal)+'.':'Earn '+money2(d.gap)+' more to reach your take-home target.',
-  action:'income'
- }];
- $('missionCount').textContent=all.filter(x=>x.done).length+' / 3 done';
- $('missionList').innerHTML=all.map(x=>'<button class="mission-item '+(x.done?'done':'current')+'" '+(x.done?'data-go="wins"':'data-open="'+x.action+'"'+(x.charging?' data-charge="true"':''))+'><span class="mission-symbol">'+x.icon+'</span><span class="mission-copy"><b>'+safe(x.title)+'</b><small>'+safe(x.desc)+'</small></span><span class="mission-arrow">'+(x.done?'✓':'›')+'</span></button>').join('');
+ const logged=!!d.entry,gross=logged&&d.goal>0&&d.earned>=d.goal,net=logged&&d.secured,hasCharge=d.charge>0;
+ const all=[
+ {done:logged,icon:'✍️',title:logged?'Day recorded':'Start the day',
+  desc:logged?'Your first entry is in the books.':'Log one real income entry to start earning progress.',action:'income'},
+ {done:gross,icon:'🎯',title:gross?'Gross target reached':'Reach your gross goal',
+  desc:gross?'You have hit '+money2(d.goal)+' in gross earnings.':money2(Math.max(0,d.goal-d.earned))+' until your '+money2(d.goal)+' gross goal.',action:'income'},
+ ...(hasCharge?[{done:logged&&d.chargeDue===0&&d.earned>=d.goal,icon:'⚡',title:d.chargeDue===0&&d.earned>=d.goal?'EV charging recovered':'Recover EV charging',
+  desc:d.chargeDue===0&&d.earned>=d.goal?'Extra earnings covered '+money2(d.charge)+' in charging.':'Another '+money2(d.chargeDue)+' in earnings above the gross target covers charging.',action:'income'}]:[]),
+ {done:net,icon:'🛡️',title:net?'Net goal protected':'Protect your take-home goal',
+  desc:net?'Take-home is at least '+money2(d.goal)+' — goal protected.':money2(d.gap)+' more earnings to protect your net target.',action:'income'}
+ ];
+ $('missionCount').textContent=all.filter(x=>x.done).length+' / '+all.length+' done';
+ $('missionList').innerHTML=all.map(x=>'<button class="mission-item '+(x.done?'done':'current')+'" '+(x.done?'data-go="wins"':'data-open="'+x.action+'"')+'><span class="mission-symbol">'+x.icon+'</span><span class="mission-copy"><b>'+safe(x.title)+'</b><small>'+safe(x.desc)+'</small></span><span class="mission-arrow">'+(x.done?'✓':'›')+'</span></button>').join('');
 }
 function renderFarePreview(){
  const d=dataFor(currentKey()),fare=forecastFare,possibleNet=round(d.net+fare),remaining=Math.max(0,round(d.goal-possibleNet));
@@ -630,7 +625,7 @@ function renderHome(){
  const now=today(),d=dataFor(currentKey()),s=scores();showMiniLevel(s);renderMissions(d);renderFarePreview();
  $('homeDate').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
  const hour=now.getHours(),greeting=hour<12?'Good morning.':hour<17?'Good afternoon.':'Good evening.';
- $('greeting').textContent=greeting;
+ $('greeting').textContent=d.secured?'You owned today.':d.entry&&d.earned>=d.goal?'One more fare. One more win.':d.entry?'Build your momentum.':greeting;
  $('heroEarned').textContent=money(d.earned);$('heroTarget').textContent=money(d.goal);$('heroLeft').textContent=money2(d.gap);
  $('heroNet').textContent=money(d.net);
  const pct=d.goal?Math.round(d.earned/d.goal*100):100;
