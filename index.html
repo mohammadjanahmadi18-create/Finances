@@ -437,7 +437,7 @@ function changeMonth(delta){viewDate=new Date(viewDate.getFullYear(),viewDate.ge
 function closeSheet(){$('overlay').classList.remove('open');document.body.style.overflow='';sheetType='';}
 function showSheet(type,key){
  sheetType=type;sheetDay=key||currentKey();incomeMode='add';selectedCat='Charging';
- $('overlay').classList.add('open');document.body.style.overflow='hidden';fillSheet();setTimeout(()=>{const el=$('sheetBody input[type=number]');if(el)el.focus();},180);
+ $('overlay').classList.add('open');document.body.style.overflow='hidden';fillSheet();setTimeout(()=>{const el=document.querySelector('#sheetBody input[type=number]');if(el)el.focus();},180);
 }
 function dateInput(){return '<label for="sheetDate">Date</label><input id="sheetDate" class="input-date" type="date" value="'+sheetDay+'" min="2000-01-01" max="2099-12-31">';}
 function fillSheet(){
