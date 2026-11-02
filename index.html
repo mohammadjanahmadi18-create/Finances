@@ -415,14 +415,14 @@ function renderWins(){
  $('levelNumber').textContent=String(lvl).padStart(2,'0');$('levelName').textContent=names[Math.min(names.length-1,lvl-1)];
  $('levelXp').textContent=sc.xp+' XP earned';$('nextXp').textContent=(500-sc.xp%500)+' XP to level '+(lvl+1);
  $('levelProgress').style.width=sc.xp%500/500*100+'%';$('winStreak').textContent=sc.streak+' 🔥';$('winBest').textContent=sc.best+' days';$('winCount').textContent=sc.hits;
- const thisMonth=monthInfo(today().getFullYear(),today().getMonth()),all=allData(),bigDay=all.some(d=>d.earned>=300),wk=startOfWeek(today());let weekGross=0;for(let i=0;i<7;i++){const x=new Date(wk);x.setDate(wk.getDate()+i);weekGross+=dataFor(dateKey(x)).earned;}
+ const all=allData(),bigDay=all.some(d=>d.earned>=300),weeklyGross={};all.forEach(d=>{const k=dateKey(startOfWeek(d.date));weeklyGross[k]=(weeklyGross[k]||0)+d.earned;});const powerWeek=Object.values(weeklyGross).some(n=>n>=1500);
  const badges=[
  ['🌱','First Step','Log your first day',sc.logged>=1],
  ['🎯','Target Hunter','Hit your goal 3 times',sc.hits>=3],
  ['🔥','On Fire','A 3-day goal streak',sc.best>=3],
  ['⚡','Power Driver','Earn £300 in a day',bigDay],
  ['👑','Weekend Warrior','Hit a Fri, Sat or Sun target',all.some(d=>isHit(d)&&weekday(d.date)>=4)],
- ['💸','Money Machine','Earn £1,500 in one week',weekGross>=1500],
+ ['💸','Money Machine','Earn £1,500 in one week',powerWeek],
  ['💎','Perfect Ten','Hit 10 daily targets',sc.hits>=10],
  ['🏅','Monthly Champion','Hit 20 goals in one month',(()=>{const m={};all.filter(isHit).forEach(d=>{const k=d.key.slice(0,7);m[k]=(m[k]||0)+1;});return Object.values(m).some(n=>n>=20);})()]
  ];
@@ -466,7 +466,7 @@ function fillSheet(){
 }
 function updateSheetDate(k){if(!/^\d{4}-\d{2}-\d{2}$/.test(k)||dateKey(fromKey(k))!==k){toast('Choose a valid date.');return;}sheetDay=k;fillSheet();}
 function saveSheet(){
- const k=sheetDay,before=dataFor(k),value=Number(($('sheetAmount')||{}).value);
+ const saveType=sheetType,k=sheetDay,before=dataFor(k),value=Number(($('sheetAmount')||{}).value);
  if(sheetType==='edit'){
   const gross=$('editEarned').value,goal=$('editTarget').value;
   if(!validMoney(gross)||!validMoney(goal,1000000)){toast('Enter valid non-negative amounts.');return;}
@@ -481,7 +481,7 @@ function saveSheet(){
  if(!persist())return;
  const after=dataFor(k);closeSheet();render();
  if(before.status!=='hit'&&after.status==='hit'){celebrate();toast('🏆 Target achieved. What a win!');}
- else{toast(sheetType==='expense'?'Expense saved.':'Saved! Your numbers are up to date.');}
+ else{toast(saveType==='expense'?'Expense saved.':'Saved! Your numbers are up to date.');}
  if(navigator.vibrate)navigator.vibrate(15);
 }
 function removeExpense(idx){const e=entryFor(sheetDay);if(!e||!e.expenses[idx])return;e.expenses.splice(idx,1);if(persist()){fillSheet();render();toast('Expense removed.');}}
