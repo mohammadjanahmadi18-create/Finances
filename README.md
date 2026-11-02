@@ -16,6 +16,12 @@ A premium green, orange and white personal driving-income tracker featuring Expe
 
 **November 2026 total: £6,310** (gross income target; expenses are deducted to determine net income).
 
+## Finances 2.2 — Premium money cockpit, with 2.1 financial logic retained
+
+Finances now has a brighter, more animated mobile cockpit: a dual gross/net progress dial, a focused level/XP rail, honest daily mission tiles, a one-tap income button in the main hero, and an interactive **Next Fare** simulator.
+
+The simulator offers +£10, +£20, +£30 and +£50 examples showing projected net and net-goal gap, but **does not record anything** unless you explicitly press the “Log after earning it” action and save the entry. Rewards are for real logged progress: no achievement requires spending money on a charge. An EV recovery mission appears only when actual charging expenses are recorded.
+
 ## Finances 2.1 — Expense Recovery and EV charging
 
 **Two targets, one clear picture.** The gross baseline is what you planned to earn. Your net goal is protected only when earnings minus recorded expenses reaches that same baseline. Hitting the gross number alone does not mean your expenses are covered.
