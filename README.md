@@ -16,6 +16,16 @@ A premium green, orange and white personal driving-income tracker featuring Expe
 
 **November 2026 total: £6,310** (gross income target; expenses are deducted to determine net income).
 
+## Finances 2.3 — Daily check-in and champagne-gold theme
+
+The home screen now includes a three-number **Daily money check-in**, in addition to the daily target: **base daily income**, **total expenses** and **extra earnings earmarked for expenses**. The extra amount is **new real income not already included in base income**, and is included in gross earnings once. Example: a £160 daily target, £160 base income, £50 total expenses and £40 extra earned for expenses produce **£200 gross, £150 net, £40 costs covered, £10 still to cover**, and £10 more required to protect the net goal.
+
+When a day uses this manual check-in, **expenses covered = min(total expenses, extra earnings earmarked)**. This tracks the user's allocation of new income towards their costs, not a refund or cancellation of actual expenses. Days created in earlier versions retain their legacy automatic surplus recovery until edited.
+
+Existing charging/food/other itemised expenses are never removed by the daily total field: any remainder of the declared expense total is recorded as an **Other** summary expense. A total lower than already itemised costs is rejected with an explanation, so users can edit individual costs first. Repeated saves update the summary amount instead of duplicating it. Previously saved local data and JSON exports remain compatible.
+
+The income sheet has a **For expenses** mode for additional real fares earmarked for expenses. The day editor lets the user change this allocation without double counting; CSV exports now show base income, extra earnings, expenses recovered and costs outstanding. The interface now uses muted champagne-gold rather than sharp orange.
+
 ## Finances 2.2 — Premium money cockpit, with 2.1 financial logic retained
 
 Finances now has a brighter, more animated mobile cockpit: a dual gross/net progress dial, a focused level/XP rail, honest daily mission tiles, a one-tap income button in the main hero, and an interactive **Next Fare** simulator.
