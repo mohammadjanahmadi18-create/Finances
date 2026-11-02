@@ -418,6 +418,151 @@ body{background:radial-gradient(ellipse 480px 450px at 90% -140px,#eee8d3,transp
 .achievement:not(.locked) .emoji{background:linear-gradient(132deg,#f9eed1,#e5c593)}
 .recover-track span{background:linear-gradient(90deg,#267b55,#68b68b)}
 
+
+/* FINANCES 2.4 — metallic atelier, tactile gloss and performance calendar */
+:root{
+ --metal-gold:#d8b673;--metal-gold-light:#fbecc3;--metal-gold-dark:#91632e;
+ --polished-white:#fffefb;--mint:#2c9067;--bronze:#ab7b47;
+ --rose:#be565f;--blue-steel:#657d93;
+}
+body{background:
+ radial-gradient(ellipse 520px 470px at 84% -140px,#edecd8 0%,transparent 84%),
+ radial-gradient(ellipse 420px 400px at -140px 400px,#f3e7d0 0%,transparent 85%),
+ linear-gradient(160deg,#f6f8f2,#f5f8f0 58%,#f8f5ec)}
+/* Tiny, angled reflective highlights bring the satin-metal quality without flicker. */
+.top .logo,.date-bubble,.hero,.calendar,.card,.metric,.level-card,.charge-card,.recover,.daily-checkin,
+.nextfare,.mission-board,.settings-card,.achievement,.xp-mini,.signal,.summary3>div{position:relative;isolation:isolate}
+.date-bubble,.calendar,.card,.metric,.recover,.daily-checkin,.nextfare,.mission-board,
+.settings-card,.achievement,.xp-mini,.signal,.summary3>div{
+ background-image:linear-gradient(139deg,#ffffffec 0%,#fffefaef 38%,#f3f8f1 100%);
+ border:1px solid #e0e8db;
+ box-shadow:inset 0 1.5px 0 #fff,0 9px 17px #163b2610,0 22px 40px #1e593008;
+}
+.hero,.charge-card,.level-card{
+ box-shadow:inset 0 1px 0 #ffffff69,inset 0 -1px 0 #071a132c,0 10px 18px #083d292b,0 24px 42px #103c292b;
+}
+.hero:before{background:radial-gradient(ellipse at 25% 18%,#ffffff27 0%,transparent 68%);opacity:.8}
+.hero-booster,.quick button,.checkin-submit,.forecast-save,.action-btn,.primary-save,.recovery-mission,
+.charge-head button,.nav,.day-chip,.cal-cell,.arrow,.mini-action,.mission-item,.forecast-choices button{
+ -webkit-tap-highlight-color:transparent;
+ transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .18s,border-color .18s,filter .18s,background .18s;
+}
+.hero-booster,.quick .earn{
+ background:linear-gradient(152deg,#fff4d7 0%,#f1dab0 24%,#d9b473 55%,#f0d6a1 82%,#c7a16b 100%);
+ border:1px solid #d7b479;
+ box-shadow:inset 0 2px 0 #ffffffc5,inset 0 -2px 0 #9a764250,0 6px 10px #84633f2c,0 14px 24px #75634018;
+ color:#583f23;
+}
+.hero-booster:active,.quick button:active,.checkin-submit:active,.forecast-save:active,
+.action-btn:active,.primary-save:active,.recovery-mission:active,.arrow:active,.mission-item:active,
+.cal-cell:active,.day-chip:active{transform:translateY(2px) scale(.977);filter:brightness(.97);box-shadow:inset 0 2px 7px #183e2619,0 2px 7px #315a291b}
+.quick .spend,.arrow,.secondary-btn{
+ background:linear-gradient(145deg,#ffffff,#f6f8f3 80%,#eaf1e6);
+ box-shadow:inset 0 2px 0 #fff,0 6px 14px #19462415;
+ border:1px solid #dce8da;
+}
+.hero .hero-metrics{background:linear-gradient(140deg,#ffffff1b,#ffffff07);box-shadow:inset 0 1px #ffffff2b}
+.ring-active{stroke:#e7cd99;filter:drop-shadow(0 0 5px #ffda8b9c)}
+.level-card:after{color:#f7dba021}
+.level-name{color:#f5d49f}
+.xp-medal{background:linear-gradient(144deg,#fffbea,#e9cc9c 58%,#b99965)}
+.xp-line i,.track span,.forecast-choices button.selected{background:linear-gradient(92deg,#ba9056,#edcc90,#e3b46d)}
+.xp-line i,.track span{box-shadow:0 0 8px #e7c68578}
+.forecast-choices button.selected{color:#4b351c;border-color:#c9a470;box-shadow:inset 0 1px 0 #fff9,0 6px 12px #a88b6240}
+.recover-track span{background:linear-gradient(90deg,#1c7c58,#5bb77e,#9ae0aa)}
+.mission-item.done .mission-symbol{box-shadow:inset 0 2px 2px #ffffffa9}
+.daily-checkin .checkin-field:focus-within{border-color:#bd9f68;box-shadow:0 0 0 3px #ead6a483}
+.bottom{background:linear-gradient(156deg,#fffffffa,#fffef6f6);border-top:1px solid #e0e6d9;box-shadow:0 -10px 30px #1c503010}
+.nav.active{background:linear-gradient(148deg,#eff9e9,#f0e3c9);box-shadow:inset 0 1px #fff,0 3px 7px #60734818}
+/* Full-width calendar header + high information density without cramped targets. */
+.calendar{border-radius:27px;padding:16px 11px 14px;overflow:hidden;background:linear-gradient(145deg,#fffefa,#f7faf5)}
+.calendar::before{content:"";position:absolute;top:0;left:18px;right:18px;height:1px;background:linear-gradient(90deg,transparent,#e8cc91,transparent);pointer-events:none}
+.calendar-grid{gap:6px}
+.cal-dow{font-size:10px;font-weight:900;letter-spacing:.5px;color:#72917e;padding:9px 0 13px}
+.cal-cell{
+ position:relative;isolation:isolate;
+ min-height:78px;display:flex;flex-direction:column;align-items:stretch;
+ justify-content:space-between;gap:6px;text-align:left;
+ padding:7px 5px 8px;border-radius:13px;
+ border:1px solid var(--tile-stroke,#e1e9de);
+ background:var(--tile-bg,linear-gradient(150deg,#fefefe,#f1f5f0));
+ color:var(--tile-ink,#748a7b);
+ box-shadow:inset 0 1px 0 #ffffffb8,0 3px 7px #12382010,0 7px 15px #13392009;
+ overflow:hidden;
+}
+.cal-cell::before{
+ content:"";position:absolute;left:0;right:0;top:0;height:48%;pointer-events:none;
+ background:linear-gradient(154deg,#ffffff75 0%,#ffffff20 58%,transparent 70%);
+ border-radius:inherit;
+ opacity:.84;
+}
+.cal-cell::after{content:"";position:absolute;inset:-110% auto auto -75%;width:58%;height:280%;background:linear-gradient(90deg,transparent,#ffffff9c,transparent);transform:rotate(23deg);opacity:0;pointer-events:none}
+.cal-cell:active::after{opacity:.8;animation:calGleam .4s ease-out both}
+.cal-cell:focus-visible{outline:2px solid #245c48;outline-offset:2px}
+@keyframes calGleam{from{left:-75%}to{left:125%}}
+.cal-cell .cal-top{display:flex;justify-content:space-between;align-items:center;gap:1px;position:relative;z-index:1}
+.cal-cell .cal-num{font-size:12px;font-weight:950;color:inherit;line-height:1}
+.cal-cell .cal-mark{font-size:10px;font-weight:900;line-height:1}
+.cal-cell .cal-money{font-size:10px;font-weight:900;letter-spacing:-.55px;white-space:nowrap;position:relative;z-index:1;text-align:center;overflow:hidden;text-overflow:clip}
+.cal-cell .cal-label{font-size:8px;font-weight:850;letter-spacing:.05px;line-height:1.1;position:relative;z-index:1;text-align:center}
+.cal-cell .cal-progress{height:3px;border-radius:10px;background:#ffffff73;overflow:hidden;position:relative;z-index:1}
+.cal-cell .cal-progress i{height:100%;width:0;display:block;border-radius:10px;background:var(--tile-accent,#9bb09d);box-shadow:0 0 6px var(--tile-accent,#9bb09d)}
+.cal-cell.gold{
+ --tile-bg:linear-gradient(155deg,#fff3c5 0%,#edcb83 43%,#c59a51 78%,#f9e0a5 100%);
+ --tile-stroke:#b88a43;--tile-ink:#634319;--tile-accent:#815b23;
+ box-shadow:inset 0 2px 1px #fff8,inset 0 -2px 1px #966b2a55,0 5px 11px #b1904a43;
+}
+.cal-cell.gold .cal-mark{color:#76501e;text-shadow:0 1px #fff5}
+.cal-cell.green{
+ --tile-bg:linear-gradient(153deg,#def7e6,#8fd4ab 42%,#3f956d 100%);
+ --tile-stroke:#4b9d71;--tile-ink:#115135;--tile-accent:#17603d;
+}
+.cal-cell.champagne{
+ --tile-bg:linear-gradient(155deg,#fffbef,#f2e4c8 57%,#dfc99c);
+ --tile-stroke:#d9c399;--tile-ink:#78613d;--tile-accent:#b49b69;
+}
+.cal-cell.bronze{
+ --tile-bg:linear-gradient(150deg,#f5e4ce,#d5ae81 58%,#ba885d);
+ --tile-stroke:#b88961;--tile-ink:#71451e;--tile-accent:#986637;
+}
+.cal-cell.red{
+ --tile-bg:linear-gradient(150deg,#fff0ee,#efc4c1 57%,#da9294);
+ --tile-stroke:#db9d9e;--tile-ink:#913c44;--tile-accent:#b9545e;
+}
+.cal-cell.steel{
+ --tile-bg:linear-gradient(152deg,#f1f5f9,#d8e2eb 52%,#afc1d0);
+ --tile-stroke:#b3c6d5;--tile-ink:#4f687b;--tile-accent:#698aa0;
+}
+.cal-cell.unlogged,.cal-cell.rest{
+ --tile-bg:linear-gradient(155deg,#ffffff,#eef2ec);
+ --tile-stroke:#e2e8e0;--tile-ink:#9aa99d;--tile-accent:#c8d7c8;
+}
+.cal-cell.today{outline:2px solid #e0be83;outline-offset:2px}
+.cal-cell.today .cal-num:after{content:"";display:inline-block;width:3px;height:3px;background:currentColor;border-radius:50%;margin-left:2px;vertical-align:middle}
+.cal-cell.future:not(.gold):not(.green):not(.champagne):not(.bronze):not(.red):not(.steel){opacity:.7}
+.cal-cell.blank{border:0;visibility:hidden}
+.cal-cell:hover{filter:brightness(1.025)}
+.calendar .legend{margin:17px 0 1px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;justify-content:stretch}
+.calendar .legend span{font-size:10px;font-weight:650;color:#647f69;display:flex;align-items:center;gap:7px;line-height:1.35}
+.calendar .legend i{width:12px;height:12px;flex:none;border-radius:4px;border:1px solid #00000014;box-shadow:inset 0 1px #fff9,0 1px 2px #00000012;margin:0}
+.cal-summary{margin:15px 0 3px;padding:12px 13px;border-radius:17px;background:linear-gradient(120deg,#f7f8f0,#f6f2e5);border:1px solid #e9e4d6}
+.cal-summary-main{font-size:12px;color:#426148;font-weight:800;line-height:1.5}
+.cal-summary-sub{font-size:10px;color:#829483;margin-top:5px}
+.cal-summary strong{color:#85612d}
+.cal-performance{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.cal-performance span{padding:8px 11px;border-radius:99px;font-size:10px;font-weight:800;background:#fffefa;border:1px solid #e5e9df;color:#536c55;box-shadow:inset 0 1px #fff,0 3px 8px #2046220c}
+.cal-performance b{color:#23593c}
+.cal-performance .gold-count{background:linear-gradient(140deg,#fff7df,#f2deab);border-color:#e4d09d;color:#7c5928}
+.cal-performance .gold-count b{color:#91632e}
+@media(max-width:410px){
+ .calendar-grid{gap:4px}.calendar{padding:13px 8px 12px}
+ .cal-cell{min-height:73px;padding:7px 2px 7px;border-radius:11px}
+ .cal-cell .cal-num{font-size:11px}.cal-cell .cal-money{font-size:9px}
+ .cal-cell .cal-label{font-size:7px;letter-spacing:-.15px}
+}
+@media(min-width:470px){.cal-cell{min-height:86px;padding:9px 7px}.cal-cell .cal-money{font-size:11px}.cal-cell .cal-label{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.cal-cell::after{animation:none!important}.cal-cell{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -499,7 +644,15 @@ body{background:radial-gradient(ellipse 480px 450px at 90% -140px,#eee8d3,transp
   <div class="page-top"><div class="kicker">YOUR JOURNEY</div><h1 class="title">The daily ledger.</h1><p class="sub">Tap any date to view or update that day.</p></div>
   <div class="period-switch"><h2 id="calMonth">November 2026</h2><div class="arrows"><button class="arrow" data-month="-1" aria-label="Previous month">‹</button><button class="arrow" data-month="1" aria-label="Next month">›</button></div></div>
   <div class="summary3"><div><small>Gross</small><b id="calGross">£0</b></div><div><small>Expenses</small><b id="calSpent">£0</b></div><div><small>Net</small><b id="calNet">£0</b></div></div>
-  <div class="calendar"><div class="calendar-grid" id="calGrid"></div><div class="legend"><span><i style="background:#4aa471"></i>Hit goal</span><span><i style="background:#eab05c"></i>Close</span><span><i style="background:#dd867e"></i>Behind</span><span><i style="background:#dce5dc"></i>Unlogged</span></div></div>
+  <div class="calendar"><div class="calendar-grid" id="calGrid"></div><div class="cal-summary" id="calMessage" role="status"></div><div class="legend" aria-label="Calendar performance legend">
+  <span><i style="background:linear-gradient(145deg,#fff0bf,#d4a85c 70%,#b98b46)"></i><b>Gold:</b> net target + costs covered</span>
+  <span><i style="background:linear-gradient(145deg,#def6e5,#75bf92)"></i><b>Green:</b> gross goal hit, costs remaining</span>
+  <span><i style="background:linear-gradient(145deg,#fffaf0,#e2c99e)"></i><b>Champagne:</b> 80–99% of gross goal</span>
+  <span><i style="background:linear-gradient(145deg,#f6e3c6,#c18e5f)"></i><b>Bronze:</b> 70–79% of gross goal</span>
+  <span><i style="background:linear-gradient(145deg,#ffe7e5,#df9b9d)"></i><b>Red:</b> below 70%</span>
+  <span><i style="background:linear-gradient(145deg,#e8eff4,#b2c5d5)"></i><b>Blue-grey:</b> expense only</span>
+  <span><i style="background:linear-gradient(145deg,#fff,#e8eee7)"></i><b>Grey:</b> no entry / rest day</span>
+ </div></div><div id="calPerformance" class="cal-performance" aria-label="Monthly performance colour totals"></div>
   <div class="section-head"><h2>Monthly checkpoint</h2></div><div class="card" id="calBreakdown"></div><div class="section-head"><h2>⚡ EV charging this month</h2></div><div class="charge-card" id="calendarEv"></div>
 </section>
 <section class="page" id="stats">
@@ -787,17 +940,47 @@ function renderHome(){
  const recent=allData().slice().reverse().slice(0,4);
  $('recent').innerHTML=recent.length?recent.map(x=>'<button class="recent-item" data-edit="'+x.key+'"><span><strong>'+safe(shortDate(x.date))+'</strong><small>Gross '+money(x.earned)+' · Costs '+money(x.spent)+'</small></span><span><b>'+money(x.net)+'</b><em class="'+(x.delta>=0?'pos':'neg')+'">'+(x.delta>=0?'+':'−')+money(Math.abs(x.delta))+' vs target</em></span></button>').join(''):'<div class="empty"><span>🌱</span>No entries yet. Tap Add income and start your first day.</div>';
 }
+
+function calendarTier(d){
+ // Colours always reflect the recorded day's real income and costs, never an artificial bonus.
+ if(!d.entry)return {id:'unlogged',label:'Not logged',mark:'·',short:'—',progress:0};
+ if(d.goal===0)return {id:'rest',label:'Rest',mark:'○',short:'Rest',progress:0};
+ if(d.earned<=0&&d.spent>0)return {id:'steel',label:'Expense only',mark:'−',short:'Costs',progress:0};
+ const pct=d.goal>0?Math.max(0,100*d.earned/d.goal):0;
+ const capOK=state.settings.expenseBudget==null||d.spent<=state.settings.expenseBudget;
+ if(d.secured&&d.due===0&&capOK)return {id:'gold',label:'Net protected and costs covered',mark:'✦',short:'GOLD',progress:100};
+ if(d.earned>=d.goal)return {id:'green',label:d.secured?'Gross achieved; some costs not allocated':'Gross achieved; net still below target',mark:'✓',short:'Hit gross',progress:100};
+ if(pct>=80)return {id:'champagne',label:'80–99% of gross goal',mark:'↗',short:Math.floor(pct)+'%',progress:Math.min(100,pct)};
+ if(pct>=70)return {id:'bronze',label:'70–79% of gross goal',mark:'↗',short:Math.floor(pct)+'%',progress:pct};
+ return {id:'red',label:'Below 70% of gross goal',mark:'!',short:Math.floor(pct)+'%',progress:pct};
+}
 function renderCalendar(){
- const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m);$('calMonth').textContent=monthTitle();$('calGross').textContent=money(s.gross);$('calSpent').textContent=money(s.spent);$('calNet').textContent=money(s.net);
- const headings=['M','T','W','T','F','S','S'].map(x=>'<div class="cal-dow">'+x+'</div>');
- const start=weekday(new Date(y,m,1));for(let i=0;i<start;i++)headings.push('<div class="cal-cell blank"></div>');
- s.days.forEach(d=>{const label=shortDate(d.date)+' earned '+money(d.earned)+' target '+money(d.goal);headings.push('<button class="cal-cell '+(d.key===currentKey()?'today ':'')+(d.key>currentKey()?'future ':'')+d.status+'" data-edit="'+d.key+'" aria-label="'+safe(label)+'"><b>'+d.date.getDate()+'</b><small>'+(d.entry?money(d.earned):'·')+'</small></button>');});
- $('calGrid').innerHTML=headings.join('');
- const remaining=s.days.filter(d=>d.key>=currentKey()).length,needed=remaining?Math.max(0,(s.goal-s.net)/remaining):0;
- $('calBreakdown').innerHTML=
- '<div class="mini-breakdown"><div><span>Gross target baseline</span><b>'+money(s.goal)+'</b></div><div><span>Monthly net vs goal</span><b class="'+(s.net>=s.goal?'pos':'neg')+'">'+money2(s.net-s.goal)+'</b></div><div><span>Expenses recovered via extra earnings</span><b>'+money2(s.covered)+'</b></div><div><span>Gross versus target</span><b class="'+(s.gross>=s.goal?'pos':'warning')+'">'+(s.gross>=s.goal?'+':'−')+money(Math.abs(s.gross-s.goal))+'</b></div><div><span>Days logged</span><b>'+s.logged+' / '+s.days.length+'</b></div><div><span>Targets achieved</span><b>'+s.hits+' days</b></div><div><span>Average needed per remaining day</span><b>'+money(needed)+'</b></div></div>';
+ const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m);
+ $('calMonth').textContent=monthTitle();
+ $('calGross').textContent=money(s.gross);$('calSpent').textContent=money(s.spent);$('calNet').textContent=money(s.net);
+ const heads=['M','T','W','T','F','S','S'].map(x=>'<div class="cal-dow">'+x+'</div>');
+ const start=weekday(new Date(y,m,1));
+ for(let i=0;i<start;i++)heads.push('<div class="cal-cell blank" aria-hidden="true"></div>');
+ const counts={gold:0,green:0,champagne:0,bronze:0,red:0,steel:0,unlogged:0,rest:0};
+ s.days.forEach(d=>{
+  const tier=calendarTier(d);counts[tier.id]=(counts[tier.id]||0)+1;
+  const accessible=shortDate(d.date)+': '+tier.label+'. Gross '+money2(d.earned)+', target '+money2(d.goal)+', net '+money2(d.net)+', expenses '+money2(d.spent)+', costs still to recover '+money2(d.due)+'. Tap to edit.';
+  heads.push('<button class="cal-cell '+tier.id+' '+(d.key===currentKey()?'today ':'')+(d.key>currentKey()?'future':'')+'" type="button" data-edit="'+d.key+'" aria-label="'+safe(accessible)+'" title="'+safe(tier.label)+'">'+
+   '<span class="cal-top"><b class="cal-num">'+d.date.getDate()+'</b><span class="cal-mark" aria-hidden="true">'+tier.mark+'</span></span>'+
+   '<span class="cal-money">'+(d.entry?money(d.net):'—')+'</span>'+
+   '<span class="cal-label">'+tier.short+'</span>'+
+   '<span class="cal-progress" aria-hidden="true"><i style="width:'+Math.max(0,Math.min(100,Math.round(tier.progress)))+'%"></i></span></button>');
+ });
+ $('calGrid').innerHTML=heads.join('');
+ const gold=counts.gold,amber=counts.champagne+counts.bronze,risky=counts.red+counts.steel;
+ $('calMessage').innerHTML='<div class="cal-summary-main">'+(s.logged===0?'Your calendar is ready. Every saved day gets its own colour.':gold?'✦ <strong>'+gold+' gold day'+(gold===1?'':'s')+'</strong> this month — your take-home goal and expenses were both covered.':'Make your first gold day: protect your net target and cover all expenses.')+'</div><div class="cal-summary-sub">'+s.logged+' logged · '+amber+' building momentum · '+risky+' needing attention. Tap any day to update it.</div>';
+ $('calPerformance').innerHTML='<span class="gold-count"><b>✦ '+gold+'</b> Gold</span><span><b>'+counts.green+'</b> Green</span><span><b>'+amber+'</b> 70–99%</span><span><b>'+risky+'</b> Costs / low</span>';
+ const remaining=s.days.filter(d=>d.key>=currentKey()).length;
+ const needed=remaining?Math.max(0,(s.goal-s.net)/remaining):0;
+ $('calBreakdown').innerHTML='<div class="mini-breakdown"><div><span>Gross target baseline</span><b>'+money(s.goal)+'</b></div><div><span>Monthly net vs goal</span><b class="'+(s.net>=s.goal?'pos':'neg')+'">'+money2(s.net-s.goal)+'</b></div><div><span>Expenses recovered via extra earnings</span><b>'+money2(s.covered)+'</b></div><div><span>Gross versus target</span><b class="'+(s.gross>=s.goal?'pos':'warning')+'">'+(s.gross>=s.goal?'+':'−')+money(Math.abs(s.gross-s.goal))+'</b></div><div><span>Days logged</span><b>'+s.logged+' / '+s.days.length+'</b></div><div><span>Net target wins</span><b>'+s.hits+' days</b></div><div><span>Average net needed per remaining day</span><b>'+money(needed)+'</b></div></div>';
  $('calendarEv').innerHTML=evReport(s,false);
 }
+
 function renderStats(){
  const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m);$('statsMonth').textContent=monthTitle();
  $('statsGross').textContent=money(s.gross);$('statsNet').textContent=money(s.net);$('statsHits').textContent=s.hits;$('statsSpent').textContent=money(s.spent);
