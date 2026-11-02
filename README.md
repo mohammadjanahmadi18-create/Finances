@@ -16,6 +16,22 @@ A premium green, orange and white personal driving-income tracker featuring Expe
 
 **November 2026 total: £6,310** (gross income target; expenses are deducted to determine net income).
 
+## Finances 2.4 — Performance calendar and metallic finish
+
+The calendar now uses a seven-state, accessible colour system, calculated on every render from saved earnings, costs, and the user's manual or legacy recovery allocation:
+
+- **Metallic gold ✦:** take-home net is at least the day's goal, all expenses are covered by allocated/automatic extra earnings, and any optional expense cap is respected.
+- **Emerald green ✓:** gross income reached the goal, but all the gold criteria are not met (for example, remaining unrecovered costs).
+- **Champagne ↗:** 80–99% of gross target reached.
+- **Bronze ↗:** 70–79% of gross target reached.
+- **Rose-red !:** below 70% of gross target on a recorded day.
+- **Blue-grey −:** expense-only day with £0 recorded income.
+- **Neutral grey ·/○:** nothing recorded or a scheduled zero-target rest day.
+
+Each calendar tile displays a day number, status symbol, **net take-home**, a short status label, and a tiny progress bar. The detailed date, amount, percentage meaning, and remaining expense recovery are included in its accessible label; the current date has a separate outline. A live monthly gold/green/attention breakdown provides a quick overview. Tiles still open the original day editor.
+
+The visual theme now uses metallic champagne-gold, deep emerald, pearl white, tactile highlights, beveled surfaces, gentle reflective gradients, tap feedback and a short, one-time shine on gold days. Motion is suppressed for reduced-motion accessibility. No changes are made to stored finance records; the same local data and backups continue to work.
+
 ## Finances 2.3 — Daily check-in and champagne-gold theme
 
 The home screen now includes a three-number **Daily money check-in**, in addition to the daily target: **base daily income**, **total expenses** and **extra earnings earmarked for expenses**. The extra amount is **new real income not already included in base income**, and is included in gross earnings once. Example: a £160 daily target, £160 base income, £50 total expenses and £40 extra earned for expenses produce **£200 gross, £150 net, £40 costs covered, £10 still to cover**, and £10 more required to protect the net goal.
