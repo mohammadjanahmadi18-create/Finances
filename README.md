@@ -1,6 +1,6 @@
 # Finances
 
-A premium green, orange and white personal income tracker, designed especially for a phone. Built with plain HTML, CSS and JavaScript, bundled into a single `index.html` plus a small offline service worker and install icons. No dependencies, backend, ads or account required.
+A premium green, orange and white personal driving-income tracker featuring Expense Recovery, net-goal protection, EV charging intelligence and rewarding daily progress. Built with plain HTML, CSS and JavaScript, bundled into a single `index.html` plus a small offline service worker and install icons. No dependencies, backend, ads or account required.
 
 ## November 2026 starter targets
 
@@ -15,6 +15,20 @@ A premium green, orange and white personal income tracker, designed especially f
 | Sunday | £230 |
 
 **November 2026 total: £6,310** (gross income target; expenses are deducted to determine net income).
+
+## Finances 2.1 — Expense Recovery and EV charging
+
+**Two targets, one clear picture.** The gross baseline is what you planned to earn. Your net goal is protected only when earnings minus recorded expenses reaches that same baseline. Hitting the gross number alone does not mean your expenses are covered.
+
+- Above-target income = `max(0, gross earned - daily gross target)`.
+- Expenses recovered = `min(above-target income, daily expenses)`.
+- Still to recover = `daily expenses - expenses recovered`.
+- Remaining earnings to secure the net goal = `max(0, daily target - (gross earned - expenses))`.
+- Example: £160 target, £190 gross, £40 expenses = £30 recovered, £10 outstanding, £150 take-home, and £10 more needed to protect the net goal.
+- All recorded Charging expenses are totaled by month, with sessions and optional kWh. The app calculates a p/kWh average **only for charges that have both cost and kWh recorded**.
+- Motivational charging allocation uses above-target earnings to cover charging costs first, then other expenses. This is an accounting visualization, not a change to the actual paid bill and not proof that a particular ride funded a particular charge.
+- A logged day is a full **net target win** only when earnings minus expenses reaches the baseline and any configured daily expense cap is respected. The calendar shows amber for a gross target hit whose net target is not yet protected.
+- Existing local entries and JSON backups remain compatible with `finances-local-v1`; charging kWh is optional and included in new backups.
 
 ## Features
 
