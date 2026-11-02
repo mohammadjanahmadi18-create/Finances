@@ -349,6 +349,63 @@ body{background:radial-gradient(ellipse 440px 420px at 75% -90px,#d9eccf 0%,tran
 @media(max-width:370px){.app{padding-left:13px;padding-right:13px}.hero{padding:20px 16px 17px}.ring-wrap{width:124px;height:124px}.hero-number{font-size:41px}.hero-metrics b{font-size:14px}.ring-middle b{font-size:25px}.recover-numbers b{font-size:15px}.mission-item{padding:9px}}
 @media(prefers-reduced-motion:reduce){.day-live i,.hero:before{animation:none!important}.fx-burst{animation-duration:.01ms!important}}
 
+
+/* Soft champagne-gold palette */
+:root{--orange:#d0a86a;--gold:#ebd3a4;--orange-soft:#f6ead7;--amber:#aa834b;--pearl:#f8f9f2}
+body{background:radial-gradient(ellipse 480px 450px at 90% -140px,#eee8d3,transparent 85%),radial-gradient(ellipse 500px 450px at -180px 380px,#f7e9d0,transparent 85%),#f7f9f1}
+.hero{background:radial-gradient(ellipse 160px 220px at 93% 2%,#cfba8a65,transparent 90%),radial-gradient(ellipse 260px 280px at 95% 27%,#3c926b58,transparent 92%),linear-gradient(128deg,#125e45,#0d4a38 50%,#0b3227)}
+.ring-active{stroke:#e1c48f;filter:drop-shadow(0 0 4px #e8ca9699)}
+.ring-middle small{color:#eedab5}
+.dial-legend i[style*="ffb55e"]{background:#e1c48f!important}
+.hero-booster{background:linear-gradient(125deg,#f6ebd0,#e3c18a);color:#644a2c;box-shadow:inset 0 1px #fff8,0 8px 20px #161f1636}
+.quick .earn{background:linear-gradient(140deg,#f4e7cc,#d6b17a);color:#5b4529;box-shadow:0 9px 25px #aa8b5540,inset 0 1px #fff}
+.xp-medal{background:linear-gradient(135deg,#fff5dd,#e3c493)}
+.xp-line i,.track span{background:linear-gradient(90deg,#c09d65,#e6cd9b)}
+.forecast-choices button.selected{background:linear-gradient(120deg,#1e6c4c,#124634);border-color:#276c4c}
+.nextfare{background:linear-gradient(126deg,#f9f3e7,#fffefa 62%,#eef7e9);border-color:#e8dec7}
+.nextfare-top span{background:#f0e3c9;color:#846239}
+.forecast-result b.due,.recover-numbers b.due{color:#a17c42}
+.charge-status b{color:#ebd8b3}
+.mission-item.current{border-color:#e0cba3;background:#fbf8ee}
+.mission-item.current .mission-symbol{background:#f4e9d1}
+.amount-chips button:active,.category-chip.active{background:#f5ebd8;color:#826a42;border-color:#dcc49c}
+.recover-note{background:#fcf7ed;border-color:#e8dcc5;color:#795d38}
+.checkin-income-modes{grid-template-columns:repeat(3,1fr)}
+.checkin-income-modes button{font-size:11px;padding:11px 5px}
+/* Daily check-in: clear, tactile and practical */
+.daily-checkin{position:relative;overflow:hidden;background:linear-gradient(145deg,#fffefa,#fff 56%,#edf6eb);border:1px solid #d9e6d7;padding:19px;border-radius:25px;box-shadow:0 14px 34px #1c64421a}
+.daily-checkin:before{content:'';position:absolute;width:130px;height:130px;border-radius:50%;top:-65px;right:-50px;background:radial-gradient(circle,#e8d0a07a,transparent 72%);pointer-events:none}
+.daily-checkin-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.daily-checkin-top h2{font:600 26px Georgia,serif;color:#175338;letter-spacing:-.6px;margin:7px 0 5px}
+.daily-checkin-top p{font-size:11px;line-height:1.55;color:#788f7e;margin:0}
+.checkin-pill{white-space:nowrap;font-size:9px;font-weight:900;letter-spacing:.4px;color:#82643d;background:#f1e5cd;border:1px solid #e6d3af;padding:8px 10px;border-radius:99px}
+.daily-goal{display:flex;align-items:center;justify-content:space-between;gap:11px;background:#f0f5ed;border:1px solid #e0eade;border-radius:14px;padding:13px;margin-top:17px}
+.daily-goal b{font-size:12px;color:#264e38}.daily-goal small{font-size:10px;color:#8ca08f;display:block;margin-top:4px}
+.daily-goal label{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid #dae8da;padding:8px 10px;border-radius:12px;color:#6f8b71;font-weight:850;font-size:13px;width:124px;flex:none}
+.daily-goal input{border:0;outline:0;font-size:20px;color:#1b543b;font-weight:900;background:transparent;width:100%;min-width:0}
+.checkin-fields{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+.checkin-field{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;border:1px solid #dde9db;background:white;min-width:0;transition:border-color .2s,box-shadow .2s}
+.checkin-field:focus-within{border-color:#c5a574;box-shadow:0 0 0 3px #e9d5b266}
+.checkin-emoji{display:grid;place-items:center;width:41px;height:41px;border-radius:13px;background:#edf3e9;font-size:20px;flex:none}
+.checkin-field.expenses .checkin-emoji{background:#f8eddf}
+.checkin-field.cover .checkin-emoji{background:#e5f4e7}
+.checkin-copy{flex:1;min-width:0}
+.checkin-copy label{font-size:12px;font-weight:850;color:#30543d;display:block}
+.checkin-copy small{font-size:10px;color:#8a9c8d;line-height:1.45;margin-top:4px;display:block}
+.checkin-input{display:flex;align-items:center;gap:3px;color:#7b9881;font-size:13px;font-weight:850;min-width:89px;width:33%;max-width:120px}
+.checkin-input input{width:100%;min-width:0;border:0;outline:0;background:transparent;font-size:22px;font-weight:900;color:#13563b;text-align:right;letter-spacing:-.5px}
+.checkin-input input:focus{outline:0}
+.checkin-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:12px}
+.checkin-results>div{padding:11px 8px;border:1px solid #e2e9dc;background:#f5f9f3;border-radius:13px;min-width:0}
+.checkin-results small{font-size:9px;line-height:1.4;color:#87998a;display:block;margin-bottom:5px}
+.checkin-results b{font-size:17px;font-weight:900;color:#1f6341;letter-spacing:-.5px;white-space:nowrap}
+.checkin-results b.owing{color:#9b7540}
+.checkin-status{font-size:11px;line-height:1.6;margin:10px 2px 0;color:#4c704f}
+.checkin-submit{background:linear-gradient(135deg,#1d7751,#0c4b35);color:white;border:0;border-radius:15px;box-shadow:0 9px 21px #144d322b;width:100%;font-weight:950;font-size:13px;padding:16px;margin-top:15px}
+.checkin-submit:active{transform:scale(.98)}
+.checkin-foot{font-size:10px;line-height:1.6;color:#8a9b8c;margin:10px 0 0}
+@media(max-width:370px){.daily-checkin{padding:13px}.checkin-field{padding:9px;gap:7px}.checkin-emoji{height:36px;width:36px}.checkin-input input{font-size:19px}.checkin-results b{font-size:15px}}
+
 </style>
 </head>
 <body>
@@ -383,6 +440,22 @@ body{background:radial-gradient(ellipse 440px 420px at 75% -90px,#d9eccf 0%,tran
     <div class="hero-metrics"><div><small>Today's target</small><b id="heroTarget">£160</b></div><div><small>Net goal gap</small><b id="heroLeft">£160</b></div><div><small>Take-home</small><b id="heroNet">£0</b></div></div>
     <div class="hero-message"><span class="sparkle">✦</span><span id="heroMessage">Start with one entry and build momentum.</span></div><button class="hero-booster" data-open="income"><span>＋</span> LOG YOUR NEXT WIN</button>
   </div>
+  <div class="section-head"><h2>Daily money check-in</h2><span class="kicker">YOUR THREE NUMBERS</span></div>
+  <section class="daily-checkin" aria-label="Record daily earnings and expense recovery">
+    <div class="daily-checkin-top"><div><span class="kicker">MAKE TODAY COUNT</span><h2>Your money. Your move.</h2><p>Fill in your income, costs, and what you earned extra to cover them.</p></div><span class="checkin-pill">✦ CHECK-IN</span></div>
+    <form id="checkinForm">
+      <div class="daily-goal"><div><b>Daily earning target</b><small>Change it just for today</small></div><label for="ciTarget">£ <input id="ciTarget" type="number" min="0" max="1000000" step=".01" inputmode="decimal" required></label></div>
+      <div class="checkin-fields">
+        <div class="checkin-field"><div class="checkin-emoji">💷</div><div class="checkin-copy"><label for="ciIncome">1. Daily income</label><small>Before extra earnings for expenses</small></div><div class="checkin-input">£ <input id="ciIncome" type="number" min="0" max="10000000" step=".01" placeholder="0" inputmode="decimal" required></div></div>
+        <div class="checkin-field expenses"><div class="checkin-emoji">🧾</div><div class="checkin-copy"><label for="ciExpense">2. Total expenses today</label><small>Charging, food and other costs</small></div><div class="checkin-input">£ <input id="ciExpense" type="number" min="0" max="1000000" step=".01" placeholder="0" inputmode="decimal" required></div></div>
+        <div class="checkin-field cover"><div class="checkin-emoji">🛡️</div><div class="checkin-copy"><label for="ciCover">3. Extra earned for expenses</label><small>New earnings not included in box 1</small></div><div class="checkin-input">£ <input id="ciCover" type="number" min="0" max="10000000" step=".01" placeholder="0" inputmode="decimal" required></div></div>
+      </div>
+      <div class="checkin-results" aria-live="polite"><div><small>Gross total</small><b id="ciGross">£0</b></div><div><small>Costs covered</small><b id="ciPaid">£0</b></div><div><small>Still to cover</small><b id="ciDue" class="owing">£0</b></div></div>
+      <p class="checkin-status" id="ciNote">Live totals appear as you type.</p>
+      <button class="checkin-submit" type="submit">UPDATE TODAY'S FIGURES ✦</button>
+      <p class="checkin-foot" id="ciFoot">Gross = income + extra. Net = gross minus total expenses. Your expenses always remain on the books.</p>
+    </form>
+  </section>
   <div class="xp-mini"><div class="xp-medal">✦</div><div class="xp-info"><div class="xp-top"><span id="miniLevel">LEVEL 01</span><small id="miniXP">0 / 500 XP</small></div><div class="xp-line"><i id="miniXpFill"></i></div></div><button data-go="wins" aria-label="See achievements">›</button></div>
   <div class="quick"><button class="earn press" data-open="income"><div class="iconbox">＋</div><div>Add income<small>Log a fare or total</small></div></button><button class="spend press" data-open="expense"><div class="iconbox">−</div><div>Add expense<small>Keep your net clear</small></div></button></div>
   <div class="section-head"><h2>Today's power-ups</h2><button class="mini-action" data-go="wins">Trophy cabinet ↗</button></div>
