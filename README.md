@@ -35,21 +35,21 @@ A premium green, orange and white personal driving-income tracker featuring Expe
 - Edit gross income target on any specific day; change weekday defaults in Settings.
 - Enter gross daily income and itemised expenses (charging, food, parking, tolls, car and other).
 - Live take-home calculation: gross income **minus** expenses.
-- Cumulative income target balance: a surplus today offsets a shortfall yesterday.
-- Green = income target achieved AND optional expense cap respected; amber = 80–99%; orange = 70–79%; red = under 70%. If income target is hit but expense cap is exceeded, the day shows **Over budget** instead of green.
-- Monthly calendar, complete ledger, spending-category breakdown and remaining daily income requirement.
+- Daily recovery view: income above the baseline automatically offsets recorded expenses, without rewriting what you actually spent.
+- Green = net goal protected AND optional expense cap respected. Amber = gross baseline reached but net goal not yet protected, or 80%+ progress toward baseline. Red = further below baseline. Unlogged days remain neutral.
+- Monthly calendar, editable daily records, income/expense analytics, monthly charging sessions and net goal remaining.
 - Monthly CSV export, full JSON backup and restore.
 - Installable progressive web app (PWA); works offline after its first successful online visit.
 - Data saved in **this browser's local storage only**. It does **not sync between devices**. Export a JSON backup regularly. Private/Incognito browsing or clearing site data can delete the local records.
 
 ## How the balance works
 
-- Daily variance = **gross earned − income target**.
-- Running balance to date = **total gross earnings − total scheduled income targets for dates that have elapsed** (including a current day once saved). A past unlogged day counts as £0 earned until you add it.
+- Daily gross variance = **gross earned − baseline target**; the protected net goal compares **gross minus expenses** to that same baseline.
+- Monthly net versus baseline = **month-to-date net earnings minus the scheduled whole-month target**; negative is expected early in the month. Daily recovery is separate and cannot make paid expenses vanish.
 - Monthly net take-home = **total gross earnings − total recorded expenses**.
-- The required average for remaining calendar days = max(0, **whole-month income target − gross earned**) / number of calendar days left (including today).
+- The required average net earnings for remaining calendar days = max(0, **whole-month target − net earned**) / number of calendar days left (including today).
 
-The budget cap is **optional** and not prefilled. If unset, hitting the income target is green even when expenses are recorded; if set, the cap must also be met.
+The budget cap is **optional** and not prefilled. Green means the net target is protected, and the configured daily expense cap (if any) is respected.
 
 ## Run locally
 
