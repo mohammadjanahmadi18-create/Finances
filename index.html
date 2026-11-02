@@ -1,214 +1,528 @@
 <!doctype html>
 <html lang="en-GB">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0e3b30">
-  <meta name="description" content="A personal finance dashboard to track daily driving income, expenses and monthly targets.">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Finances">
-  <style>
-:root{--forest:#103d31;--forest-deep:#0b3027;--forest-dim:#205f4b;--mint:#e5f3e9;--orange:#f49b45;--orange-soft:#fff0de;--white:#fff;--bg:#f6f8f5;--ink:#1e3129;--muted:#85928a;--line:#e7ebe5;--red:#c84d49;--red-bg:#ffedeb;--amber:#c47b21;--amber-bg:#fff2d9;--shadow:0 9px 35px rgba(26,53,40,.045);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Arial,sans-serif;color:var(--ink);background:var(--bg)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #f2a04c;outline-offset:2px}button:disabled{opacity:.5;cursor:not-allowed}.app-shell{display:flex;min-height:100vh}.sidebar{width:248px;flex:0 0 248px;background:var(--forest-deep);padding:34px 19px 25px;display:flex;flex-direction:column;color:#fff;min-height:100vh;position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:11px;padding:0 8px 46px}.brand-emblem{width:43px;height:43px;border-radius:13px;background:#f2f5e9;color:var(--forest-deep);display:inline-flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:31px;font-weight:bold;letter-spacing:-4px;padding-right:4px;flex:none}.brand-emblem span{color:var(--orange)}.brand-text{font-size:16px;letter-spacing:2.5px;font-weight:850}.brand-text small{display:block;margin-top:5px;color:#adcbb7;font-size:8px;font-weight:700;letter-spacing:1.8px}.sidebar-label{font-size:10px;letter-spacing:2.2px;color:#719788;font-weight:800;padding-left:16px;margin:10px 0 13px}.side-nav{display:flex;flex-direction:column;gap:8px}.nav-btn{color:#b9d2c7;background:transparent;border:0;border-radius:11px;text-align:left;padding:15px 16px;font-size:13px;font-weight:650;display:flex;align-items:center;gap:16px;transition:background .2s,color .2s}.nav-btn:hover{background:#1c4c3e;color:#fff}.nav-btn.active{background:#285846;color:#fff}.nav-icon{width:20px;text-align:center;font-size:22px;font-weight:400;line-height:16px;color:#9fbcb0}.nav-btn.active .nav-icon{color:var(--orange)}.sidebar-bottom{margin-top:auto;padding:19px 11px 2px;border-top:1px solid #315949;font-size:12px;display:flex;align-items:flex-start;gap:9px;color:#e0ebe3}.sidebar-bottom small{display:block;color:#8bae9c;margin-top:4px;font-size:11px}.privacy-dot{background:#78d6a5;width:7px;height:7px;border-radius:50%;margin-top:5px}.main-content{min-width:0;width:100%;flex:1}.topbar{height:104px;padding:0 40px;background:var(--white);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}.eyebrow{display:block;font-size:10px;letter-spacing:1.8px;font-weight:800;color:var(--forest-dim)}.eyebrow.muted{color:#96a39b}.topbar-heading h1{font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:600;letter-spacing:-.8px;margin:5px 0 0}.topbar-actions{display:flex;align-items:center;gap:22px}.topbar-date{font-size:12px;color:var(--muted);white-space:nowrap}.btn{border:0;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;font-size:12px;font-weight:800;white-space:nowrap;transition:transform .2s,background .2s}.btn:hover{transform:translateY(-1px)}.btn-orange{background:var(--orange);color:#2d352a;box-shadow:0 6px 16px #f49b452c}.btn-green{background:var(--forest);color:#fff}.btn-outline{border:1px solid #dae5dc;background:white;color:var(--forest);box-shadow:none}.btn-small-outline{border:1px solid #d7e4d9;background:white;color:var(--forest);font-size:11px;padding:9px 12px}.btn-plus{font-size:18px;font-weight:400;line-height:10px}.mobile-brand{display:none}.content-area{max-width:1350px;margin:0 auto;padding:33px 40px 28px}.month-toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:25px}.month-heading{display:flex;align-items:center;gap:15px}.month-heading h2{font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:33px;letter-spacing:-1.2px;margin:5px 0 0}.month-badge{background:#e9f0e9;color:#728b7a;padding:7px 10px;border-radius:5px;font-size:9px;font-weight:800;letter-spacing:1px}.month-switch{border:1px solid #e0e7df;background:#fff;display:flex;align-items:center;border-radius:10px;padding:4px}.icon-button{border:0;background:transparent;width:37px;height:34px;border-radius:7px;font-size:26px;color:var(--forest);line-height:1}.icon-button:hover{background:#eaf4ea}.current-button{font-size:11px;font-weight:750;border:0;background:#f0f5ef;color:var(--forest-dim);border-radius:6px;padding:10px 13px}.view{display:none}.view.active{display:block}.hero{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(118deg,#124534 0%,#103b30 60%,#092e25 100%);border-radius:19px;min-height:281px;padding:28px 33px 30px;color:#fff;box-shadow:0 20px 45px #0e40272a}.hero-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}.hero-kicker,.hero-period{font-size:10px;letter-spacing:1.9px;color:#c3dfce;font-weight:850}.hero-kicker{display:flex;align-items:center;gap:9px}.hero-kicker i{display:block;width:6px;height:6px;border-radius:100%;background:var(--orange)}.hero-period{color:#88b29b}.hero-content{display:flex;align-items:center;justify-content:space-between;gap:18px;position:relative;z-index:1;margin-top:26px}.hero-label{color:#b6d4c4;font-size:14px;margin:0 0 5px}.hero-money{font-family:Georgia,'Times New Roman',serif;font-size:clamp(37px,4.1vw,62px);line-height:1.1;letter-spacing:-2.5px;white-space:nowrap}.hero-subtitle{color:#9dc3ad;font-size:12px;margin:12px 0 0}.hero-target{min-width:181px;border-left:1px solid #537a66;padding-left:25px;display:flex;flex-direction:column;gap:7px}.hero-target span{color:#bad2c5;letter-spacing:1.7px;font-size:10px;font-weight:800}.hero-target strong{font-size:29px;letter-spacing:-.9px;font-weight:600}.hero-target small{color:#f9ba7b;font-size:12px}.hero-progress{position:relative;z-index:1;margin-top:31px}.hero-progress-label{display:flex;justify-content:space-between;gap:10px;color:#c3dacb;font-size:11px}.hero-progress-label strong{color:#fff}.progress-track{height:7px;background:#315b49;border-radius:30px;margin-top:11px;overflow:hidden}.progress-fill{height:100%;background:linear-gradient(90deg,#ffb16b,var(--orange));border-radius:30px;width:0%;transition:width .3s}.hero-corner{position:absolute;pointer-events:none;border:1px solid rgba(172,211,181,.09);border-radius:50%;width:360px;height:360px;right:-140px;top:-170px;z-index:0}.hero-corner.two{width:470px;height:470px;right:-180px;top:-215px}.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-top:17px}.metric-card{background:#fff;border:1px solid #edf0eb;border-radius:15px;min-width:0;padding:21px;box-shadow:var(--shadow)}.metric-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:9px;letter-spacing:1.4px;font-weight:850;color:#899b90}.metric-icon{font-size:17px;width:30px;height:30px;display:flex;justify-content:center;align-items:center;border-radius:8px}.green-icon{background:#eaf4e9;color:#348763}.orange-icon{background:#fff0e0;color:#d88a3b}.dark-icon{background:#e8f2e6;color:var(--forest)}.metric-value{font-size:clamp(21px,2vw,28px);font-weight:750;letter-spacing:-.8px;color:#213b2d;margin-top:18px;white-space:nowrap;font-variant-numeric:tabular-nums}.metric-value small{font-size:12px;color:#88958b;font-weight:500;letter-spacing:0}.metric-card p{font-size:11px;color:#99a49b;margin:8px 0 0}.metric-card.accent-card{background:#f1f6eb;border-color:#e5efdf}.metric-card.accent-card.negative{background:#fff1eb;border-color:#ffe2d8}.metric-card.accent-card.negative .metric-value{color:var(--red)}.insights-row{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:20px 0 24px;background:#fff;border:1px solid #e8ede5;padding:19px 23px;border-radius:14px}.insight-main{display:flex;gap:15px;align-items:center;min-width:0}.insight-symbol{width:43px;height:43px;border-radius:13px;background:#e7f4e7;color:#3a9a6c;display:flex;align-items:center;justify-content:center;font-size:25px;flex:none}.insight-main h3{font-size:14px;margin:0 0 5px}.insight-main p{font-size:12px;color:#89998e;margin:0;line-height:1.5}.insight-number{display:flex;align-items:flex-end;flex-direction:column;white-space:nowrap}.insight-number small{font-size:9px;letter-spacing:1.2px;color:#93a599;font-weight:800}.insight-number strong{font-size:25px;color:var(--forest);margin:3px 0 0}.insight-number span{font-size:10px;color:#9bab9e}.section-card{background:white;border:1px solid #e9eee7;border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:22px;min-width:0}.section-header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:23px}.section-header h3{font-family:Georgia,'Times New Roman',serif;font-size:23px;letter-spacing:-.5px;font-weight:600;margin:5px 0 0}.section-hint{font-size:11px;color:#95a098}.calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.calendar-weekdays{text-align:center;font-size:10px;font-weight:800;color:#9ca99f;letter-spacing:1px;margin-bottom:10px}.calendar-cell{border:1px solid #e9ede8;border-radius:10px;min-height:81px;background:#fbfcfa;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:10px 12px;transition:transform .15s,border-color .15s;position:relative;text-align:left;color:#233a2d}.calendar-cell:hover{transform:translateY(-2px);border-color:#8cae98}.calendar-cell.empty{visibility:hidden;pointer-events:none}.calendar-cell.today{outline:2px solid var(--orange);outline-offset:-2px}.calendar-cell.logged.achieved{background:#e9f6e9;border-color:#cce7d0}.calendar-cell.logged.close{background:#fff7e8;border-color:#f0dfc0}.calendar-cell.logged.caution,.calendar-cell.logged.overspent{background:#fff0e0;border-color:#ffdab3}.calendar-cell.logged.missed{background:#fff0ee;border-color:#f7d6d1}.calendar-cell.logged.rest{background:#edf1f0}.calendar-cell .day-num{font-weight:800;font-size:13px}.calendar-cell .day-money{font-size:12px;font-weight:750;margin-top:auto;white-space:nowrap}.calendar-cell .day-target{font-size:9px;color:#92a297;white-space:nowrap}.calendar-cell.future .day-num{color:#8c9990}.calendar-cell .cell-mark{position:absolute;right:9px;top:8px;width:6px;height:6px;border-radius:50%;background:transparent}.calendar-cell.achieved .cell-mark{background:#4ba778}.calendar-cell.close .cell-mark{background:#e2aa4c}.calendar-cell.caution .cell-mark,.calendar-cell.overspent .cell-mark{background:#e99042}.calendar-cell.missed .cell-mark{background:#dd6760}.calendar-legend{display:flex;flex-wrap:wrap;gap:20px;margin-top:19px;font-size:10px;color:#8b9b90}.calendar-legend span{display:flex;align-items:center;gap:6px}.legend-dot{width:9px;height:9px;border-radius:3px}.legend-green{background:#93caa3}.legend-amber{background:#f0cb84}.legend-red{background:#eca7a2}.legend-empty{background:#e5eae4}.recent-list{display:flex;flex-direction:column;gap:0}.recent-item{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid #f0f1ee;padding:15px 3px;width:100%;background:none;text-align:left;border-left:0;border-right:0;border-bottom:0}.recent-item:first-child{border-top:0}.recent-date{font-weight:700;font-size:13px}.recent-date small{display:block;color:#9ba79b;font-size:11px;font-weight:500;margin-top:4px}.recent-right{text-align:right;font-size:14px;font-weight:750}.recent-right small{display:block;font-size:10px;margin-top:4px}.recent-right small.plus{color:#278858}.recent-right small.minus{color:var(--red)}.empty-state{text-align:center;padding:28px 12px;color:#9daaa0;font-size:12px;line-height:1.7}.empty-state strong{display:block;color:var(--forest);font-size:15px;margin:8px 0 3px}.empty-state-icon{width:48px;height:48px;border-radius:15px;background:#eaf5e9;color:#41966c;display:inline-flex;align-items:center;justify-content:center;font-size:22px}.text-button{border:0;background:transparent;color:var(--forest-dim);font-size:11px;font-weight:800}.section-description{color:#91a094;font-size:12px;line-height:1.65;margin-top:-10px;margin-bottom:25px;max-width:780px}.table-wrap{overflow-x:auto}.daily-table{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap}.daily-table thead{background:#f5f8f4}.daily-table th{color:#809288;font-size:9px;letter-spacing:1px;text-align:left;font-weight:850;padding:14px 11px}.daily-table td{padding:14px 11px;border-bottom:1px solid #eff2ee;font-variant-numeric:tabular-nums}.daily-table tbody tr:hover{background:#fafcf9}.daily-table tbody tr.today-row{background:#fffaf3}.daily-table td:first-child{font-weight:700;color:#284335}.daily-table td small{display:block;color:#95a297;font-weight:400;margin-top:4px}.daily-table .num{font-weight:700}.daily-table .net-cell{font-weight:800}.delta-positive{color:#288259!important}.delta-negative{color:var(--red)!important}.status-chip{display:inline-flex;align-items:center;border-radius:15px;padding:5px 9px;background:#eef1ed;color:#85938a;font-size:10px;font-weight:800}.status-chip.achieved{background:#e5f6ea;color:#28815b}.status-chip.close{background:#fff1d6;color:#aa7827}.status-chip.caution,.status-chip.overspent{background:#ffead9;color:#bf743b}.status-chip.missed{background:#ffebe9;color:#bf514b}.status-chip.rest{background:#edf3f0;color:#688477}.row-edit{border:1px solid #dce8df;border-radius:7px;color:var(--forest);background:white;padding:6px 10px;font-size:10px;font-weight:800}.expenses-hero{background:#e9f3e9;border-radius:17px;border:1px solid #dfebdf;padding:30px 34px;margin-bottom:19px;display:flex;justify-content:space-between;overflow:hidden;position:relative}.expenses-hero h3{font-family:Georgia,serif;font-size:27px;font-weight:600;margin:8px 0 15px}.expenses-hero strong{font-size:41px;color:var(--forest)}.expenses-hero p{color:#839688;font-size:12px}.expense-decoration{font-family:Georgia,serif;font-size:200px;position:absolute;right:65px;top:-42px;color:#d6e9d8;opacity:.8}.expenses-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:18px;align-items:start}.category-row{display:flex;align-items:center;gap:13px;margin:19px 0}.category-symbol{width:37px;height:37px;border-radius:11px;background:#eaf4eb;color:#286d4c;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}.category-info{flex:1;min-width:0}.category-heading{display:flex;justify-content:space-between;font-size:12px;font-weight:750;margin-bottom:8px}.category-progress{height:5px;background:#f0f3ef;border-radius:10px;overflow:hidden}.category-progress>div{height:100%;background:var(--orange);border-radius:10px}.transaction-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #edf0eb;gap:10px}.transaction-item:last-child{border-bottom:0}.transaction-name{font-size:12px;font-weight:750}.transaction-name small{display:block;font-size:10px;color:#98a499;font-weight:400;margin-top:5px}.transaction-value{font-size:12px;font-weight:800;color:#be6335}.settings-layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}.settings-layout .section-card{align-self:start}.settings-column{min-width:0}.weekday-settings{margin:12px 0 23px}.weekday-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f3ee;font-size:13px;font-weight:750}.weekday-row:last-child{border-bottom:0}.currency-control{display:flex;align-items:center;border:1px solid #e0e8df;border-radius:9px;background:#fff;overflow:hidden;max-width:185px}.currency-control:focus-within{border-color:#80b596}.currency-control span{font-size:13px;color:#8c9f92;padding:0 10px 0 14px}.currency-control input{padding:12px 11px 12px 0;border:0;min-width:0;width:100%;outline:0;font-size:14px;font-weight:750;color:var(--forest)}.currency-control input:focus{outline:0}.settings-column label{display:block;font-size:12px;color:#5c7667;font-weight:750;margin-bottom:9px}.settings-note{font-size:11px;color:#368359;margin-top:11px;min-height:12px}.backup-actions{display:flex;flex-wrap:wrap;gap:9px}.footer{padding:9px 0;display:flex;justify-content:space-between;gap:14px;color:#a0aea3;font-size:10px;letter-spacing:.6px}.footer i{color:var(--orange);font-style:normal}.mobile-nav{display:none}.editor-overlay[hidden]{display:none!important}.editor-overlay{position:fixed;inset:0;z-index:30;display:flex;justify-content:flex-end}.editor-backdrop{position:absolute;inset:0;background:rgba(10,34,24,.52);backdrop-filter:blur(3px)}.editor-panel{position:relative;background:#fff;width:min(480px,100vw);height:100%;overflow:auto;padding:31px 30px 37px;box-shadow:-15px 0 60px #102f2533}.editor-handle{display:none}.editor-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:27px}.editor-header h2{font-family:Georgia,serif;font-size:28px;font-weight:600;line-height:1.2;margin:8px 0 0}.close-button{border:0;background:#f4f7f3;border-radius:9px;font-size:24px;width:34px;height:34px;color:#557464}.editor-fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}.editor-fields label{font-size:11px;color:#738b7a;font-weight:800}.editor-fields .currency-control{margin-top:9px;max-width:none}.editor-expense-heading{margin:31px 0 14px;display:flex;justify-content:space-between;align-items:center;gap:10px}.editor-expense-heading h3{margin:4px 0 0;font-family:Georgia,serif;font-size:20px;font-weight:500}.expense-editor-list{display:flex;flex-direction:column;gap:10px}.expense-editor-row{display:flex;align-items:center;gap:7px}.expense-editor-row select{min-width:0;flex:1;border:1px solid #e0e8df;border-radius:8px;padding:11px 6px;color:var(--forest);font-size:12px;background:#fff}.expense-editor-row .currency-control{flex:0 0 115px}.expense-editor-row .currency-control span{padding:0 5px 0 9px}.expense-editor-row .currency-control input{font-size:12px;padding:11px 5px 11px 0}.remove-expense{width:27px;height:35px;border:0;background:#fff2ef;color:#ba5f58;border-radius:7px;flex:none}.no-expenses{text-align:center;color:#93a396;background:#fafcf9;padding:17px;border:1px dashed #dfe9df;border-radius:10px;font-size:12px}.notes-label{font-size:11px;font-weight:800;color:#738b7a;display:block;margin-top:23px}.notes-label textarea{display:block;width:100%;margin-top:9px;padding:12px;border:1px solid #e0e8df;border-radius:9px;resize:vertical;font-size:12px;min-height:70px}.editor-preview{margin-top:25px;background:var(--forest);border-radius:12px;padding:19px;display:flex;justify-content:space-between;gap:12px}.editor-preview div{display:flex;flex-direction:column;gap:6px}.editor-preview span{font-size:9px;letter-spacing:1px;color:#b2cfbe;font-weight:850}.editor-preview strong{font-size:23px;color:#fff;font-weight:750;font-variant-numeric:tabular-nums}.editor-preview div:last-child{text-align:right}.editor-preview div:last-child strong{color:#ffc18a}.editor-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:22px}.delete-button{border:0;background:none;color:#b8665d;font-size:12px;font-weight:800;padding:10px 0}.save-entry{min-width:145px}.toast{position:fixed;bottom:30px;right:30px;background:var(--forest);color:#fff;padding:13px 18px;border-radius:10px;z-index:50;font-size:12px;font-weight:700;box-shadow:0 12px 28px #123d3160;display:none}.toast.show{display:block}
-@media(min-width:1450px){.content-area{padding:42px 49px}.topbar{padding:0 49px}}@media(max-width:1190px){.sidebar{width:205px;flex-basis:205px}.content-area{padding:27px}.topbar{padding:0 27px}.metric-card{padding:17px}.metric-value{font-size:22px}.hero{padding:25px}.hero-money{font-size:48px}}@media(max-width:930px){.sidebar{display:none}.topbar{height:85px}.content-area{max-width:900px}.mobile-brand{display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:2px;font-weight:850}.mobile-brand .brand-emblem{width:35px;height:35px;font-size:25px;border-radius:9px;background:var(--forest);color:white}.topbar-heading{display:none}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mobile-nav{display:flex;position:fixed;z-index:15;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e7ece4;justify-content:space-around;height:calc(65px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom)}.mobile-nav button{flex:1;border:0;background:none;font-size:10px;color:#90a094;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:700}.mobile-nav button span{font-size:22px;line-height:22px}.mobile-nav button.active{color:var(--forest);box-shadow:inset 0 3px var(--orange)}.content-area{padding-bottom:92px}.footer{padding-bottom:10px}}@media(max-width:580px){.topbar{height:74px;padding:0 17px}.topbar-actions{gap:10px}.topbar-date{display:none}.topbar-actions .btn{font-size:11px;padding:12px 13px}.content-area{padding:23px 14px 82px}.month-toolbar{align-items:center;margin-bottom:18px}.month-heading{display:block}.month-heading h2{font-size:27px}.month-badge{display:none}.month-switch{flex:none}.current-button{font-size:10px;padding:8px 9px}.icon-button{width:26px;height:31px;font-size:22px}.hero{min-height:auto;padding:21px 19px 23px;border-radius:15px}.hero-content{margin-top:27px;display:block}.hero-money{font-size:46px}.hero-label{font-size:12px}.hero-subtitle{font-size:11px}.hero-target{margin-top:22px;border-left:0;border-top:1px solid #527763;padding:17px 0 0;display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px}.hero-target strong{font-size:22px;grid-column:2;grid-row:1/3}.hero-target span{font-size:9px}.hero-target small{grid-column:1;font-size:11px}.hero-progress{margin-top:23px}.hero-progress-label{font-size:10px}.metric-grid{gap:10px;margin-top:12px}.metric-card{padding:15px 12px;border-radius:12px}.metric-top{font-size:9px;letter-spacing:.7px}.metric-icon{width:24px;height:24px;font-size:13px}.metric-value{font-size:22px;margin-top:13px}.metric-card p{font-size:10px;line-height:1.4}.insights-row{align-items:flex-start;flex-direction:column;gap:17px;padding:17px;margin:12px 0 18px}.insight-number{align-items:flex-start;padding-left:59px}.insight-main p{font-size:11px}.insight-main h3{font-size:13px}.section-card{padding:18px 13px;margin-bottom:14px;border-radius:13px}.section-header{gap:10px;margin-bottom:15px}.section-header h3{font-size:21px}.section-hint{font-size:9px;text-align:right;max-width:85px}.calendar-weekdays,.calendar-grid{gap:3px}.calendar-weekdays{font-size:8px}.calendar-cell{padding:7px 4px;min-height:59px;border-radius:7px;gap:3px;align-items:center;text-align:center}.calendar-cell .day-num{font-size:11px}.calendar-cell .day-money{font-size:10px}.calendar-cell .day-target{font-size:8px}.calendar-cell .cell-mark{width:5px;height:5px;right:4px;top:5px}.calendar-legend{gap:9px;font-size:9px}.calendar-legend span{gap:4px}.recent-item{padding:13px 3px}.expenses-grid,.settings-layout{grid-template-columns:1fr;gap:0}.expenses-hero{padding:24px 19px}.expenses-hero h3{font-size:24px}.expenses-hero strong{font-size:35px}.expense-decoration{right:9px;font-size:170px}.daily-table{font-size:11px}.daily-table th,.daily-table td{padding:12px 9px}.section-description{font-size:11px}.footer{font-size:9px;flex-direction:column;gap:5px;text-align:center}.editor-overlay{align-items:flex-end}.editor-panel{height:min(91dvh,850px);width:100%;border-radius:21px 21px 0 0;padding:14px 20px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -12px 40px #122d273b}.editor-handle{display:block;width:38px;height:4px;border-radius:10px;background:#dae4db;margin:0 auto 19px}.editor-header h2{font-size:25px}.editor-fields{gap:10px}.editor-preview strong{font-size:19px}.editor-expense-heading{margin-top:24px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
-
-  </style>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <title>Finances — Your daily money, clearly.</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d3228">
+<meta name="description" content="Finances — your daily earning game. Track income, expenses, streaks and wins.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+<title>Finances · Make every day count</title>
+<style>
+:root{
+  --green:#103c2f;--deep:#09271f;--green2:#1b5b45;--pearl:#f5f7f1;--paper:#fffefa;
+  --orange:#ef994e;--gold:#e9ba73;--ink:#172c23;--muted:#829286;--line:#e5ebe3;
+  --soft:#eaf2e8;--red:#c95652;--amber:#bc812a;--shadow:0 16px 44px rgba(17,57,38,.07);
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--pearl);-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #f3b570;outline-offset:3px}
+button:disabled{opacity:.46;cursor:not-allowed}a{color:inherit}
+svg{display:block}
+.app{width:100%;max-width:620px;min-height:100dvh;margin:auto;padding:0 20px calc(118px + env(safe-area-inset-bottom));position:relative}
+.top{display:flex;justify-content:space-between;align-items:center;padding:27px 0 22px}
+.identity{display:flex;align-items:center;gap:10px}
+.logo{width:43px;height:43px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#245d45,#072c22);box-shadow:inset 1px 2px 1px #ffffff55,0 8px 18px #1a56372b;color:#f6efe2;font:italic 700 29px Georgia,serif;position:relative}
+.logo:after{content:"";position:absolute;width:7px;height:7px;background:var(--orange);border-radius:50%;right:9px;top:9px}
+.brand{font-size:17px;font-weight:900;letter-spacing:2.6px;line-height:1.1}
+.brand span{display:block;color:var(--muted);font-size:9px;letter-spacing:2.4px;font-weight:700;margin-top:5px}
+.date-bubble{width:45px;height:45px;border-radius:16px;background:var(--paper);box-shadow:0 5px 20px #1538290a;display:grid;place-items:center;line-height:1.05;border:1px solid var(--line)}
+.date-bubble b{font-size:16px}.date-bubble small{font-weight:900;color:var(--green2);font-size:9px;letter-spacing:.7px}
+.page{display:none;animation:pageIn .32s both}.page.active{display:block}
+@keyframes pageIn{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.kicker{font-size:10px;font-weight:900;letter-spacing:2.2px;color:#72917e;text-transform:uppercase}
+.title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(31px,7.7vw,40px);font-weight:600;line-height:1.12;letter-spacing:-1.2px;margin:8px 0 7px}
+.sub{color:var(--muted);font-size:13px;line-height:1.6;margin:0}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:27px 0 13px;gap:10px}
+.section-head h2{font-family:Georgia,serif;letter-spacing:-.45px;font-size:22px;font-weight:600;margin:0}
+.mini-action{border:0;background:transparent;color:var(--green2);font-weight:800;font-size:12px;padding:8px}
+.hero{overflow:hidden;position:relative;border:1px solid #2f674d;border-radius:30px;background:radial-gradient(ellipse at 104% 0%,#347255 0%,transparent 44%),linear-gradient(135deg,#184f3b,#0d3529 56%,#09271f);color:#fff;margin-top:23px;padding:25px 24px 22px;box-shadow:0 20px 40px #0d39262a,inset 0 1px #ffffff35}
+.hero:before,.hero:after{content:"";position:absolute;pointer-events:none;border:1px solid #ffffff13;border-radius:50%;width:330px;height:330px;right:-160px;top:-156px}
+.hero:after{width:265px;height:265px;right:-127px;top:-122px}
+.hero-head{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.hero-head small{font-size:10px;letter-spacing:1.5px;font-weight:900;color:#bcddc9}
+.live{display:flex;align-items:center;gap:7px;color:#f7d19a;font-size:10px;font-weight:800}
+.live i{height:7px;width:7px;background:#efab65;display:block;border-radius:50%;box-shadow:0 0 0 4px #ed9e4552}
+.hero-main{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:0;margin-top:24px;margin-bottom:18px}
+.hero-copy{flex:1;min-width:0}
+.hero-copy>span{display:block;color:#bdd9c6;font-size:12px;font-weight:550;margin-bottom:8px}
+.hero-number{font-size:clamp(34px,8vw,53px);font-weight:850;letter-spacing:-2px;line-height:1.05;font-variant-numeric:tabular-nums}
+.hero-caption{font-size:11px;color:#a4cdb3;margin-top:11px;line-height:1.4}
+.ring-wrap{position:relative;width:128px;height:128px;flex:none;margin-right:-4px}
+.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 5px 10px #0002)}
+.ring-bg{stroke:#386f56}.ring-active{stroke:#f6b573;stroke-linecap:round;stroke-dasharray:327;stroke-dashoffset:327;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+.ring-middle{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-middle b{font-size:25px;letter-spacing:-1px}.ring-middle small{font-size:9px;color:#b3d4c0;font-weight:800;letter-spacing:.8px}
+.hero-divider{height:1px;background:#ffffff22;position:relative;z-index:1}
+.hero-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:17px;position:relative;z-index:1}
+.hero-metrics small{display:block;font-size:9px;color:#a9cdb7;letter-spacing:.3px;margin-bottom:6px}
+.hero-metrics b{font-size:17px;letter-spacing:-.6px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hero-metrics>div+div{border-left:1px solid #ffffff20;padding-left:12px}
+.hero-message{display:flex;gap:10px;align-items:center;background:#ffffff11;padding:12px 14px;border-radius:14px;margin-top:19px;color:#f5e6cb;font-size:11px;line-height:1.4;position:relative;z-index:1}
+.sparkle{color:#ffbd78;font-size:17px}
+.quick{display:grid;grid-template-columns:1.1fr 1fr;gap:12px;margin-top:16px}
+.quick button{border:0;border-radius:20px;min-height:72px;padding:13px 16px;display:flex;align-items:center;gap:11px;text-align:left;transition:transform .15s,box-shadow .15s;box-shadow:var(--shadow);font-size:13px;font-weight:900}
+.quick button:active,.press:active{transform:scale(.97)}
+.quick .earn{background:linear-gradient(130deg,#f9b978,#ee9645);color:#4d2b12;box-shadow:0 12px 24px #e4a05d36,inset 0 1px #fff8}
+.quick .spend{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.quick .iconbox{width:38px;height:38px;border-radius:13px;background:#ffffff65;display:grid;place-items:center;font-size:24px;flex:none}
+.quick .spend .iconbox{background:#eef3e9}
+.quick small{display:block;font-size:10px;font-weight:650;opacity:.75;margin-top:4px}
+.signal{padding:15px 17px;background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);display:flex;align-items:center;gap:13px}
+.signal-icon{width:43px;height:43px;display:grid;place-items:center;background:#eaf4e9;border-radius:14px;color:var(--green);font-size:21px}
+.signal b{font-size:13px}.signal p{font-size:11px;color:var(--muted);margin:5px 0 0;line-height:1.4}
+.week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.day-chip{min-width:0;text-align:center;border:1px solid #e4ebe2;border-radius:15px;background:#fff;padding:10px 1px 9px}
+.day-chip span{display:block;color:#99a89d;font-size:10px;font-weight:750;margin-bottom:9px}
+.day-chip b{font-size:12px;background:#e9eee8;color:#768a7a;width:25px;height:25px;display:grid;place-items:center;margin:auto;border-radius:50%}
+.day-chip.hit b{background:#d9f1df;color:#217c52}.day-chip.close b{background:#fff0d2;color:#b97b24}.day-chip.miss b{background:#fce2df;color:#b5514c}
+.day-chip.today{border:2px solid #eba365;padding:9px 0 8px;box-shadow:0 3px 12px #e1aa7030}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:23px;padding:20px;box-shadow:var(--shadow)}
+.recent-item{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;text-align:left;padding:14px 2px;gap:12px}
+.recent-item:last-child{border-bottom:0}
+.recent-item strong{display:block;font-size:13px}.recent-item small{display:block;font-size:10px;color:var(--muted);margin-top:4px}
+.recent-item b{font-size:14px;white-space:nowrap}
+.recent-item em{font-size:10px;font-style:normal;display:block;text-align:right;margin-top:5px;font-weight:800}
+.pos{color:#2e9160}.neg{color:var(--red)}.warning{color:#bd8434}
+.empty{text-align:center;color:var(--muted);padding:25px 8px;font-size:12px;line-height:1.6}
+.empty span{display:block;font-size:33px;margin-bottom:10px}
+.page-top{margin:8px 0 22px}
+.period-switch{display:flex;align-items:center;justify-content:space-between;margin:19px 0 15px}
+.period-switch h2{font:600 25px Georgia,serif;margin:0}
+.arrows{display:flex;gap:8px}.arrow{width:38px;height:38px;background:white;border:1px solid var(--line);border-radius:13px;color:var(--green);font-size:19px}
+.summary3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:14px}
+.summary3>div{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px 10px;min-width:0}
+.summary3 small{color:var(--muted);font-size:10px;display:block;margin-bottom:7px}
+.summary3 b{font-size:clamp(14px,4vw,20px);letter-spacing:-.6px;white-space:nowrap}
+.calendar{background:#fff;border:1px solid var(--line);border-radius:24px;padding:16px 12px 12px;box-shadow:var(--shadow)}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.cal-dow{text-align:center;font-size:10px;font-weight:800;color:#9caaa0;padding:7px 0 13px}
+.cal-cell{min-height:63px;border:1px solid #f0f2ec;background:#fafbf8;border-radius:11px;padding:8px 2px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:5px}
+.cal-cell b{font-size:12px;font-weight:800}.cal-cell small{font-size:9px;letter-spacing:-.35px;font-weight:750}
+.cal-cell.hit{background:#e3f3e7;border-color:#cdebd6;color:#25734b}
+.cal-cell.close{background:#fff2d9;border-color:#ffebbc;color:#a87322}
+.cal-cell.miss{background:#fceae6;border-color:#f4dad7;color:#bc514a}
+.cal-cell.today{outline:2px solid var(--orange);outline-offset:1px}
+.cal-cell.blank{visibility:hidden}.cal-cell.future{color:#a8b4aa}
+.legend{display:flex;justify-content:center;gap:12px;margin:14px 0 0;flex-wrap:wrap}
+.legend span{font-size:10px;color:var(--muted)}.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.mini-breakdown{margin-top:17px}
+.mini-breakdown>div{padding:13px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.mini-breakdown>div:last-child{border:0}.mini-breakdown b{font-weight:800}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.metric{min-height:124px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.metric .sym{font-size:22px}.metric small{display:block;color:var(--muted);font-size:11px;margin:12px 0 6px}
+.metric b{font-size:25px;letter-spacing:-.9px}
+.metric.dark{background:linear-gradient(135deg,#194f3c,#0b3026);color:#fff}.metric.dark small{color:#c2d8c9}
+.bar-card{padding:20px 15px;background:#fff;border:1px solid var(--line);border-radius:23px;box-shadow:var(--shadow)}
+.bars{height:178px;display:grid;grid-template-columns:repeat(7,1fr);gap:11px;align-items:end;padding:15px 5px 0;border-bottom:1px solid var(--line)}
+.bar-col{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px}
+.bar-stand{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;position:relative}
+.bar-fill{width:min(100%,29px);min-height:2px;background:linear-gradient(180deg,#edaa6b,#e89148);border-radius:8px 8px 2px 2px;transition:height .7s}
+.bar-col.zero .bar-fill{background:#e8eee8}
+.bar-col b{font-size:10px;color:var(--muted);font-weight:700;position:absolute;bottom:calc(100% + 3px);display:none}
+.bar-labels{display:grid;grid-template-columns:repeat(7,1fr);gap:11px;padding:9px 5px 0;text-align:center;color:var(--muted);font-size:10px;font-weight:800}
+.bar-caption{font-size:11px;color:var(--muted);margin:14px 3px 0}
+.level-card{background:linear-gradient(125deg,#143e30,#0a2d23);border:1px solid #35674e;color:#fff;position:relative;overflow:hidden;border-radius:26px;padding:23px;box-shadow:0 15px 35px #0d3c2930}
+.level-card:after{content:'✦';font-size:170px;color:#fff1;position:absolute;right:-3px;top:-30px}
+.level-label{font-size:10px;letter-spacing:2px;color:#b6d6c3;font-weight:850}
+.level-num{font:600 54px Georgia,serif;letter-spacing:-2px;margin:9px 0 2px}
+.level-name{color:#f1ba79;font-weight:750;font-size:14px}
+.track{height:9px;border-radius:99px;background:#ffffff2a;overflow:hidden;margin-top:23px;position:relative;z-index:1}
+.track span{display:block;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#faad69,#f7d198);transition:width .7s}
+.level-foot{display:flex;justify-content:space-between;color:#bbd2c1;font-size:10px;margin-top:9px}
+.badge-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.achievement{background:#fff;border:1px solid var(--line);border-radius:21px;padding:19px 14px;min-height:154px}
+.achievement.locked{background:#f8faf7;opacity:.57;filter:grayscale(.6)}
+.achievement .emoji{width:47px;height:47px;background:#f9efe0;border-radius:15px;display:grid;place-items:center;font-size:26px;margin-bottom:12px}
+.achievement b{display:block;font-size:13px}.achievement small{display:block;margin-top:6px;font-size:10px;line-height:1.5;color:var(--muted)}
+.achievement .unlock{color:#298458;font-size:10px;font-weight:850;margin-top:9px}
+.settings-card{background:#fff;border:1px solid var(--line);border-radius:23px;padding:20px;margin-top:14px}
+.settings-card h2{font:600 22px Georgia,serif;margin:0 0 6px}.settings-card p{font-size:11px;line-height:1.55;color:var(--muted);margin:0 0 15px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;font-weight:750}
+.setting-row:last-child{border:0}
+.field-money{display:flex;align-items:center;background:#f6f8f4;border:1px solid #e1e9df;border-radius:12px;padding:0 10px;min-width:0;width:110px}
+.field-money>span{font-size:12px;color:#7e9786;font-weight:800}
+.field-money input{width:100%;padding:11px 4px;background:none;border:0;outline:0;min-width:0;font-weight:850;color:var(--green);font-size:14px}
+.field-money input:focus{outline:0}
+.action-btn{width:100%;border:0;border-radius:15px;background:var(--green);color:#fff;padding:15px;font-weight:850;font-size:13px;margin-top:15px}
+.secondary-btn{border:1px solid #dae7dc;border-radius:15px;background:#fff;color:var(--green);padding:14px;font-weight:850;font-size:12px;width:100%}
+.button-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
+.privacy{font-size:11px;line-height:1.6;color:var(--muted);padding:14px 0}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,620px);height:calc(77px + env(safe-area-inset-bottom));padding:8px 12px calc(7px + env(safe-area-inset-bottom));background:#fffefaed;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid #e2e9e1;display:grid;grid-template-columns:repeat(5,1fr);gap:0;z-index:20}
+.nav{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#95a49a;border-radius:14px;font-size:9px;font-weight:850;padding:5px 0}
+.nav svg{width:21px;height:21px;stroke-width:1.9}.nav.active{color:var(--green);background:#e9f2e8}.nav.active svg{stroke:#1c7450}
+.overlay{position:fixed;inset:0;background:#071b14a8;z-index:50;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(5px)}
+.overlay.open{display:flex}
+.sheet{width:min(100%,620px);max-height:min(90dvh,850px);overflow-y:auto;overscroll-behavior:contain;background:#fffefa;border-radius:28px 28px 0 0;padding:10px 21px calc(25px + env(safe-area-inset-bottom));box-shadow:0 -18px 55px #0002;animation:rise .28s ease both}
+@keyframes rise{from{transform:translateY(35px);opacity:.7}to{transform:translateY(0);opacity:1}}
+.handle{width:45px;height:5px;border-radius:9px;background:#dbe3d9;margin:0 auto 20px}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sheet h2{font:600 27px Georgia,serif;letter-spacing:-.6px;margin:0}
+.close{background:#eff3ed;border:0;border-radius:50%;width:36px;height:36px;font-size:20px;color:var(--green)}
+.sheet-sub{color:var(--muted);font-size:12px;margin:9px 0 18px}
+.segment{display:grid;grid-template-columns:1fr 1fr;background:#eef3ec;border-radius:14px;padding:4px;gap:3px;margin:12px 0 18px}
+.segment button{border:0;border-radius:11px;background:transparent;padding:12px 8px;font-size:12px;font-weight:850;color:#829488}
+.segment button.selected{background:#fff;color:var(--green);box-shadow:0 3px 10px #20422b13}
+.sheet label{display:block;font-size:11px;font-weight:850;color:#537360;margin:16px 0 8px}
+.money-input{display:flex;align-items:center;border:1px solid #dce8dc;background:#f9fbf7;border-radius:18px;padding:9px 17px;gap:9px}
+.money-input span{font-size:29px;color:#8ca592;font-weight:750}
+.money-input input{border:0;background:transparent;width:100%;font-size:35px;letter-spacing:-1px;font-weight:900;color:var(--green);outline:none;min-width:0;padding:6px 0}
+.money-input input:focus{outline:0}
+.amount-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.amount-chips button,.category-chip{border:1px solid #e0e9dc;background:#f7f9f3;border-radius:12px;padding:10px 13px;font-size:12px;font-weight:850;color:var(--green)}
+.amount-chips button:active,.category-chip:active{background:#e7f0e2}
+.category-list{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.category-chip{padding:15px 5px;text-align:center;font-size:11px}
+.category-chip span{display:block;font-size:22px;margin-bottom:7px}
+.category-chip.active{border-color:#e3a46c;background:#fff0df;color:#9a5c22;box-shadow:0 0 0 1px #edbc90}
+.primary-save{width:100%;margin-top:23px;background:linear-gradient(120deg,#1d6047,#103729);color:#fff;border:0;border-radius:17px;min-height:58px;font-weight:900;font-size:14px;box-shadow:0 12px 24px #204a3430}
+.input-date{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #dce7d9;background:#fafcf8;color:var(--green);font-weight:750}
+textarea{width:100%;border-radius:13px;border:1px solid #e1e9df;background:#fafcf8;padding:12px;min-height:67px;resize:vertical;color:var(--ink)}
+.editor-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.editor-two input{width:100%;border:1px solid #e0e9df;background:#f8fbf5;border-radius:13px;padding:14px;font-weight:900;color:var(--green);font-size:17px;min-width:0}
+.expense-line{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12px}
+.remove{border:0;background:#fff0ec;border-radius:10px;color:#b95b52;padding:8px 11px;font-weight:850}
+.toast{position:fixed;bottom:calc(95px + env(safe-area-inset-bottom));left:50%;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#133d2e;color:#fff;padding:13px 18px;border-radius:14px;box-shadow:0 10px 30px #122a2044;font-size:12px;font-weight:750;z-index:75;max-width:90%;transition:opacity .2s,transform .2s;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}
+.confetti i{position:absolute;left:50%;top:44%;height:13px;width:8px;border-radius:2px;background:#ecae6e;animation:burst 1s ease-out forwards}
+@keyframes burst{to{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+@media(min-width:800px){body{background:linear-gradient(125deg,#e4eee3,#faf9f3)}.app{margin:20px auto;min-height:calc(100dvh - 20px);background:#f6f8f2;border-radius:32px 32px 0 0;box-shadow:0 24px 90px #274c2a15;padding-left:26px;padding-right:26px}}
+@media(max-width:370px){.app{padding-left:14px;padding-right:14px}.hero{padding:21px 16px}.ring-wrap{width:107px;height:107px}.hero-number{font-size:34px}.hero-metrics b{font-size:15px}.quick button{padding:11px 9px}.calendar{padding:11px 7px}.cal-cell{min-height:59px}.cal-cell small{font-size:8px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
 </head>
 <body>
-<div class="app-shell">
-  <aside class="sidebar" aria-label="Main navigation">
-    <div class="brand"><span class="brand-emblem">F<span>.</span></span><span class="brand-text">FINANCES<small>OWN YOUR NUMBERS</small></span></div>
-    <p class="sidebar-label">WORKSPACE</p>
-    <nav class="side-nav">
-      <button class="nav-btn active" data-view="overview"><span class="nav-icon">▦</span> Overview</button>
-      <button class="nav-btn" data-view="log"><span class="nav-icon">☷</span> Daily log</button>
-      <button class="nav-btn" data-view="expenses"><span class="nav-icon">◫</span> Expenses</button>
-      <button class="nav-btn" data-view="settings"><span class="nav-icon">⚙</span> Settings</button>
-    </nav>
-    <div class="sidebar-bottom"><div class="privacy-dot"></div><span>Private by design<small>Stored on this device</small></span></div>
-  </aside>
-
-  <main class="main-content">
-    <header class="topbar">
-      <div class="mobile-brand"><span class="brand-emblem">F<span>.</span></span><span>FINANCES</span></div>
-      <div class="topbar-heading"><span class="eyebrow">PERSONAL MONEY MANAGER</span><h1 id="page-title">Good to see you.</h1></div>
-      <div class="topbar-actions"><span class="topbar-date" id="today-label"></span><button class="btn btn-orange" id="quick-add" type="button"><span class="btn-plus">+</span> <span>Log income</span></button></div>
-    </header>
-
-    <div class="content-area">
-      <section class="month-toolbar" aria-label="Month selector">
-        <div class="month-title-block"><span class="eyebrow muted">YOUR FINANCIAL MONTH</span><div class="month-heading"><h2 id="month-heading">November 2026</h2><span class="month-badge">MONTHLY TRACKER</span></div></div>
-        <div class="month-switch"><button id="month-prev" class="icon-button" aria-label="Previous month">‹</button><button id="month-current" class="current-button">This month</button><button id="month-next" class="icon-button" aria-label="Next month">›</button></div>
-      </section>
-
-      <section id="view-overview" class="view active" aria-label="Overview">
-        <div class="hero">
-          <div class="hero-top"><span class="hero-kicker"><i></i> THE BIG PICTURE</span><span class="hero-period" id="hero-period">NOVEMBER 2026</span></div>
-          <div class="hero-content"><div><p class="hero-label">Your take-home this month</p><div class="hero-money" id="hero-net">£0.00</div><p class="hero-subtitle">Income minus recorded expenses. All yours.</p></div>
-          <div class="hero-target"><span>INCOME GOAL</span><strong id="hero-target">£6,310</strong><small id="hero-goal-progress">0% achieved</small></div></div>
-          <div class="hero-progress"><div class="hero-progress-label"><span>Progress towards your income target</span><strong id="hero-progress-pct">0%</strong></div><div class="progress-track"><div id="hero-progress-bar" class="progress-fill"></div></div></div>
-          <div class="hero-corner one"></div><div class="hero-corner two"></div>
-        </div>
-
-        <div class="metric-grid">
-          <article class="metric-card"><div class="metric-top"><span>GROSS EARNINGS</span><span class="metric-icon green-icon">↗</span></div><div class="metric-value" id="metric-gross">£0.00</div><p>Total income entered</p></article>
-          <article class="metric-card"><div class="metric-top"><span>TOTAL EXPENSES</span><span class="metric-icon orange-icon">↘</span></div><div class="metric-value" id="metric-expenses">£0.00</div><p>Charging, food and more</p></article>
-          <article class="metric-card accent-card"><div class="metric-top"><span>BALANCE TO DATE</span><span class="metric-icon dark-icon">±</span></div><div class="metric-value" id="metric-balance">£0.00</div><p id="balance-message">Your running target balance</p></article>
-          <article class="metric-card"><div class="metric-top"><span>DAYS ON TARGET</span><span class="metric-icon green-icon">✓</span></div><div class="metric-value" id="metric-days">0 <small>/ 0 logged</small></div><p>Days reaching your goal</p></article>
-        </div>
-
-        <div class="insights-row"><div class="insight-main"><div class="insight-symbol">✦</div><div><h3 id="insight-title">Your next move</h3><p id="insight-text">Log your first day to see your position.</p></div></div><div class="insight-number"><small>REQUIRED DAILY AVERAGE</small><strong id="insight-average">£0</strong><span id="insight-days">for remaining days</span></div></div>
-
-        <section class="section-card calendar-section"><div class="section-header"><div><span class="eyebrow muted">AT A GLANCE</span><h3>Monthly calendar</h3></div><span class="section-hint">Tap a date to add or edit</span></div><div class="calendar-weekdays" aria-hidden="true"><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span></div><div id="calendar" class="calendar-grid"></div><div class="calendar-legend"><span><i class="legend-dot legend-green"></i> Hit target</span><span><i class="legend-dot legend-amber"></i> 80–99%</span><span><i class="legend-dot legend-red"></i> Under 70%</span><span><i class="legend-dot legend-empty"></i> Not logged</span></div></section>
-        <section class="section-card snapshot-section"><div class="section-header"><div><span class="eyebrow muted">RECENT ACTIVITY</span><h3>Latest entries</h3></div><button class="text-button" data-goto="log">View full log →</button></div><div id="recent-entries" class="recent-list"></div></section>
-      </section>
-
-      <section id="view-log" class="view" aria-label="Daily log"><div class="section-card"><div class="section-header"><div><span class="eyebrow muted">EVERY POUND COUNTS</span><h3>Daily income & expenses</h3></div><button class="btn btn-outline" id="export-csv">↓ Export CSV</button></div><p class="section-description">Your daily target, what you earned, what you spent, and your take-home. Surpluses and shortfalls automatically balance across the month.</p><div class="table-wrap"><table class="daily-table"><thead><tr><th>DATE</th><th>TARGET</th><th>EARNED</th><th>EXPENSES</th><th>NET</th><th>VS TARGET</th><th>STATUS</th><th></th></tr></thead><tbody id="daily-table-body"></tbody></table></div></div></section>
-
-      <section id="view-expenses" class="view" aria-label="Expenses"><div class="expenses-hero"><div><span class="eyebrow">WHERE THE MONEY GOES</span><h3>Your monthly outgoings</h3><strong id="expenses-page-total">£0.00</strong><p>Every expense reduces take-home pay, not gross earnings.</p></div><div class="expense-decoration">£</div></div><div class="expenses-grid"><div class="section-card"><div class="section-header"><div><span class="eyebrow muted">BREAKDOWN</span><h3>By category</h3></div></div><div id="expense-categories" class="category-list"></div></div><div class="section-card"><div class="section-header"><div><span class="eyebrow muted">TRANSACTIONS</span><h3>Expense history</h3></div></div><div id="expense-transactions" class="transaction-list"></div></div></div></section>
-
-      <section id="view-settings" class="view" aria-label="Settings"><div class="settings-layout"><div class="section-card"><div class="section-header"><div><span class="eyebrow muted">YOUR SCHEDULE</span><h3>Default daily income targets</h3></div></div><p class="section-description">These goals apply to every month automatically. You can also override a target for a single date in the daily log.</p><div id="weekday-settings" class="weekday-settings"></div><button class="btn btn-green" id="save-goals">Save targets</button><div class="settings-note" id="goals-feedback" role="status"></div></div><div class="settings-column"><div class="section-card"><div class="section-header"><div><span class="eyebrow muted">OPTIONAL SECOND GOAL</span><h3>Daily expense limit</h3></div></div><p class="section-description">Set a spending cap if you want green days to mean both your income goal and your expense goal were met. Leave blank to track income alone.</p><label for="expense-cap">Expense budget per day</label><div class="currency-control"><span>£</span><input type="number" min="0" step="0.01" id="expense-cap" placeholder="No limit set"></div><button class="btn btn-green" id="save-cap">Save spending limit</button><div class="settings-note" id="cap-feedback" role="status"></div></div><div class="section-card"><div class="section-header"><div><span class="eyebrow muted">YOUR DATA</span><h3>Backup and privacy</h3></div></div><p class="section-description">No login, advertisements or cloud tracking. Your entries stay in this browser. Back them up before changing phones or clearing browser data.</p><div class="backup-actions"><button id="export-json" class="btn btn-outline">↓ Download backup</button><button id="import-json" class="btn btn-outline">↑ Restore backup</button><input id="import-file" type="file" accept=".json,application/json" hidden></div><div class="settings-note" id="backup-feedback" role="status"></div></div></div></div></section>
-      <footer class="footer"><span>FINANCES <i>·</i> MADE FOR YOUR EVERYDAY</span><span>Private. Offline-friendly. In control.</span></footer>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute">
+<symbol id="homeicon" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="calendaricon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor"/><path d="M7 2v6M17 2v6M3 11h18" fill="none" stroke="currentColor" stroke-linecap="round"/></symbol>
+<symbol id="statsicon" viewBox="0 0 24 24"><path d="M4 20V11m6 9V5m6 15v-8m5 8V8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"/></symbol>
+<symbol id="trophyicon" viewBox="0 0 24 24"><path d="M7 3h10v7a5 5 0 0 1-10 0V3Zm0 2H4v3a4 4 0 0 0 4 4m9-7h3v3a4 4 0 0 1-4 4m-4 3v4m-5 2h10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="settingsicon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16M9 4v4m6 2v4m-6 2v4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></symbol>
+</svg>
+<div class="app">
+<header class="top">
+  <div class="identity"><div class="logo">F</div><div class="brand">FINANCES<span>THE DAILY DRIVE</span></div></div>
+  <div class="date-bubble" aria-label="Today's date"><b id="dateDay">2</b><small id="dateMonth">NOV</small></div>
+</header>
+<main>
+<section class="page active" id="home">
+  <div class="kicker" id="homeDate">MONDAY · 2 NOVEMBER</div>
+  <h1 class="title" id="greeting">Make today count.</h1>
+  <p class="sub">Every fare. Every pound. Every win.</p>
+  <div class="hero">
+    <div class="hero-head"><small>TODAY'S PERFORMANCE</small><div class="live"><i></i>LIVE TRACKER</div></div>
+    <div class="hero-main">
+      <div class="hero-copy"><span>Earned today</span><div class="hero-number" id="heroEarned">£0</div><div class="hero-caption" id="heroSub">Your next win starts here.</div></div>
+      <div class="ring-wrap">
+        <svg viewBox="0 0 128 128" aria-label="Progress to today's target"><circle class="ring-bg" cx="64" cy="64" r="52" stroke-width="11" fill="none"/><circle id="ring" class="ring-active" cx="64" cy="64" r="52" stroke-width="11" fill="none"/></svg>
+        <div class="ring-middle"><b id="ringPercent">0%</b><small>OF GOAL</small></div>
+      </div>
     </div>
-  </main>
+    <div class="hero-divider"></div>
+    <div class="hero-metrics"><div><small>Today's target</small><b id="heroTarget">£160</b></div><div><small>Left to win</small><b id="heroLeft">£160</b></div><div><small>Take-home</small><b id="heroNet">£0</b></div></div>
+    <div class="hero-message"><span class="sparkle">✦</span><span id="heroMessage">Start with one entry and build momentum.</span></div>
+  </div>
+  <div class="quick"><button class="earn press" data-open="income"><div class="iconbox">＋</div><div>Add income<small>Log a fare or total</small></div></button><button class="spend press" data-open="expense"><div class="iconbox">−</div><div>Add expense<small>Keep your net clear</small></div></button></div>
+  <div class="section-head"><h2>This week's pulse</h2><button class="mini-action" data-go="calendar">Calendar ↗</button></div>
+  <div class="week-strip" id="weekStrip"></div>
+  <div class="section-head"><h2>Your momentum</h2><button class="mini-action" data-go="wins">View wins ↗</button></div>
+  <div class="signal"><div class="signal-icon" id="momentumIcon">✦</div><div><b id="momentumTitle">Your streak starts now</b><p id="momentumText">Hit today's target to start stacking wins.</p></div></div>
+  <div class="section-head"><h2>Recent activity</h2><button class="mini-action" data-go="calendar">All days ↗</button></div>
+  <div class="card" id="recent"></div>
+</section>
+<section class="page" id="calendar">
+  <div class="page-top"><div class="kicker">YOUR JOURNEY</div><h1 class="title">The daily ledger.</h1><p class="sub">Tap any date to view or update that day.</p></div>
+  <div class="period-switch"><h2 id="calMonth">November 2026</h2><div class="arrows"><button class="arrow" data-month="-1" aria-label="Previous month">‹</button><button class="arrow" data-month="1" aria-label="Next month">›</button></div></div>
+  <div class="summary3"><div><small>Gross</small><b id="calGross">£0</b></div><div><small>Expenses</small><b id="calSpent">£0</b></div><div><small>Net</small><b id="calNet">£0</b></div></div>
+  <div class="calendar"><div class="calendar-grid" id="calGrid"></div><div class="legend"><span><i style="background:#4aa471"></i>Hit goal</span><span><i style="background:#eab05c"></i>Close</span><span><i style="background:#dd867e"></i>Behind</span><span><i style="background:#dce5dc"></i>Unlogged</span></div></div>
+  <div class="section-head"><h2>Monthly checkpoint</h2></div><div class="card" id="calBreakdown"></div>
+</section>
+<section class="page" id="stats">
+  <div class="page-top"><div class="kicker">THE BIG PICTURE</div><h1 class="title">Numbers that move you.</h1><p class="sub">Your performance, without the spreadsheet.</p></div>
+  <div class="period-switch"><h2 id="statsMonth"></h2><div class="arrows"><button class="arrow" data-month="-1" aria-label="Previous month">‹</button><button class="arrow" data-month="1" aria-label="Next month">›</button></div></div>
+  <div class="metric-grid">
+    <div class="metric dark"><div class="sym">↗</div><small>Gross earnings</small><b id="statsGross">£0</b></div>
+    <div class="metric"><div class="sym">💎</div><small>Net take-home</small><b id="statsNet">£0</b></div>
+    <div class="metric"><div class="sym">🎯</div><small>Goal hit days</small><b id="statsHits">0</b></div>
+    <div class="metric"><div class="sym">⚡</div><small>Total expenses</small><b id="statsSpent">£0</b></div>
+  </div>
+  <div class="section-head"><h2 id="chartTitle">Daily earnings</h2></div>
+  <div class="bar-card"><div class="bars" id="bars"></div><div class="bar-labels" id="barLabels"></div><p class="bar-caption" id="chartCaption"></p></div>
+  <div class="section-head"><h2>Money intelligence</h2></div><div class="card" id="insights"></div>
+</section>
+<section class="page" id="wins">
+  <div class="page-top"><div class="kicker">PROGRESS IS A GAME</div><h1 class="title">Earn your crown.</h1><p class="sub">Real achievements. No fake points. Just consistency.</p></div>
+  <div class="level-card"><div class="level-label">YOUR DRIVER LEVEL</div><div class="level-num" id="levelNumber">01</div><div class="level-name" id="levelName">Rising Star</div><div class="track"><span id="levelProgress"></span></div><div class="level-foot"><span id="levelXp">0 XP earned</span><span id="nextXp">500 XP to next level</span></div></div>
+  <div class="summary3" style="margin-top:13px"><div><small>Current streak</small><b id="winStreak">0 🔥</b></div><div><small>Best streak</small><b id="winBest">0 days</b></div><div><small>Total wins</small><b id="winCount">0</b></div></div>
+  <div class="section-head"><h2>Trophy cabinet</h2></div><div class="badge-grid" id="badges"></div>
+  <p class="privacy">XP is earned by logging your actual results and hitting goals. Your numbers stay on this device.</p>
+</section>
+<section class="page" id="settings">
+  <div class="page-top"><div class="kicker">YOUR RULES</div><h1 class="title">Make it yours.</h1><p class="sub">Set the targets that work for your driving week.</p></div>
+  <div class="settings-card"><h2>Weekly targets</h2><p>These apply to future and unedited days. Individual day overrides stay unchanged.</p><div id="weekdaySettings"></div><button class="action-btn press" id="saveGoals">Save weekly targets</button></div>
+  <div class="settings-card"><h2>Expense guardrail</h2><p>Optional daily expense cap. Leave blank to switch it off.</p><div class="setting-row"><span>Daily cap</span><div class="field-money"><span>£</span><input id="expenseCap" type="number" min="0" max="1000000" step=".01" inputmode="decimal" placeholder="Off"></div></div><button class="secondary-btn" id="saveCap" style="margin-top:14px">Save expense cap</button></div>
+  <div class="settings-card"><h2>Your data, your control</h2><p>Entries are stored only in this browser. Keep regular backups, particularly before changing phones or clearing browser data.</p><div class="button-row"><button class="secondary-btn" id="backup">↓ JSON backup</button><button class="secondary-btn" id="exportCsv">↓ Monthly CSV</button></div><button class="secondary-btn" id="restoreBtn" style="margin-top:10px">↑ Restore from backup</button><input id="restoreFile" type="file" accept=".json,application/json" hidden></div>
+  <div class="settings-card"><h2>Install on your phone</h2><p>In Chrome, open the app link, tap ⋮ and choose <b>Add to Home screen</b> or <b>Install app</b>. It works offline after the first successful visit.</p><button id="installBtn" class="secondary-btn" hidden>Install Finances</button></div>
+  <p class="privacy">FINANCES 2.0 · Private, offline-ready, no accounts, no ads. Designed to make each day's progress worth opening.</p>
+</section>
+</main>
 </div>
-<nav class="mobile-nav" aria-label="Mobile navigation"><button class="active" data-view="overview"><span>▦</span>Home</button><button data-view="log"><span>☷</span>Daily log</button><button data-view="expenses"><span>◫</span>Expenses</button><button data-view="settings"><span>⚙</span>Settings</button></nav>
-
-<div id="editor-overlay" class="editor-overlay" hidden><div class="editor-backdrop" data-close-editor></div><section class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editor-title"><div class="editor-handle"></div><div class="editor-header"><div><span class="eyebrow muted">DAILY ENTRY</span><h2 id="editor-title">Monday, 2 November</h2></div><button id="editor-close" class="close-button" aria-label="Close entry">×</button></div><form id="entry-form"><div class="editor-fields"><label>Income target<div class="currency-control"><span>£</span><input id="edit-target" type="number" min="0" step="0.01" required inputmode="decimal"></div></label><label>Gross earnings<div class="currency-control"><span>£</span><input id="edit-earned" type="number" min="0" step="0.01" required inputmode="decimal" placeholder="0.00"></div></label></div><div class="editor-expense-heading"><div><span class="eyebrow muted">OUTGOINGS</span><h3>Today's expenses</h3></div><button type="button" class="btn btn-small-outline" id="add-expense">+ Add expense</button></div><div id="expense-editor-list" class="expense-editor-list"></div><label class="notes-label">Notes (optional)<textarea id="edit-note" rows="2" maxlength="400" placeholder="Anything worth remembering about today..."></textarea></label><div class="editor-preview"><div><span>TAKE-HOME</span><strong id="edit-net-preview">£0.00</strong></div><div><span>VS DAILY TARGET</span><strong id="edit-diff-preview">£0.00</strong></div></div><div class="editor-actions"><button type="button" id="delete-entry" class="delete-button">Delete entry</button><button type="submit" class="btn btn-orange save-entry">Save day <span>→</span></button></div></form></section></div>
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<nav class="bottom" aria-label="Main navigation">
+<button class="nav active" data-go="home"><svg><use href="#homeicon"></use></svg>Home</button>
+<button class="nav" data-go="calendar"><svg><use href="#calendaricon"></use></svg>Calendar</button>
+<button class="nav" data-go="stats"><svg><use href="#statsicon"></use></svg>Stats</button>
+<button class="nav" data-go="wins"><svg><use href="#trophyicon"></use></svg>Wins</button>
+<button class="nav" data-go="settings"><svg><use href="#settingsicon"></use></svg>Settings</button>
+</nav>
+<div class="overlay" id="overlay" role="presentation">
+<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+<div class="handle"></div><div class="sheet-head"><h2 id="sheetTitle">Add income</h2><button class="close" id="closeSheet" aria-label="Close">×</button></div>
+<p class="sheet-sub" id="sheetSub">Every pound brings you closer.</p>
+<div id="sheetBody"></div>
+</div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div><div class="confetti" id="confetti" aria-hidden="true"></div>
 <script>
-/* FINANCES — dependency-free, local-first daily income tracker. */
-(() => {
-  'use strict';
-  const STORAGE_KEY = 'finances-local-v1';
-  const WEEKDAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-  const DEFAULT_TARGETS = [160,160,200,230,250,250,230];
-  const CATEGORIES = ['Charging','Food','Parking','Tolls','Car','Other'];
-  const CATEGORY_ICONS = {Charging:'⚡',Food:'◈',Parking:'P',Tolls:'⇄',Car:'◇',Other:'⋯'};
-  const currency = new Intl.NumberFormat('en-GB', {style:'currency',currency:'GBP'});
-  const integerMoney = new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0});
-  const today = new Date();
-  const todayKey = dateKey(today.getFullYear(),today.getMonth(),today.getDate());
-  let year = today.getFullYear(), month = today.getMonth();
-  let activeView = 'overview', editingKey = null;
-  let state;
-  const $ = id => document.getElementById(id);
-  const money = n => currency.format(Number(n) || 0);
-  const money0 = n => integerMoney.format(Number(n) || 0);
-  const round2 = n => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
-  const finiteNonnegative = value => Number.isFinite(Number(value)) && Number(value) >= 0;
-  const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  state = loadState();
-  function dateKey(y,m,d) { return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
-  function dateFromKey(key) { const [y,m,d] = key.split('-').map(Number); return new Date(y,m-1,d); }
-  function weekdayIndex(date) { return (date.getDay()+6)%7; }
-  function newState() { return {settings:{weekdayTargets:[...DEFAULT_TARGETS], expenseBudget:null},entries:{}}; }
-  function normaliseState(obj) {
-    if(!obj || typeof obj !== 'object' || !obj.settings || !obj.entries || typeof obj.entries !== 'object' || Array.isArray(obj.entries)) throw Error('Invalid backup format');
-    const targets = obj.settings.weekdayTargets;
-    if(!Array.isArray(targets) || targets.length !== 7 || !targets.every(v => finiteNonnegative(v) && Number(v) <= 1000000)) throw Error('Invalid weekday goals');
-    const cap = obj.settings.expenseBudget;
-    if(cap !== null && cap !== undefined && !(finiteNonnegative(cap) && Number(cap) <= 1000000)) throw Error('Invalid expense limit');
-    const data = {settings:{weekdayTargets:targets.map(v => round2(v)), expenseBudget:cap == null ? null : round2(cap)},entries:{}};
-    Object.entries(obj.entries).forEach(([key,v])=>{
-      if(!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(key) || !v || typeof v !== 'object') return;
-      const dt=dateFromKey(key);
-      if(!Number.isFinite(dt.getTime()) || dateKey(dt.getFullYear(),dt.getMonth(),dt.getDate())!==key) return;
-      if(!finiteNonnegative(v.earned) || Number(v.earned)>10000000) return;
-      const override = v.targetOverride == null ? null : Number(v.targetOverride);
-      if(override !== null && (!finiteNonnegative(override) || override>1000000)) return;
-      const expenses = Array.isArray(v.expenses) ? v.expenses.slice(0,100).filter(e=>e && CATEGORIES.includes(e.category) && finiteNonnegative(e.amount) && Number(e.amount)<=1000000).map(e=>({category:e.category,amount:round2(e.amount)})) : [];
-      data.entries[key]={earned:round2(v.earned),targetOverride:override==null?null:round2(override),expenses,note:String(v.note||'').slice(0,400)};
-    });
-    return data;
-  }
-  function loadState() { try { const stored = localStorage.getItem(STORAGE_KEY); if(stored) return normaliseState(JSON.parse(stored)); } catch(e) { console.warn('Saved data could not be read:',e); } return newState(); }
-  function saveState() { try { localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); return true; } catch(e) { toast('Storage unavailable: please download a backup.'); return false; } }
-  function datesInMonth(y,m) {const count=new Date(y,m+1,0).getDate();return Array.from({length:count},(_,i)=>dateKey(y,m,i+1));}
-  function defaultTarget(key) {return state.settings.weekdayTargets[weekdayIndex(dateFromKey(key))];}
-  function dataFor(key) {
-    const entry=state.entries[key] || null;
-    const target=entry?.targetOverride ?? defaultTarget(key);
-    const earned=entry?.earned ?? 0;
-    const expenses=round2((entry?.expenses||[]).reduce((sum,e)=>sum+e.amount,0));
-    const net=round2(earned-expenses), delta=round2(earned-target);
-    const ratio=target>0 ? earned/target : 1;
-    const limit=state.settings.expenseBudget;
-    let status='unlogged';
-    if(entry) {
-      if(target===0) status='rest';
-      else if(earned>=target) status=limit!==null && expenses>limit ? 'overspent' : 'achieved';
-      else if(ratio>=0.8) status='close';
-      else if(ratio>=0.7) status='caution';
-      else status='missed';
-    }
-    return {key,date:dateFromKey(key),entry,target,earned,expenses,net,delta,ratio,status};
-  }
-  function monthStats() {
-    const days=datesInMonth(year,month).map(dataFor);
-    const goal=round2(days.reduce((s,d)=>s+d.target,0));
-    const gross=round2(days.reduce((s,d)=>s+d.earned,0));
-    const spent=round2(days.reduce((s,d)=>s+d.expenses,0));
-    const net=round2(gross-spent);
-    const logged=days.filter(d=>d.entry);
-    const hits=logged.filter(d=>d.status==='achieved').length;
-    // A previous blank day is treated as £0 for catch-up, but current blank day
-    // is not charged against the balance until it has an entry.
-    const todayLocal=new Date(today.getFullYear(),today.getMonth(),today.getDate());
-    const elapsed=days.filter(d=>d.date < todayLocal || (d.date.getTime()===todayLocal.getTime() && d.entry));
-    const elapsedGoal=round2(elapsed.reduce((s,d)=>s+d.target,0));
-    const elapsedEarned=round2(elapsed.reduce((s,d)=>s+d.earned,0));
-    const balance=round2(elapsedEarned-elapsedGoal);
-    const daysLeft=days.filter(d=>d.date>=todayLocal).length;
-    const needed=daysLeft ? Math.max(0,round2((goal-gross)/daysLeft)) : 0;
-    return {days,goal,gross,spent,net,logged,hits,elapsedGoal,elapsedEarned,balance,daysLeft,needed};
-  }
-  function monthName() {return new Date(year,month,1).toLocaleDateString('en-GB',{month:'long',year:'numeric'});}
-  function shortDate(date) {return date.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}
-  function statusLabel(status) {return ({unlogged:'Not logged',rest:'Rest day',achieved:'On target',close:'Almost there',caution:'70–79%',missed:'Below 70%',overspent:'Over budget'})[status];}
-  function timeAppropriateEntryKey(){return year===today.getFullYear()&&month===today.getMonth()?todayKey:dateKey(year,month,1);}
-  function setMonth(delta){const d=new Date(year,month+delta,1);year=d.getFullYear();month=d.getMonth();render();}
-  function render(){const stats=monthStats();$('month-heading').textContent=monthName();$('hero-period').textContent=monthName().toUpperCase();$('today-label').textContent=today.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});$('page-title').textContent=({overview:'Good to see you.',log:'Your daily log.',expenses:'Know your outgoings.',settings:'Make it yours.'})[activeView];
-    document.querySelectorAll('[data-view]').forEach(btn=>btn.classList.toggle('active',btn.dataset.view===activeView));document.querySelectorAll('.view').forEach(view=>view.classList.toggle('active',view.id==='view-'+activeView));
-    renderOverview(stats);renderCalendar(stats);renderRecent(stats);renderTable(stats);renderExpenses(stats);renderSettings();
-  }
-  function renderOverview(s){$('hero-net').textContent=money(s.net);$('hero-target').textContent=money0(s.goal);const pct=s.goal>0?Math.round(s.gross/s.goal*100):100;$('hero-goal-progress').textContent=pct+'% achieved';$('hero-progress-pct').textContent=pct+'%';$('hero-progress-bar').style.width=Math.min(100,pct)+'%';$('metric-gross').textContent=money(s.gross);$('metric-expenses').textContent=money(s.spent);$('metric-balance').textContent=(s.balance>=0?'+':'−')+money(Math.abs(s.balance));$('metric-balance').classList.toggle('delta-negative',s.balance<0);$('metric-days').innerHTML=`${s.hits} <small>/ ${s.logged.length} logged</small>`;$('balance-message').textContent=s.balance<0?'Behind schedule — future surpluses help':'Ahead of target or all caught up';document.querySelector('.metric-card.accent-card').classList.toggle('negative',s.balance<0);
-    if(s.balance>0){$('insight-title').textContent='You are ahead of your target.';$('insight-text').textContent=`You have a ${money(s.balance)} cushion. It will offset any quieter days ahead.`;}
-    else if(s.balance<0){$('insight-title').textContent='Your catch-up plan';$('insight-text').textContent=`You are ${money(Math.abs(s.balance))} below your targets so far. Every extra pound on a future day reduces the gap.`;}
-    else{$('insight-title').textContent=s.logged.length?'Right on track. Keep going.':'Every good month starts with one day.';$('insight-text').textContent=s.logged.length?'Your income is balancing your targets so far.':'Tap Log income to record earnings, expenses and your take-home.';}
-    $('insight-average').textContent=s.daysLeft?money0(s.needed):'—';$('insight-days').textContent=s.daysLeft?`across ${s.daysLeft} remaining day${s.daysLeft===1?'':'s'}`:'This month is complete';
-  }
-  function renderCalendar(s){const first=weekdayIndex(new Date(year,month,1)), el=$('calendar');let html='';for(let i=0;i<first;i++)html+='<div class="calendar-cell empty" aria-hidden="true"></div>';for(const d of s.days){const day=d.date.getDate();const future=d.key>todayKey?'future':'';const amt=d.entry?money0(d.net):'—';const title=`${shortDate(d.date)}: target ${money(d.target)}, earned ${money(d.earned)}, expenses ${money(d.expenses)}, ${statusLabel(d.status)}`;html+=`<button type="button" class="calendar-cell ${d.entry?'logged':''} ${d.status} ${future} ${d.key===todayKey?'today':''}" data-date="${d.key}" aria-label="${escapeHTML(title)}"><span class="day-num">${day}</span><span class="cell-mark"></span><span class="day-money">${amt}</span><span class="day-target">${money0(d.target)} goal</span></button>`;}el.innerHTML=html;}
-  function renderRecent(s){const recent=s.logged.slice().reverse().slice(0,4);$('recent-entries').innerHTML=recent.length?recent.map(d=>`<button class="recent-item" data-date="${d.key}"><span class="recent-date">${escapeHTML(shortDate(d.date))}<small>Earned ${money(d.earned)} · Spent ${money(d.expenses)}</small></span><span class="recent-right">${money(d.net)}<small class="${d.delta>=0?'plus':'minus'}">${d.delta>=0?'+':'−'}${money(Math.abs(d.delta))} vs target</small></span></button>`).join(''):'<div class="empty-state"><div class="empty-state-icon">↗</div><strong>No days logged yet</strong>Your money story starts with your first entry.</div>';}
-  function renderTable(s){$('daily-table-body').innerHTML=s.days.map(d=>`<tr class="${d.key===todayKey?'today-row':''}"><td>${escapeHTML(shortDate(d.date))}<small>${d.key===todayKey?'Today':d.entry?'Recorded':'Scheduled'}</small></td><td class="num">${money0(d.target)}</td><td class="num">${d.entry?money(d.earned):'—'}</td><td>${d.entry?money(d.expenses):'—'}</td><td class="net-cell">${d.entry?money(d.net):'—'}</td><td class="${d.entry?(d.delta>=0?'delta-positive':'delta-negative'):''}">${d.entry?(d.delta>=0?'+':'−')+money(Math.abs(d.delta)):'—'}</td><td><span class="status-chip ${d.status}">${statusLabel(d.status)}</span></td><td><button class="row-edit" data-date="${d.key}" aria-label="Edit ${escapeHTML(shortDate(d.date))}">${d.entry?'Edit':'Add'} ↗</button></td></tr>`).join('');}
-  function renderExpenses(s){$('expenses-page-total').textContent=money(s.spent);const sums={};CATEGORIES.forEach(c=>sums[c]=0);const transactions=[];for(const d of s.days){if(d.entry)for(const e of d.entry.expenses){sums[e.category]=round2(sums[e.category]+e.amount);transactions.push({...e,key:d.key,date:d.date});}}const categories=CATEGORIES.filter(c=>sums[c]>0).sort((a,b)=>sums[b]-sums[a]);$('expense-categories').innerHTML=categories.length?categories.map(c=>`<div class="category-row"><span class="category-symbol">${CATEGORY_ICONS[c]}</span><div class="category-info"><div class="category-heading"><span>${c}</span><strong>${money(sums[c])}</strong></div><div class="category-progress"><div style="width:${s.spent?Math.min(100,sums[c]/s.spent*100):0}%"></div></div></div></div>`).join(''):'<div class="empty-state">No expenses recorded this month.</div>';$('expense-transactions').innerHTML=transactions.length?transactions.reverse().map(e=>`<div class="transaction-item"><div class="transaction-name">${CATEGORY_ICONS[e.category]} &nbsp;${e.category}<small>${escapeHTML(shortDate(e.date))}</small></div><div class="transaction-value">−${money(e.amount)}</div></div>`).join(''):'<div class="empty-state">Your expense history will appear here.</div>';}
-  function renderSettings(){const wrap=$('weekday-settings');if(!wrap.querySelector('input') || document.activeElement?.closest('#weekday-settings')===null){wrap.innerHTML=WEEKDAYS.map((day,i)=>`<label class="weekday-row" for="weekday-${i}"><span>${day}</span><span class="currency-control"><span>£</span><input id="weekday-${i}" type="number" step="0.01" min="0" max="1000000" inputmode="decimal" value="${state.settings.weekdayTargets[i]}"></span></label>`).join('');}if(document.activeElement!==$('expense-cap'))$('expense-cap').value=state.settings.expenseBudget===null?'':state.settings.expenseBudget;}
-  function changeView(view){activeView=view;render();window.scrollTo({top:0,behavior:'smooth'});}
-  function expenseRow(category='Charging',amount=''){return `<div class="expense-editor-row"><select aria-label="Expense category">${CATEGORIES.map(c=>`<option ${c===category?'selected':''} value="${c}">${c}</option>`).join('')}</select><label class="currency-control"><span>£</span><input type="number" min="0" step="0.01" inputmode="decimal" aria-label="Expense amount" placeholder="0.00" value="${amount}"></label><button class="remove-expense" type="button" aria-label="Remove expense">×</button></div>`;}
-  function openEditor(key){editingKey=key;const d=dataFor(key);$('editor-title').textContent=d.date.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('edit-target').value=d.target;$('edit-earned').value=d.entry?d.earned:'';$('edit-note').value=d.entry?.note||'';$('expense-editor-list').innerHTML=d.entry?.expenses.length?d.entry.expenses.map(e=>expenseRow(e.category,e.amount)).join(''):'<div class="no-expenses">Nothing spent? That’s a win. Add an expense if needed.</div>';$('delete-entry').hidden=!d.entry;$('editor-overlay').hidden=false;document.body.style.overflow='hidden';renderPreview();$('edit-earned').focus();}
-  function closeEditor(){$('editor-overlay').hidden=true;document.body.style.overflow='';editingKey=null;}
-  function readExpenseRows(){return [...document.querySelectorAll('.expense-editor-row')].map(row=>({category:row.querySelector('select').value,amount:row.querySelector('input').value.trim()})).filter(e=>e.amount!=='').map(e=>({category:e.category,amount:round2(Number(e.amount))}));}
-  function renderPreview(){const gross=Number($('edit-earned').value)||0,target=Number($('edit-target').value)||0,exp=[...document.querySelectorAll('.expense-editor-row input')].reduce((s,input)=>s+(Number(input.value)||0),0);const net=round2(gross-exp),diff=round2(gross-target);$('edit-net-preview').textContent=money(net);$('edit-diff-preview').textContent=(diff>=0?'+':'−')+money(Math.abs(diff));}
-  function saveEntry(event){event.preventDefault();if(!editingKey)return;const target=Number($('edit-target').value),earned=Number($('edit-earned').value);if(!finiteNonnegative(target)||!finiteNonnegative(earned)||target>1000000||earned>10000000){toast('Please enter valid non-negative amounts.');return;}const expenses=readExpenseRows();if(expenses.some(e=>!finiteNonnegative(e.amount)||e.amount>1000000)){toast('Please check expense amounts.');return;}state.entries[editingKey]={targetOverride:round2(target)===defaultTarget(editingKey)?null:round2(target),earned:round2(earned),expenses,note:$('edit-note').value.trim().slice(0,400)};saveState();closeEditor();render();toast('Day saved. Your totals have updated.');}
-  function deleteEntry(){if(!editingKey || !state.entries[editingKey])return;if(!confirm('Delete this day’s saved income and expenses?'))return;delete state.entries[editingKey];saveState();closeEditor();render();toast('Entry deleted.');}
-  function download(name,text,type){const blob=new Blob([text],{type});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-  function csvCell(value){let s=String(value??'');if(/^[=+@\-\t\r]/.test(s) && isNaN(Number(s)))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
-  function exportCSV(){const s=monthStats();const cols=['Date','Day','Target GBP','Gross earnings GBP','Expenses GBP','Net GBP','Vs target GBP','Percentage of target','Status','Expense details','Notes'];const rows=s.days.map(d=>[d.key,WEEKDAYS[weekdayIndex(d.date)],d.target,d.entry?d.earned:'',d.entry?d.expenses:'',d.entry?d.net:'',d.entry?d.delta:'',d.entry?Math.round(d.ratio*100)+'%':'',statusLabel(d.status),d.entry?.expenses.map(e=>`${e.category} ${money(e.amount)}`).join(' | ')||'',d.entry?.note||'']);rows.push(['MONTH TOTAL','',s.goal,s.gross,s.spent,s.net,'','','','','']);download(`Finances-${year}-${String(month+1).padStart(2,'0')}.csv`,'\ufeff'+[cols,...rows].map(row=>row.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8');toast('Monthly CSV downloaded.');}
-  function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),3500);}
-  function saveGoals(){const inputs=WEEKDAYS.map((_,i)=>$(`weekday-${i}`).value);if(inputs.some(v=>v==='' || !finiteNonnegative(v) || Number(v)>1000000)){toast('Enter a valid target for each weekday.');return;}state.settings.weekdayTargets=inputs.map(v=>round2(Number(v)));saveState();$('goals-feedback').textContent='Your weekday goals are saved.';render();}
-  function saveCap(){const input=$('expense-cap').value.trim();if(input!=='' && (!finiteNonnegative(input) || Number(input)>1000000)){toast('Please enter a valid expense limit.');return;}state.settings.expenseBudget=input===''?null:round2(Number(input));saveState();$('cap-feedback').textContent=state.settings.expenseBudget===null?'Expense limit turned off.':'Your daily expense limit is saved.';render();}
-  function exportBackup(){download(`Finances-backup-${todayKey}.json`,JSON.stringify({version:1,exportedAt:new Date().toISOString(),settings:state.settings,entries:state.entries},null,2),'application/json');toast('Backup downloaded. Store it somewhere safe.');}
-  async function importBackup(file){if(!file)return;try{if(file.size>5*1024*1024)throw Error('File is too large');const incoming=normaliseState(JSON.parse(await file.text()));if(!confirm('Replace ALL current entries and settings with this backup? Please download a backup of your current data first.'))return;state=incoming;saveState();render();$('backup-feedback').textContent='Backup restored successfully.';toast('Backup restored.');}catch(e){toast('Could not restore backup: '+e.message);}finally{$('import-file').value='';}}
-  function init(){document.querySelectorAll('[data-view]').forEach(btn=>btn.addEventListener('click',()=>changeView(btn.dataset.view)));document.addEventListener('click',event=>{const dateButton=event.target.closest('[data-date]');if(dateButton && !event.target.closest('#editor-overlay'))openEditor(dateButton.dataset.date);const go=event.target.closest('[data-goto]');if(go)changeView(go.dataset.goto);});$('quick-add').addEventListener('click',()=>openEditor(timeAppropriateEntryKey()));$('month-prev').addEventListener('click',()=>setMonth(-1));$('month-next').addEventListener('click',()=>setMonth(1));$('month-current').addEventListener('click',()=>{year=today.getFullYear();month=today.getMonth();render();});$('editor-close').addEventListener('click',closeEditor);document.querySelector('[data-close-editor]').addEventListener('click',closeEditor);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('editor-overlay').hidden)closeEditor();});$('add-expense').addEventListener('click',()=>{const box=$('expense-editor-list');if(box.querySelector('.no-expenses'))box.innerHTML='';box.insertAdjacentHTML('beforeend',expenseRow());renderPreview();});$('expense-editor-list').addEventListener('click',e=>{const b=e.target.closest('.remove-expense');if(!b)return;b.closest('.expense-editor-row').remove();if(!$('expense-editor-list').children.length)$('expense-editor-list').innerHTML='<div class="no-expenses">No expenses recorded for this day.</div>';renderPreview();});$('entry-form').addEventListener('input',renderPreview);$('entry-form').addEventListener('submit',saveEntry);$('delete-entry').addEventListener('click',deleteEntry);$('export-csv').addEventListener('click',exportCSV);$('save-goals').addEventListener('click',saveGoals);$('save-cap').addEventListener('click',saveCap);$('export-json').addEventListener('click',exportBackup);$('import-json').addEventListener('click',()=>$('import-file').click());$('import-file').addEventListener('change',e=>importBackup(e.target.files?.[0]));if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});render();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-  // Exposed only for lightweight automated testing in the local developer build.
-  window.__financesTest = {dateKey,weekdayIndex,normaliseState,monthStats,dataFor};
+(function(){
+'use strict';
+const STORAGE='finances-local-v1';
+const DEFAULTS=[160,160,200,230,250,250,230];
+const WEEKDAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const CATS=['Charging','Food','Parking','Tolls','Car','Other'];
+const EMOJI={Charging:'⚡',Food:'🥪',Parking:'🅿️',Tolls:'🛣️',Car:'🚗',Other:'🧾'};
+const GBP=new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0});
+const GBP2=new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'});
+const $=id=>document.getElementById(id);
+const round=n=>Math.round((Number(n)+Number.EPSILON)*100)/100;
+const money=n=>GBP.format(Number(n)||0);
+const money2=n=>GBP2.format(Number(n)||0);
+const safe=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dateKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const fromKey=k=>{const p=k.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]);};
+const today=()=>new Date();
+const currentKey=()=>dateKey(today());
+const weekday=d=>(d.getDay()+6)%7;
+const startOfWeek=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-weekday(x));return x;};
+const validMoney=(v,max=10000000)=>v!==''&&v!==null&&v!==undefined&&Number.isFinite(Number(v))&&Number(v)>=0&&Number(v)<=max;
+const newState=()=>({settings:{weekdayTargets:DEFAULTS.slice(),expenseBudget:null},entries:{}});
+function normalize(obj){
+ if(!obj||typeof obj!=='object'||!obj.settings||!obj.entries||typeof obj.entries!=='object'||Array.isArray(obj.entries))throw Error('Not a Finances backup');
+ const t=obj.settings.weekdayTargets;
+ if(!Array.isArray(t)||t.length!==7||!t.every(v=>validMoney(v,1000000)))throw Error('Invalid targets');
+ const cap=obj.settings.expenseBudget;
+ if(cap!=null&&!validMoney(cap,1000000))throw Error('Invalid expense cap');
+ const out={settings:{weekdayTargets:t.map(round),expenseBudget:cap==null?null:round(cap)},entries:{}};
+ Object.entries(obj.entries).forEach(pair=>{
+  const k=pair[0],e=pair[1];if(!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(k)||!e||typeof e!=='object')return;
+  const d=fromKey(k);if(isNaN(d.getTime())||dateKey(d)!==k||!validMoney(e.earned))return;
+  const to=e.targetOverride;if(to!=null&&!validMoney(to,1000000))return;
+  const expenses=(Array.isArray(e.expenses)?e.expenses:[]).slice(0,100).filter(x=>x&&CATS.includes(x.category)&&validMoney(x.amount,1000000)).map(x=>({category:x.category,amount:round(x.amount)}));
+  out.entries[k]={earned:round(e.earned),targetOverride:to==null?null:round(to),expenses:expenses,note:String(e.note||'').slice(0,400)};
+ });
+ return out;
+}
+function load(){try{const s=localStorage.getItem(STORAGE);if(s)return normalize(JSON.parse(s));}catch(e){console.warn('Could not read saved data',e);}return newState();}
+let state=load(),page='home',viewDate=today(),sheetType='',sheetDay=currentKey(),incomeMode='add',selectedCat='Charging',installPrompt=null;
+function persist(){try{localStorage.setItem(STORAGE,JSON.stringify(state));return true;}catch(e){toast('Could not save. Check phone storage and export a backup.');return false;}}
+function entryFor(k){return state.entries[k]||null;}
+function targetFor(k){const e=entryFor(k);return e&&e.targetOverride!=null?e.targetOverride:state.settings.weekdayTargets[weekday(fromKey(k))];}
+function dataFor(k){const e=entryFor(k),goal=targetFor(k),earned=e?e.earned:0,expenses=e?round(e.expenses.reduce((s,x)=>s+x.amount,0)):0,net=round(earned-expenses);
+ const ratio=goal?earned/goal:1;let status='blank';
+ if(e){if(goal===0)status='rest';else if(earned>=goal)status=state.settings.expenseBudget!=null&&expenses>state.settings.expenseBudget?'close':'hit';else status=ratio>=.8?'close':'miss';}
+ return {key:k,date:fromKey(k),entry:e,goal:goal,earned:earned,spent:expenses,net:net,ratio:ratio,status:status,delta:round(earned-goal)};
+}
+function monthDays(y,m){const count=new Date(y,m+1,0).getDate(),a=[];for(let d=1;d<=count;d++)a.push(dataFor(dateKey(new Date(y,m,d))));return a;}
+function monthInfo(y,m){const a=monthDays(y,m),sum=key=>round(a.reduce((s,d)=>s+d[key],0));return {days:a,gross:sum('earned'),spent:sum('spent'),net:sum('net'),goal:sum('goal'),hits:a.filter(x=>x.status==='hit').length,logged:a.filter(x=>x.entry).length};}
+function monthTitle(){return viewDate.toLocaleDateString('en-GB',{month:'long',year:'numeric'});}
+function shortDate(d){return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}
+function ensureEntry(k){if(!state.entries[k])state.entries[k]={earned:0,targetOverride:null,expenses:[],note:''};return state.entries[k];}
+function allData(){return Object.keys(state.entries).sort().map(dataFor);}
+function isHit(d){return d.status==='hit';}
+function scores(){const a=allData(),hits=a.filter(isHit).length,logged=a.length,xp=logged*20+hits*60;let best=0,run=0,last=null;
+ a.filter(d=>d.date<=today()).forEach(d=>{if(isHit(d)&&(!last||Math.round((d.date-last)/86400000)===1)){run++;}else{run=isHit(d)?1:0;}if(run>best)best=run;last=d.date;});
+ let streak=0;const begin=new Date(today().getFullYear(),today().getMonth(),today().getDate());const todayD=dataFor(currentKey());if(!isHit(todayD))begin.setDate(begin.getDate()-1);
+ while(isHit(dataFor(dateKey(begin)))){streak++;begin.setDate(begin.getDate()-1);if(streak>10000)break;}
+ return {xp:xp,level:Math.floor(xp/500)+1,logged:logged,hits:hits,streak:streak,best:best};
+}
+function toast(s){const n=$('toast');n.textContent=s;n.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>n.classList.remove('show'),3000);}
+function celebrate(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const n=$('confetti');n.innerHTML='';for(let i=0;i<28;i++){const el=document.createElement('i');el.style.setProperty('--x',((Math.random()-.5)*560)+'px');el.style.setProperty('--y',((Math.random()-.65)*650)+'px');el.style.setProperty('--r',(Math.random()*1000)+'deg');el.style.background=['#f3b26d','#fff','#5ab27a','#d9a550'][i%4];el.style.animationDelay=(Math.random()*.14)+'s';n.appendChild(el);}setTimeout(()=>n.innerHTML='',1300);}
+function render(){
+ const now=today();$('dateDay').textContent=now.getDate();$('dateMonth').textContent=now.toLocaleDateString('en-GB',{month:'short'}).toUpperCase();
+ document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));
+ document.querySelectorAll('.nav').forEach(el=>el.classList.toggle('active',el.dataset.go===page));
+ if(page==='home')renderHome();if(page==='calendar')renderCalendar();if(page==='stats')renderStats();if(page==='wins')renderWins();if(page==='settings')renderSettings();
+}
+function renderHome(){
+ const now=today(),d=dataFor(currentKey()),s=scores();
+ $('homeDate').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
+ const hour=now.getHours(),greeting=hour<12?'Good morning.':hour<17?'Good afternoon.':'Good evening.';
+ $('greeting').textContent=greeting;
+ $('heroEarned').textContent=money(d.earned);$('heroTarget').textContent=money(d.goal);$('heroLeft').textContent=money(Math.max(0,d.goal-d.earned));
+ $('heroNet').textContent=money(d.net);
+ const pct=d.goal?Math.round(d.earned/d.goal*100):100;
+ $('ringPercent').textContent=pct+'%';$('ring').style.strokeDashoffset=String(2*Math.PI*52*(1-Math.min(1,pct/100)));
+ $('ring').style.strokeDasharray=String(2*Math.PI*52);
+ $('heroSub').textContent=d.entry?'Expenses '+money(d.spent)+' · '+(d.net>=0?'Net '+money(d.net):'Net below zero'):'Fresh day, fresh target.';
+ let message='Your next win starts with one entry.';
+ if(d.goal===0)message='Rest day unlocked. Keep your records tidy.';
+ else if(pct>=100)message='Target smashed! You did it. 🏆';
+ else if(pct>=80)message='So close — only '+money(Math.max(0,d.goal-d.earned))+' to your goal.';
+ else if(d.entry)message='Momentum is building. Keep stacking fares.';
+ $('heroMessage').textContent=message;
+ const start=startOfWeek(now),week=[];
+ for(let i=0;i<7;i++){const dt=new Date(start);dt.setDate(start.getDate()+i);const x=dataFor(dateKey(dt));
+ const cls=x.status==='hit'?'hit':x.status==='close'?'close':x.status==='miss'?'miss':'';
+ week.push('<div class="day-chip '+cls+(x.key===currentKey()?' today':'')+'" aria-label="'+safe(shortDate(dt))+': '+safe(x.status)+'"><span>'+['M','T','W','T','F','S','S'][i]+'</span><b>'+(x.status==='hit'?'✓':dt.getDate())+'</b></div>');
+ }
+ $('weekStrip').innerHTML=week.join('');
+ $('momentumIcon').textContent=s.streak>=3?'🔥':s.streak?'⚡':'✦';
+ $('momentumTitle').textContent=s.streak?s.streak+'-day target streak':'Your winning streak starts now';
+ $('momentumText').textContent=s.streak?'Consistency pays. Keep your streak alive.':'Hit a daily goal to start building a streak.';
+ const recent=allData().slice().reverse().slice(0,4);
+ $('recent').innerHTML=recent.length?recent.map(x=>'<button class="recent-item" data-edit="'+x.key+'"><span><strong>'+safe(shortDate(x.date))+'</strong><small>Gross '+money(x.earned)+' · Costs '+money(x.spent)+'</small></span><span><b>'+money(x.net)+'</b><em class="'+(x.delta>=0?'pos':'neg')+'">'+(x.delta>=0?'+':'−')+money(Math.abs(x.delta))+' vs target</em></span></button>').join(''):'<div class="empty"><span>🌱</span>No entries yet. Tap Add income and start your first day.</div>';
+}
+function renderCalendar(){
+ const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m);$('calMonth').textContent=monthTitle();$('calGross').textContent=money(s.gross);$('calSpent').textContent=money(s.spent);$('calNet').textContent=money(s.net);
+ const headings=['M','T','W','T','F','S','S'].map(x=>'<div class="cal-dow">'+x+'</div>');
+ const start=weekday(new Date(y,m,1));for(let i=0;i<start;i++)headings.push('<div class="cal-cell blank"></div>');
+ s.days.forEach(d=>{const label=shortDate(d.date)+' earned '+money(d.earned)+' target '+money(d.goal);headings.push('<button class="cal-cell '+(d.key===currentKey()?'today ':'')+(d.key>currentKey()?'future ':'')+d.status+'" data-edit="'+d.key+'" aria-label="'+safe(label)+'"><b>'+d.date.getDate()+'</b><small>'+(d.entry?money(d.earned):'·')+'</small></button>');});
+ $('calGrid').innerHTML=headings.join('');
+ const remaining=s.days.filter(d=>d.key>=currentKey()).length,needed=remaining?Math.max(0,(s.goal-s.gross)/remaining):0;
+ $('calBreakdown').innerHTML=
+ '<div class="mini-breakdown"><div><span>Monthly target</span><b>'+money(s.goal)+'</b></div><div><span>Gross versus target</span><b class="'+(s.gross>=s.goal?'pos':'warning')+'">'+(s.gross>=s.goal?'+':'−')+money(Math.abs(s.gross-s.goal))+'</b></div><div><span>Days logged</span><b>'+s.logged+' / '+s.days.length+'</b></div><div><span>Targets achieved</span><b>'+s.hits+' days</b></div><div><span>Average needed per remaining day</span><b>'+money(needed)+'</b></div></div>';
+}
+function renderStats(){
+ const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m);$('statsMonth').textContent=monthTitle();
+ $('statsGross').textContent=money(s.gross);$('statsNet').textContent=money(s.net);$('statsHits').textContent=s.hits;$('statsSpent').textContent=money(s.spent);
+ const days=s.days.filter(d=>d.entry),last=days.slice(-7),top=Math.max(1,...last.map(d=>d.earned));
+ $('chartTitle').textContent='Last 7 logged days';
+ const renderBars=last.length?last:[];
+ $('bars').innerHTML=renderBars.map(d=>'<div class="bar-col '+(!d.earned?'zero':'')+'"><div class="bar-stand"><div class="bar-fill" style="height:'+Math.max(2,Math.round(d.earned/top*100))+'%" title="'+money(d.earned)+'"></div></div></div>').join('');
+ $('barLabels').innerHTML=renderBars.map(d=>'<span>'+d.date.getDate()+'</span>').join('');
+ $('chartCaption').textContent=last.length?'Orange bars show gross earnings by logged date ('+monthTitle()+').':'Log a day to start seeing your earnings chart.';
+ const avg=days.length?s.gross/days.length:0,expenseRatio=s.gross?Math.round(s.spent/s.gross*100):0;
+ const highest=days.slice().sort((a,b)=>b.earned-a.earned)[0];
+ const cats={};CATS.forEach(c=>cats[c]=0);days.forEach(d=>d.entry.expenses.forEach(e=>cats[e.category]+=e.amount));
+ const biggest=Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+ $('insights').innerHTML='<div class="mini-breakdown"><div><span>Average per logged day</span><b>'+money(avg)+'</b></div><div><span>Best earning day</span><b>'+(highest?money(highest.earned):'—')+'</b></div><div><span>Expenses as % of gross</span><b>'+expenseRatio+'%</b></div><div><span>Largest expense category</span><b>'+(biggest&&biggest[1]>0?biggest[0]+' · '+money(biggest[1]):'—')+'</b></div><div><span>Net after all expenses</span><b>'+money(s.net)+'</b></div></div>';
+}
+function renderWins(){
+ const sc=scores(),lvl=sc.level,names=['Rising Star','Consistent Driver','Road Performer','Elite Driver','Money Machine','Legend'];
+ $('levelNumber').textContent=String(lvl).padStart(2,'0');$('levelName').textContent=names[Math.min(names.length-1,lvl-1)];
+ $('levelXp').textContent=sc.xp+' XP earned';$('nextXp').textContent=(500-sc.xp%500)+' XP to level '+(lvl+1);
+ $('levelProgress').style.width=sc.xp%500/500*100+'%';$('winStreak').textContent=sc.streak+' 🔥';$('winBest').textContent=sc.best+' days';$('winCount').textContent=sc.hits;
+ const thisMonth=monthInfo(today().getFullYear(),today().getMonth()),all=allData(),bigDay=all.some(d=>d.earned>=300),wk=startOfWeek(today());let weekGross=0;for(let i=0;i<7;i++){const x=new Date(wk);x.setDate(wk.getDate()+i);weekGross+=dataFor(dateKey(x)).earned;}
+ const badges=[
+ ['🌱','First Step','Log your first day',sc.logged>=1],
+ ['🎯','Target Hunter','Hit your goal 3 times',sc.hits>=3],
+ ['🔥','On Fire','A 3-day goal streak',sc.best>=3],
+ ['⚡','Power Driver','Earn £300 in a day',bigDay],
+ ['👑','Weekend Warrior','Hit a Fri, Sat or Sun target',all.some(d=>isHit(d)&&weekday(d.date)>=4)],
+ ['💸','Money Machine','Earn £1,500 in one week',weekGross>=1500],
+ ['💎','Perfect Ten','Hit 10 daily targets',sc.hits>=10],
+ ['🏅','Monthly Champion','Hit 20 goals in one month',(()=>{const m={};all.filter(isHit).forEach(d=>{const k=d.key.slice(0,7);m[k]=(m[k]||0)+1;});return Object.values(m).some(n=>n>=20);})()]
+ ];
+ $('badges').innerHTML=badges.map(b=>'<div class="achievement '+(b[3]?'':'locked')+'"><div class="emoji">'+b[0]+'</div><b>'+b[1]+'</b><small>'+b[2]+'</small><div class="unlock">'+(b[3]?'✓ UNLOCKED':'🔒 LOCKED')+'</div></div>').join('');
+}
+function renderSettings(){
+ $('weekdaySettings').innerHTML=WEEKDAYS.map((n,i)=>'<div class="setting-row"><span>'+n+'</span><div class="field-money"><span>£</span><input id="goal'+i+'" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+state.settings.weekdayTargets[i]+'" aria-label="'+n+' target"></div></div>').join('');
+ $('expenseCap').value=state.settings.expenseBudget==null?'':state.settings.expenseBudget;
+}
+function navigate(to){if(!['home','calendar','stats','wins','settings'].includes(to))return;page=to;if(to==='calendar'||to==='stats')viewDate=today();render();window.scrollTo({top:0,behavior:'smooth'});}
+function changeMonth(delta){viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+delta,1);render();}
+function closeSheet(){$('overlay').classList.remove('open');document.body.style.overflow='';sheetType='';}
+function showSheet(type,key){
+ sheetType=type;sheetDay=key||currentKey();incomeMode='add';selectedCat='Charging';
+ $('overlay').classList.add('open');document.body.style.overflow='hidden';fillSheet();setTimeout(()=>{const el=$('sheetBody input[type=number]');if(el)el.focus();},180);
+}
+function dateInput(){return '<label for="sheetDate">Date</label><input id="sheetDate" class="input-date" type="date" value="'+sheetDay+'" min="2000-01-01" max="2099-12-31">';}
+function fillSheet(){
+ const d=dataFor(sheetDay),edit=sheetType==='edit',expense=sheetType==='expense';
+ $('sheetTitle').textContent=edit?'Edit your day':expense?'Add expense':'Add income';
+ $('sheetSub').textContent=edit?'Everything for '+shortDate(d.date)+'.':expense?'Small costs matter. Keep the net honest.':'Every fare brings your target closer.';
+ let s=dateInput();
+ if(sheetType==='income'){
+  s+='<div class="segment"><button data-mode="add" class="'+(incomeMode==='add'?'selected':'')+'">+ Add a fare</button><button data-mode="total" class="'+(incomeMode==='total'?'selected':'')+'">Set day total</button></div>';
+  s+='<label for="sheetAmount">'+(incomeMode==='add'?'Fare amount':'Total earned today')+'</label><div class="money-input"><span>£</span><input id="sheetAmount" type="number" min="0" max="10000000" step=".01" placeholder="0.00" inputmode="decimal" value="'+(incomeMode==='total'?d.earned:'')+'"></div>';
+  s+='<div class="amount-chips"><button data-amount="10">£10</button><button data-amount="20">£20</button><button data-amount="30">£30</button><button data-amount="50">£50</button><button data-amount="100">£100</button></div>';
+  s+='<p class="privacy">'+(incomeMode==='add'?'Current total '+money(d.earned)+' — this fare will be added to it.':'This replaces the earned amount for the selected day.')+'</p>';
+ }else if(expense){
+  s+='<label>What was it for?</label><div class="category-list">'+CATS.map(c=>'<button class="category-chip '+(selectedCat===c?'active':'')+'" data-cat="'+c+'"><span>'+EMOJI[c]+'</span>'+c+'</button>').join('')+'</div>';
+  s+='<label for="sheetAmount">Amount spent</label><div class="money-input"><span>£</span><input id="sheetAmount" type="number" min="0" max="1000000" step=".01" placeholder="0.00" inputmode="decimal"></div>';
+  s+='<div class="amount-chips"><button data-amount="5">£5</button><button data-amount="10">£10</button><button data-amount="15">£15</button><button data-amount="20">£20</button><button data-amount="30">£30</button></div>';
+ }else{
+  s+='<div class="editor-two"><div><label for="editEarned">Gross earned (£)</label><input id="editEarned" type="number" min="0" max="10000000" step=".01" inputmode="decimal" value="'+d.earned+'"></div><div><label for="editTarget">Daily goal (£)</label><input id="editTarget" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+d.goal+'"></div></div>';
+  s+='<label for="editNote">Note (optional)</label><textarea id="editNote" maxlength="400" placeholder="A quick memory of today...">'+safe(d.entry?d.entry.note:'')+'</textarea>';
+  s+='<label>Expenses</label><div id="existingExpenses">'+(d.entry&&d.entry.expenses.length?d.entry.expenses.map((e,i)=>'<div class="expense-line"><span>'+EMOJI[e.category]+' '+e.category+'</span><b>'+money2(e.amount)+'</b><button class="remove" data-remove="'+i+'" aria-label="Remove expense '+safe(e.category)+'">×</button></div>').join(''):'<p class="sub">No expenses logged.</p>')+'</div>';
+  s+='<button class="secondary-btn" id="addExpenseFromEdit" type="button" style="margin-top:12px">+ Add an expense</button>';
+  if(d.entry)s+='<button class="secondary-btn" id="deleteDay" type="button" style="margin-top:10px;color:#bc5650">Delete day entry</button>';
+ }
+ s+='<button class="primary-save" id="sheetSave" type="button">'+(edit?'Save day':expense?'Save expense':'Save income')+' →</button>';
+ $('sheetBody').innerHTML=s;
+}
+function updateSheetDate(k){if(!/^\d{4}-\d{2}-\d{2}$/.test(k)||dateKey(fromKey(k))!==k){toast('Choose a valid date.');return;}sheetDay=k;fillSheet();}
+function saveSheet(){
+ const k=sheetDay,before=dataFor(k),value=Number(($('sheetAmount')||{}).value);
+ if(sheetType==='edit'){
+  const gross=$('editEarned').value,goal=$('editTarget').value;
+  if(!validMoney(gross)||!validMoney(goal,1000000)){toast('Enter valid non-negative amounts.');return;}
+  const e=ensureEntry(k);e.earned=round(gross);e.targetOverride=round(goal)===state.settings.weekdayTargets[weekday(fromKey(k))]?null:round(goal);e.note=$('editNote').value.trim().slice(0,400);
+ }else{
+  const field=$('sheetAmount');if(!field||!validMoney(field.value,sheetType==='income'?10000000:1000000)){toast('Enter a valid amount.');return;}
+  if(sheetType==='expense'&&value<=0){toast('Enter an expense greater than £0.');return;}
+  const e=ensureEntry(k);
+  if(sheetType==='income'){const next=incomeMode==='add'?round(e.earned+value):round(value);if(!validMoney(next)){toast('Income exceeds the maximum amount.');return;}e.earned=next;}
+  else{if(e.expenses.length>=100){toast('Expense limit for this day reached.');return;}e.expenses.push({category:selectedCat,amount:round(value)});}
+ }
+ if(!persist())return;
+ const after=dataFor(k);closeSheet();render();
+ if(before.status!=='hit'&&after.status==='hit'){celebrate();toast('🏆 Target achieved. What a win!');}
+ else{toast(sheetType==='expense'?'Expense saved.':'Saved! Your numbers are up to date.');}
+ if(navigator.vibrate)navigator.vibrate(15);
+}
+function removeExpense(idx){const e=entryFor(sheetDay);if(!e||!e.expenses[idx])return;e.expenses.splice(idx,1);if(persist()){fillSheet();render();toast('Expense removed.');}}
+function deleteDay(){if(!confirm('Delete the entire entry for '+sheetDay+'?'))return;delete state.entries[sheetDay];if(persist()){closeSheet();render();toast('Day entry deleted.');}}
+function download(name,content,type){const blob=new Blob([content],{type:type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
+function csvEsc(v){const str=String(v==null?'':v);return '"'+( /^[=+@\t\r]/.test(str)?"'"+str:str).replace(/"/g,'""')+'"';}
+function exportCSV(){const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m),rows=[['Date','Day','Target GBP','Gross GBP','Expenses GBP','Net GBP','Vs target GBP','Status','Notes']];
+ s.days.forEach(d=>rows.push([d.key,WEEKDAYS[weekday(d.date)],d.goal,d.entry?d.earned:'',d.entry?d.spent:'',d.entry?d.net:'',d.entry?d.delta:'',d.status,d.entry?d.entry.note:'']));
+ rows.push(['TOTAL','',s.goal,s.gross,s.spent,s.net,'','','']);
+ download('Finances-'+y+'-'+String(m+1).padStart(2,'0')+'.csv','\ufeff'+rows.map(r=>r.map(csvEsc).join(',')).join('\r\n'),'text/csv;charset=utf-8');toast('Monthly CSV downloaded.');}
+function backup(){download('Finances-backup-'+currentKey()+'.json',JSON.stringify(state,null,2),'application/json');toast('Backup downloaded. Keep it somewhere safe.');}
+document.addEventListener('click',function(ev){
+ const button=ev.target.closest('button');if(!button)return;
+ if(button.dataset.go){navigate(button.dataset.go);return;}
+ if(button.dataset.month){changeMonth(Number(button.dataset.month));return;}
+ if(button.dataset.open){showSheet(button.dataset.open);return;}
+ if(button.dataset.edit){showSheet('edit',button.dataset.edit);return;}
+ if(button.id==='closeSheet'){closeSheet();return;}
+ if(button.dataset.mode){incomeMode=button.dataset.mode;fillSheet();return;}
+ if(button.dataset.cat){selectedCat=button.dataset.cat;fillSheet();return;}
+ if(button.dataset.amount){const inp=$('sheetAmount');if(inp){inp.value=button.dataset.amount;inp.focus();}return;}
+ if(button.id==='sheetSave'){const type=sheetType;saveSheet();return;}
+ if(button.dataset.remove!==undefined){removeExpense(Number(button.dataset.remove));return;}
+ if(button.id==='addExpenseFromEdit'){showSheet('expense',sheetDay);return;}
+ if(button.id==='deleteDay'){deleteDay();return;}
+ if(button.id==='saveGoals'){const vals=WEEKDAYS.map((_,i)=>$('goal'+i).value);if(!vals.every(v=>validMoney(v,1000000))){toast('Enter valid weekly targets.');return;}state.settings.weekdayTargets=vals.map(round);if(persist()){render();toast('Weekly targets updated.');}return;}
+ if(button.id==='saveCap'){const v=$('expenseCap').value; if(v!==''&&!validMoney(v,1000000)){toast('Invalid expense cap.');return;}state.settings.expenseBudget=v===''?null:round(v);if(persist()){toast('Expense guardrail saved.');render();}return;}
+ if(button.id==='backup'){backup();return;}
+ if(button.id==='exportCsv'){exportCSV();return;}
+ if(button.id==='restoreBtn'){$('restoreFile').click();return;}
+ if(button.id==='installBtn'&&installPrompt){installPrompt.prompt();installPrompt.userChoice.then(()=>{installPrompt=null;button.hidden=true;});return;}
+});
+$('overlay').addEventListener('click',ev=>{if(ev.target===$('overlay'))closeSheet();});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&sheetType)closeSheet();});
+$('sheetBody').addEventListener('change',ev=>{if(ev.target.id==='sheetDate')updateSheetDate(ev.target.value);});
+$('restoreFile').addEventListener('change',async function(){const file=this.files[0];if(!file)return;try{if(file.size>5000000)throw Error('Backup file too large');const incoming=normalize(JSON.parse(await file.text()));if(!confirm('Replace your current entries and settings with this backup?'))return;const old=state;state=incoming;if(!persist()){state=old;return;}render();toast('Backup restored successfully.');}catch(e){toast('Restore failed: '+e.message);}finally{this.value='';}});
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false;});
+window.addEventListener('appinstalled',()=>{$('installBtn').hidden=true;installPrompt=null;});
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+render();
 })();
-
 </script>
-<script>if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {navigator.serviceWorker.register('./sw.js').catch(()=>{});}</script>
 </body>
 </html>
