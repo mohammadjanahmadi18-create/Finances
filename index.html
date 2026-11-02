@@ -193,6 +193,46 @@ textarea{width:100%;border-radius:13px;border:1px solid #e1e9df;background:#fafc
 @media(min-width:800px){body{background:linear-gradient(125deg,#e4eee3,#faf9f3)}.app{margin:20px auto;min-height:calc(100dvh - 20px);background:#f6f8f2;border-radius:32px 32px 0 0;box-shadow:0 24px 90px #274c2a15;padding-left:26px;padding-right:26px}}
 @media(max-width:370px){.app{padding-left:14px;padding-right:14px}.hero{padding:21px 16px}.ring-wrap{width:107px;height:107px}.hero-number{font-size:34px}.hero-metrics b{font-size:15px}.quick button{padding:11px 9px}.calendar{padding:11px 7px}.cal-cell{min-height:59px}.cal-cell small{font-size:8px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Expense recovery and EV charging — Finances 2.1 */
+.recover{border-radius:25px;background:linear-gradient(135deg,#fffefa,#e7f3e8);border:1px solid #d8e7d8;padding:20px;box-shadow:0 12px 34px #17512c13}
+.recover-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.recover-eyebrow{color:#609173;letter-spacing:1.3px;font-size:9px;font-weight:900}
+.recover h3{font:600 23px Georgia,serif;margin:7px 0 5px}
+.recover p{font-size:11px;color:#7a9180;line-height:1.55;margin:0}
+.recover-pct{min-width:83px;padding:12px 7px;border-radius:18px;background:#dcebdc;box-shadow:inset 0 2px 7px #22582b12;text-align:center}
+.recover-pct b{font-size:24px;color:#28784f;display:block}
+.recover-pct small{font-size:9px;color:#6b9378;font-weight:850}
+.recover-track{border-radius:100px;background:#dce7da;height:13px;overflow:hidden;margin:17px 0 14px;box-shadow:inset 0 2px 6px #153a1c16}
+.recover-track span{height:100%;width:0;display:block;background:linear-gradient(90deg,#278a57,#6ac184);transition:width .7s;border-radius:100px}
+.recover-numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.recover-numbers>div+div{padding-left:8px;border-left:1px solid #d3e3d2}
+.recover-numbers small{display:block;font-size:9px;color:#799383;margin-bottom:6px}
+.recover-numbers b{font-size:17px;color:#1f6a44;letter-spacing:-.4px;white-space:nowrap}
+.recover-numbers b.due{color:#bb7738}
+.recover-note{display:flex;gap:9px;align-items:flex-start;margin-top:15px;background:#fff5e8;border:1px solid #f2e1d0;border-radius:14px;padding:12px;font-size:11px;line-height:1.6;color:#856030}
+.recover-note i{font-style:normal;font-size:18px}
+.recover.complete .recover-note{background:#e0f3e5;color:#206b41;border-color:#cee7d3}
+.recover-foot{margin-top:11px!important;font-size:10px!important}
+.charge-card{border-radius:25px;background:linear-gradient(120deg,#143e30,#235c44);border:1px solid #336c51;padding:20px;color:#fff;box-shadow:0 14px 30px #15463230;position:relative;overflow:hidden}
+.charge-card:after{content:"⚡";font-size:125px;color:#fff;position:absolute;right:-10px;top:-5px;opacity:.075;pointer-events:none}
+.charge-head{display:flex;align-items:center;justify-content:space-between;gap:9px;position:relative;z-index:1}
+.charge-head h3{font:600 23px Georgia,serif;margin:5px 0}
+.charge-head small{font-size:10px;color:#badac5}
+.charge-head button{border:1px solid #ffffff40;background:#ffffff1b;color:#fff;border-radius:12px;padding:11px;font-size:11px;font-weight:850}
+.charge-amount{font-size:39px;font-weight:850;letter-spacing:-1.4px;margin:14px 0 5px;position:relative;z-index:1}
+.charge-details{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:#c3decf;position:relative;z-index:1}
+.charge-rule{height:1px;background:#ffffff2b;margin:17px 0 14px}
+.charge-status{display:flex;justify-content:space-between;gap:7px;font-size:11px;position:relative;z-index:1}
+.charge-status span{color:#b9d7c4}.charge-status b{color:#ffd2a7;font-size:12px}
+.charge-hint{font-size:10px;color:#bfd4c4;line-height:1.55;margin:11px 0 0}
+.charge-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #ffffff25;padding:11px 0;font-size:11px}
+.charge-row:last-child{border-bottom:0}.charge-row span{color:#c3dfce}.charge-row b{color:#fff}
+.editor-recovery{background:#eaf5e8;color:#246245;border:1px solid #d2e6d1;border-radius:14px;padding:13px;margin:10px 0;font-size:12px;line-height:1.6}
+.editor-recovery strong{color:#155636}
+.charge-kwh{display:block;margin-top:12px}
+.charge-kwh[hidden]{display:none}
+
 </style>
 </head>
 <body>
@@ -223,14 +263,24 @@ textarea{width:100%;border-radius:13px;border:1px solid #e1e9df;background:#fafc
       </div>
     </div>
     <div class="hero-divider"></div>
-    <div class="hero-metrics"><div><small>Today's target</small><b id="heroTarget">£160</b></div><div><small>Left to win</small><b id="heroLeft">£160</b></div><div><small>Take-home</small><b id="heroNet">£0</b></div></div>
+    <div class="hero-metrics"><div><small>Today's target</small><b id="heroTarget">£160</b></div><div><small>Net goal gap</small><b id="heroLeft">£160</b></div><div><small>Take-home</small><b id="heroNet">£0</b></div></div>
     <div class="hero-message"><span class="sparkle">✦</span><span id="heroMessage">Start with one entry and build momentum.</span></div>
   </div>
   <div class="quick"><button class="earn press" data-open="income"><div class="iconbox">＋</div><div>Add income<small>Log a fare or total</small></div></button><button class="spend press" data-open="expense"><div class="iconbox">−</div><div>Add expense<small>Keep your net clear</small></div></button></div>
+  <div class="section-head"><h2>Recover your expenses</h2><button class="mini-action" data-go="stats">Full breakdown ↗</button></div>
+  <div class="recover" id="recover">
+   <div class="recover-top"><div><span class="recover-eyebrow">EXTRA EARNINGS VS EXPENSES</span><h3 id="recoverTitle">Make expenses disappear</h3><p id="recoverSubtitle">Your costs, paid back by your extra effort.</p></div><div class="recover-pct"><b id="recoverPct">0%</b><small>RECOVERED</small></div></div>
+   <div class="recover-track"><span id="recoverFill"></span></div>
+   <div class="recover-numbers"><div><small>Expenses</small><b id="recoverCosts">£0</b></div><div><small>Recovered</small><b id="recoverCovered">£0</b></div><div><small>Still to cover</small><b id="recoverDue" class="due">£0</b></div></div>
+   <div class="recover-note"><i id="recoverEmoji">🛡️</i><span id="recoverText">Track a fare and see your progress.</span></div>
+   <p class="recover-foot">Recovery is calculated using earnings ABOVE your gross target. Net always equals earnings minus actual expenses.</p>
+  </div>
+  <div class="section-head"><h2>EV charging station</h2><button class="mini-action" data-go="stats">Monthly report ↗</button></div>
+  <div class="charge-card"><div class="charge-head"><div><small>⚡ YOUR ELECTRICITY COST</small><h3>Charging tracker</h3></div><button data-open="expense" data-charge="true">+ Log charge</button></div><div class="charge-amount" id="evMonthAmount">£0</div><div class="charge-details"><span id="evMonthName">This month</span><span id="evSessions">0 sessions</span><span id="evKwh"></span></div><div class="charge-rule"></div><div class="charge-status"><span>Today's charging recovered</span><b id="evRecovered">£0 / £0</b></div><p class="charge-hint" id="evHint">Add a charging expense to begin.</p></div>
   <div class="section-head"><h2>This week's pulse</h2><button class="mini-action" data-go="calendar">Calendar ↗</button></div>
   <div class="week-strip" id="weekStrip"></div>
   <div class="section-head"><h2>Your momentum</h2><button class="mini-action" data-go="wins">View wins ↗</button></div>
-  <div class="signal"><div class="signal-icon" id="momentumIcon">✦</div><div><b id="momentumTitle">Your streak starts now</b><p id="momentumText">Hit today's target to start stacking wins.</p></div></div>
+  <div class="signal"><div class="signal-icon" id="momentumIcon">✦</div><div><b id="momentumTitle">Your streak starts now</b><p id="momentumText">Protect your net target to start stacking wins.</p></div></div>
   <div class="section-head"><h2>Recent activity</h2><button class="mini-action" data-go="calendar">All days ↗</button></div>
   <div class="card" id="recent"></div>
 </section>
@@ -239,7 +289,7 @@ textarea{width:100%;border-radius:13px;border:1px solid #e1e9df;background:#fafc
   <div class="period-switch"><h2 id="calMonth">November 2026</h2><div class="arrows"><button class="arrow" data-month="-1" aria-label="Previous month">‹</button><button class="arrow" data-month="1" aria-label="Next month">›</button></div></div>
   <div class="summary3"><div><small>Gross</small><b id="calGross">£0</b></div><div><small>Expenses</small><b id="calSpent">£0</b></div><div><small>Net</small><b id="calNet">£0</b></div></div>
   <div class="calendar"><div class="calendar-grid" id="calGrid"></div><div class="legend"><span><i style="background:#4aa471"></i>Hit goal</span><span><i style="background:#eab05c"></i>Close</span><span><i style="background:#dd867e"></i>Behind</span><span><i style="background:#dce5dc"></i>Unlogged</span></div></div>
-  <div class="section-head"><h2>Monthly checkpoint</h2></div><div class="card" id="calBreakdown"></div>
+  <div class="section-head"><h2>Monthly checkpoint</h2></div><div class="card" id="calBreakdown"></div><div class="section-head"><h2>⚡ EV charging this month</h2></div><div class="charge-card" id="calendarEv"></div>
 </section>
 <section class="page" id="stats">
   <div class="page-top"><div class="kicker">THE BIG PICTURE</div><h1 class="title">Numbers that move you.</h1><p class="sub">Your performance, without the spreadsheet.</p></div>
@@ -252,6 +302,7 @@ textarea{width:100%;border-radius:13px;border:1px solid #e1e9df;background:#fafc
   </div>
   <div class="section-head"><h2 id="chartTitle">Daily earnings</h2></div>
   <div class="bar-card"><div class="bars" id="bars"></div><div class="bar-labels" id="barLabels"></div><p class="bar-caption" id="chartCaption"></p></div>
+  <div class="section-head"><h2>Cost recovery report</h2></div><div class="card" id="monthlyRecovery"></div><div class="section-head"><h2>⚡ Charging log</h2></div><div class="charge-card" id="statsEv"></div>
   <div class="section-head"><h2>Money intelligence</h2></div><div class="card" id="insights"></div>
 </section>
 <section class="page" id="wins">
@@ -320,7 +371,7 @@ function normalize(obj){
   const k=pair[0],e=pair[1];if(!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(k)||!e||typeof e!=='object')return;
   const d=fromKey(k);if(isNaN(d.getTime())||dateKey(d)!==k||!validMoney(e.earned))return;
   const to=e.targetOverride;if(to!=null&&!validMoney(to,1000000))return;
-  const expenses=(Array.isArray(e.expenses)?e.expenses:[]).slice(0,100).filter(x=>x&&CATS.includes(x.category)&&validMoney(x.amount,1000000)).map(x=>({category:x.category,amount:round(x.amount)}));
+  const expenses=(Array.isArray(e.expenses)?e.expenses:[]).slice(0,100).filter(x=>x&&CATS.includes(x.category)&&validMoney(x.amount,1000000)).map(x=>({category:x.category,amount:round(x.amount),...(x.category==='Charging'&&validMoney(x.kwh,1000000)&&Number(x.kwh)>0?{kwh:round(x.kwh)}:{})}));
   out.entries[k]={earned:round(e.earned),targetOverride:to==null?null:round(to),expenses:expenses,note:String(e.note||'').slice(0,400)};
  });
  return out;
@@ -330,13 +381,23 @@ let state=load(),page='home',viewDate=today(),sheetType='',sheetDay=currentKey()
 function persist(){try{localStorage.setItem(STORAGE,JSON.stringify(state));return true;}catch(e){toast('Could not save. Check phone storage and export a backup.');return false;}}
 function entryFor(k){return state.entries[k]||null;}
 function targetFor(k){const e=entryFor(k);return e&&e.targetOverride!=null?e.targetOverride:state.settings.weekdayTargets[weekday(fromKey(k))];}
-function dataFor(k){const e=entryFor(k),goal=targetFor(k),earned=e?e.earned:0,expenses=e?round(e.expenses.reduce((s,x)=>s+x.amount,0)):0,net=round(earned-expenses);
- const ratio=goal?earned/goal:1;let status='blank';
- if(e){if(goal===0)status='rest';else if(earned>=goal)status=state.settings.expenseBudget!=null&&expenses>state.settings.expenseBudget?'close':'hit';else status=ratio>=.8?'close':'miss';}
- return {key:k,date:fromKey(k),entry:e,goal:goal,earned:earned,spent:expenses,net:net,ratio:ratio,status:status,delta:round(earned-goal)};
+function dataFor(k){
+ const e=entryFor(k),goal=targetFor(k),earned=e?e.earned:0,spent=e?round(e.expenses.reduce((n,x)=>n+x.amount,0)):0,net=round(earned-spent);
+ const charge=e?round(e.expenses.filter(x=>x.category==='Charging').reduce((n,x)=>n+x.amount,0)):0;
+ const kwh=e?round(e.expenses.filter(x=>x.category==='Charging').reduce((n,x)=>n+(x.kwh||0),0)):0;
+ const extra=Math.max(0,round(earned-goal)),covered=Math.min(extra,spent),due=round(spent-covered);
+ const chargeCovered=Math.min(charge,covered),chargeDue=round(charge-chargeCovered),gap=Math.max(0,round(goal-net));
+ const secured=!!e&&goal>0&&net>=goal;
+ const ratio=goal>0?earned/goal:1;let status='blank';
+ if(e){if(goal===0)status='rest';else if(secured&&(state.settings.expenseBudget==null||spent<=state.settings.expenseBudget))status='hit';else if(earned>=goal||ratio>=.8)status='close';else status='miss';}
+ return {key:k,date:fromKey(k),entry:e,goal,earned,spent,net,charge,kwh,extra,covered,due,chargeCovered,chargeDue,gap,secured,ratio,status,delta:round(earned-goal)};
 }
 function monthDays(y,m){const count=new Date(y,m+1,0).getDate(),a=[];for(let d=1;d<=count;d++)a.push(dataFor(dateKey(new Date(y,m,d))));return a;}
-function monthInfo(y,m){const a=monthDays(y,m),sum=key=>round(a.reduce((s,d)=>s+d[key],0));return {days:a,gross:sum('earned'),spent:sum('spent'),net:sum('net'),goal:sum('goal'),hits:a.filter(x=>x.status==='hit').length,logged:a.filter(x=>x.entry).length};}
+function monthInfo(y,m){
+ const days=monthDays(y,m),sum=k=>round(days.reduce((n,d)=>n+d[k],0));
+ const charges=days.flatMap(d=>(d.entry?.expenses||[]).filter(x=>x.category==='Charging').map(x=>({key:d.key,date:d.date,amount:x.amount,kwh:x.kwh||0})));
+ return {days,gross:sum('earned'),spent:sum('spent'),net:sum('net'),goal:sum('goal'),hits:days.filter(x=>x.status==='hit').length,logged:days.filter(x=>x.entry).length,charge:sum('charge'),kwh:sum('kwh'),covered:sum('covered'),due:sum('due'),chargeCovered:sum('chargeCovered'),chargeDue:sum('chargeDue'),secured:days.filter(d=>d.secured).length,charges};
+}
 function monthTitle(){return viewDate.toLocaleDateString('en-GB',{month:'long',year:'numeric'});}
 function shortDate(d){return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}
 function ensureEntry(k){if(!state.entries[k])state.entries[k]={earned:0,targetOverride:null,expenses:[],note:''};return state.entries[k];}
@@ -356,23 +417,59 @@ function render(){
  document.querySelectorAll('.nav').forEach(el=>el.classList.toggle('active',el.dataset.go===page));
  if(page==='home')renderHome();if(page==='calendar')renderCalendar();if(page==='stats')renderStats();if(page==='wins')renderWins();if(page==='settings')renderSettings();
 }
+function evReport(m,withHistory){
+ const avg=m.charges.length?m.charge/m.charges.length:0,price=m.kwh>0?Math.round(m.charge/m.kwh*100):0;
+ return '<div class="charge-head"><div><small>YOUR EV ENERGY</small><h3>'+ (withHistory?'Electricity ledger':'Monthly charging')+'</h3></div><button data-open="expense" data-charge="true">+ Log charge</button></div>'+
+ '<div class="charge-amount">'+money2(m.charge)+'</div><div class="charge-details"><span>'+m.charges.length+' charge'+(m.charges.length===1?'':'s')+'</span><span>Average '+money2(avg)+'</span>'+(m.kwh>0?'<span>'+m.kwh.toFixed(1)+' kWh · '+price+'p/kWh</span>':'')+'</div>'+
+ '<div class="charge-rule"></div><div class="charge-status"><span>Charging allocated to extra earnings</span><b>'+money2(m.chargeCovered)+' / '+money2(m.charge)+'</b></div>'+
+ '<p class="charge-hint">For motivation, extra earnings recover charging first and then other costs. Your actual paid expenses remain unchanged. Recovery is measured per day.</p>'+
+ (withHistory?'<div class="charge-rule"></div>'+(m.charges.length?m.charges.slice().reverse().map(x=>'<div class="charge-row"><span>⚡ '+safe(shortDate(x.date))+(x.kwh?' · '+x.kwh+' kWh':'')+'</span><b>'+money2(x.amount)+'</b></div>').join(''):'<div class="charge-row"><span>No charges logged this month.</span></div>'):'');
+}
+function showRecovery(d){
+ const p=d.spent?Math.round(Math.min(100,100*d.covered/d.spent)):0;
+ $('recoverPct').textContent=d.spent?p+'%':'—';$('recoverFill').style.width=p+'%';
+ $('recoverCosts').textContent=money2(d.spent);$('recoverCovered').textContent=money2(d.covered);$('recoverDue').textContent=money2(d.due);
+ $('recover').classList.toggle('complete',d.spent>0&&d.due===0&&d.earned>=d.goal);
+ $('recoverTitle').textContent=d.spent===0?'Keep your earnings.':d.due===0?'Costs recovered!':'Earn back your costs.';
+ $('recoverSubtitle').textContent='Surplus beyond '+money(d.goal)+' gross target is applied to expenses.';
+ let message;
+ if(!d.entry)message='Log earnings and expenses to start the recovery game.';
+ else if(d.spent===0)message=d.secured?'Net target protected. No expenses to recover.':'No expenses recorded yet. Keep growing your earnings.';
+ else if(d.due===0&&d.earned>=d.goal)message='🏆 You have recovered all '+money2(d.spent)+' of your costs. Net goal protected!';
+ else if(d.extra===0)message='Earn '+money2(Math.max(0,d.goal-d.earned))+' to reach gross target, then '+money2(d.spent)+' extra to cover costs.';
+ else message='You have recovered '+money2(d.covered)+' with extra earnings. Just '+money2(d.gap)+' more protects your net target.';
+ $('recoverText').textContent=message;$('recoverEmoji').textContent=d.due===0&&d.spent>0?'🏆':'🛡️';
+}
+function showEv(d){
+ const m=monthInfo(today().getFullYear(),today().getMonth());
+ $('evMonthAmount').textContent=money2(m.charge);$('evMonthName').textContent=today().toLocaleDateString('en-GB',{month:'long'})+' spend';
+ $('evSessions').textContent=m.charges.length+' session'+(m.charges.length===1?'':'s');
+ $('evKwh').textContent=m.kwh?m.kwh+' kWh':'';
+ $('evRecovered').textContent=money2(d.chargeCovered)+' / '+money2(d.charge);
+ $('evHint').textContent=d.charge===0?'Log a charge to track its cost and recovery.':d.chargeDue===0?'⚡ Today’s charging has been covered by extra earnings.':money2(d.chargeDue)+' more extra earnings covers all of today’s charging.';
+}
+function sheetRecovery(d){
+ return '<div class="editor-recovery">🛡️ <strong>'+ (d.secured?'Net target protected!':d.earned>=d.goal?'Gross target hit; costs not fully recovered.':'Goal in progress.')+'</strong> Extra '+money2(d.extra)+' · recovered '+money2(d.covered)+' · still to recover '+money2(d.due)+' · net '+money2(d.net)+'.</div>';
+}
+function saveFeedback(before,after,type){
+ if(!before.secured&&after.secured){celebrate();toast('🏆 NET target protected — all costs covered!');return;}
+ if(before.chargeDue>0&&after.charge>0&&after.chargeDue===0){celebrate();toast('⚡ EV charge covered by extra earnings!');return;}
+ if(after.spent>0&&after.earned>=after.goal&&after.due>0){toast(money2(after.due)+' more to recover today’s expenses.');return;}
+ toast(type==='expense'?'Expense logged. Recovery updated.':'Income saved. Your progress is updated.');
+}
 function renderHome(){
  const now=today(),d=dataFor(currentKey()),s=scores();
  $('homeDate').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
  const hour=now.getHours(),greeting=hour<12?'Good morning.':hour<17?'Good afternoon.':'Good evening.';
  $('greeting').textContent=greeting;
- $('heroEarned').textContent=money(d.earned);$('heroTarget').textContent=money(d.goal);$('heroLeft').textContent=money(Math.max(0,d.goal-d.earned));
+ $('heroEarned').textContent=money(d.earned);$('heroTarget').textContent=money(d.goal);$('heroLeft').textContent=money2(d.gap);
  $('heroNet').textContent=money(d.net);
  const pct=d.goal?Math.round(d.earned/d.goal*100):100;
  $('ringPercent').textContent=pct+'%';$('ring').style.strokeDashoffset=String(2*Math.PI*52*(1-Math.min(1,pct/100)));
  $('ring').style.strokeDasharray=String(2*Math.PI*52);
- $('heroSub').textContent=d.entry?'Expenses '+money(d.spent)+' · '+(d.net>=0?'Net '+money(d.net):'Net below zero'):'Fresh day, fresh target.';
- let message='Your next win starts with one entry.';
- if(d.goal===0)message='Rest day unlocked. Keep your records tidy.';
- else if(pct>=100)message='Target smashed! You did it. 🏆';
- else if(pct>=80)message='So close — only '+money(Math.max(0,d.goal-d.earned))+' to your goal.';
- else if(d.entry)message='Momentum is building. Keep stacking fares.';
- $('heroMessage').textContent=message;
+ $('heroSub').textContent=d.entry?'Expenses '+money2(d.spent)+' · Net '+money2(d.net):'Fresh day, fresh target.';
+ $('heroMessage').textContent=d.secured?'🛡️ Net target protected — you earned back your costs!':d.earned>=d.goal&&d.due>0?'Gross target reached. '+money2(d.gap)+' more to protect your NET goal.':d.spent>0?'Your extra earnings can cover '+money2(d.spent)+' of costs.':'Every fare brings you closer.';
+ showRecovery(d);showEv(d);
  const start=startOfWeek(now),week=[];
  for(let i=0;i<7;i++){const dt=new Date(start);dt.setDate(start.getDate()+i);const x=dataFor(dateKey(dt));
  const cls=x.status==='hit'?'hit':x.status==='close'?'close':x.status==='miss'?'miss':'';
@@ -391,9 +488,10 @@ function renderCalendar(){
  const start=weekday(new Date(y,m,1));for(let i=0;i<start;i++)headings.push('<div class="cal-cell blank"></div>');
  s.days.forEach(d=>{const label=shortDate(d.date)+' earned '+money(d.earned)+' target '+money(d.goal);headings.push('<button class="cal-cell '+(d.key===currentKey()?'today ':'')+(d.key>currentKey()?'future ':'')+d.status+'" data-edit="'+d.key+'" aria-label="'+safe(label)+'"><b>'+d.date.getDate()+'</b><small>'+(d.entry?money(d.earned):'·')+'</small></button>');});
  $('calGrid').innerHTML=headings.join('');
- const remaining=s.days.filter(d=>d.key>=currentKey()).length,needed=remaining?Math.max(0,(s.goal-s.gross)/remaining):0;
+ const remaining=s.days.filter(d=>d.key>=currentKey()).length,needed=remaining?Math.max(0,(s.goal-s.net)/remaining):0;
  $('calBreakdown').innerHTML=
- '<div class="mini-breakdown"><div><span>Monthly target</span><b>'+money(s.goal)+'</b></div><div><span>Gross versus target</span><b class="'+(s.gross>=s.goal?'pos':'warning')+'">'+(s.gross>=s.goal?'+':'−')+money(Math.abs(s.gross-s.goal))+'</b></div><div><span>Days logged</span><b>'+s.logged+' / '+s.days.length+'</b></div><div><span>Targets achieved</span><b>'+s.hits+' days</b></div><div><span>Average needed per remaining day</span><b>'+money(needed)+'</b></div></div>';
+ '<div class="mini-breakdown"><div><span>Gross target baseline</span><b>'+money(s.goal)+'</b></div><div><span>Monthly net vs goal</span><b class="'+(s.net>=s.goal?'pos':'neg')+'">'+money2(s.net-s.goal)+'</b></div><div><span>Expenses recovered via extra earnings</span><b>'+money2(s.covered)+'</b></div><div><span>Gross versus target</span><b class="'+(s.gross>=s.goal?'pos':'warning')+'">'+(s.gross>=s.goal?'+':'−')+money(Math.abs(s.gross-s.goal))+'</b></div><div><span>Days logged</span><b>'+s.logged+' / '+s.days.length+'</b></div><div><span>Targets achieved</span><b>'+s.hits+' days</b></div><div><span>Average needed per remaining day</span><b>'+money(needed)+'</b></div></div>';
+ $('calendarEv').innerHTML=evReport(s,false);
 }
 function renderStats(){
  const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m);$('statsMonth').textContent=monthTitle();
@@ -408,6 +506,8 @@ function renderStats(){
  const highest=days.slice().sort((a,b)=>b.earned-a.earned)[0];
  const cats={};CATS.forEach(c=>cats[c]=0);days.forEach(d=>d.entry.expenses.forEach(e=>cats[e.category]+=e.amount));
  const biggest=Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+ $('monthlyRecovery').innerHTML='<div class="mini-breakdown"><div><span>Net target protected days</span><b>'+s.secured+'</b></div><div><span>Extra earnings recovered expenses</span><b class="pos">'+money2(s.covered)+'</b></div><div><span>Uncovered same-day expenses</span><b class="neg">'+money2(s.due)+'</b></div><div><span>Gross above monthly goal</span><b>'+money2(s.gross-s.goal)+'</b></div><div><span>Monthly net versus goal</span><b class="'+(s.net>=s.goal?'pos':'neg')+'">'+money2(s.net-s.goal)+'</b></div></div><p class="recover-foot">Recovery is tracked per day; other days’ surplus is reflected in the monthly net result above.</p>';
+ $('statsEv').innerHTML=evReport(s,true);
  $('insights').innerHTML='<div class="mini-breakdown"><div><span>Average per logged day</span><b>'+money(avg)+'</b></div><div><span>Best earning day</span><b>'+(highest?money(highest.earned):'—')+'</b></div><div><span>Expenses as % of gross</span><b>'+expenseRatio+'%</b></div><div><span>Largest expense category</span><b>'+(biggest&&biggest[1]>0?biggest[0]+' · '+money(biggest[1]):'—')+'</b></div><div><span>Net after all expenses</span><b>'+money(s.net)+'</b></div></div>';
 }
 function renderWins(){
@@ -418,12 +518,14 @@ function renderWins(){
  const all=allData(),bigDay=all.some(d=>d.earned>=300),weeklyGross={};all.forEach(d=>{const k=dateKey(startOfWeek(d.date));weeklyGross[k]=(weeklyGross[k]||0)+d.earned;});const powerWeek=Object.values(weeklyGross).some(n=>n>=1500);
  const badges=[
  ['🌱','First Step','Log your first day',sc.logged>=1],
- ['🎯','Target Hunter','Hit your goal 3 times',sc.hits>=3],
- ['🔥','On Fire','A 3-day goal streak',sc.best>=3],
+ ['🎯','Target Hunter','Protect your net goal three times',sc.hits>=3],
+ ['🔥','On Fire','A 3-day protected-net streak',sc.best>=3],
  ['⚡','Power Driver','Earn £300 in a day',bigDay],
  ['👑','Weekend Warrior','Hit a Fri, Sat or Sun target',all.some(d=>isHit(d)&&weekday(d.date)>=4)],
  ['💸','Money Machine','Earn £1,500 in one week',powerWeek],
- ['💎','Perfect Ten','Hit 10 daily targets',sc.hits>=10],
+ ['💎','Perfect Ten','Protect your net goal on 10 days',sc.hits>=10],
+ ['⚡','Charge Conqueror','Earn back the full cost of EV charging',all.some(d=>d.charge>0&&d.chargeDue===0&&d.earned>=d.goal)],
+ ['🛡️','Cost Defender','Recover every expense on five days',all.filter(d=>d.spent>0&&d.due===0&&d.earned>=d.goal).length>=5],
  ['🏅','Monthly Champion','Hit 20 goals in one month',(()=>{const m={};all.filter(isHit).forEach(d=>{const k=d.key.slice(0,7);m[k]=(m[k]||0)+1;});return Object.values(m).some(n=>n>=20);})()]
  ];
  $('badges').innerHTML=badges.map(b=>'<div class="achievement '+(b[3]?'':'locked')+'"><div class="emoji">'+b[0]+'</div><b>'+b[1]+'</b><small>'+b[2]+'</small><div class="unlock">'+(b[3]?'✓ UNLOCKED':'🔒 LOCKED')+'</div></div>').join('');
@@ -452,12 +554,14 @@ function fillSheet(){
   s+='<p class="privacy">'+(incomeMode==='add'?'Current total '+money(d.earned)+' — this fare will be added to it.':'This replaces the earned amount for the selected day.')+'</p>';
  }else if(expense){
   s+='<label>What was it for?</label><div class="category-list">'+CATS.map(c=>'<button class="category-chip '+(selectedCat===c?'active':'')+'" data-cat="'+c+'"><span>'+EMOJI[c]+'</span>'+c+'</button>').join('')+'</div>';
+  s+='<div class="charge-kwh" id="chargeKwhBlock"'+(selectedCat==='Charging'?'':' hidden')+'><label for="chargeKwh">Energy added (kWh) · optional</label><div class="money-input"><input id="chargeKwh" type="number" min="0" max="1000000" step=".01" inputmode="decimal" placeholder="e.g. 42.5"></div></div>';
   s+='<label for="sheetAmount">Amount spent</label><div class="money-input"><span>£</span><input id="sheetAmount" type="number" min="0" max="1000000" step=".01" placeholder="0.00" inputmode="decimal"></div>';
   s+='<div class="amount-chips"><button data-amount="5">£5</button><button data-amount="10">£10</button><button data-amount="15">£15</button><button data-amount="20">£20</button><button data-amount="30">£30</button></div>';
  }else{
+  s+=sheetRecovery(d);
   s+='<div class="editor-two"><div><label for="editEarned">Gross earned (£)</label><input id="editEarned" type="number" min="0" max="10000000" step=".01" inputmode="decimal" value="'+d.earned+'"></div><div><label for="editTarget">Daily goal (£)</label><input id="editTarget" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+d.goal+'"></div></div>';
   s+='<label for="editNote">Note (optional)</label><textarea id="editNote" maxlength="400" placeholder="A quick memory of today...">'+safe(d.entry?d.entry.note:'')+'</textarea>';
-  s+='<label>Expenses</label><div id="existingExpenses">'+(d.entry&&d.entry.expenses.length?d.entry.expenses.map((e,i)=>'<div class="expense-line"><span>'+EMOJI[e.category]+' '+e.category+'</span><b>'+money2(e.amount)+'</b><button class="remove" data-remove="'+i+'" aria-label="Remove expense '+safe(e.category)+'">×</button></div>').join(''):'<p class="sub">No expenses logged.</p>')+'</div>';
+  s+='<label>Expenses</label><div id="existingExpenses">'+(d.entry&&d.entry.expenses.length?d.entry.expenses.map((e,i)=>'<div class="expense-line"><span>'+EMOJI[e.category]+' '+e.category+(e.kwh?' · '+e.kwh+' kWh':'')+'</span><b>'+money2(e.amount)+'</b><button class="remove" data-remove="'+i+'" aria-label="Remove expense '+safe(e.category)+'">×</button></div>').join(''):'<p class="sub">No expenses logged.</p>')+'</div>';
   s+='<button class="secondary-btn" id="addExpenseFromEdit" type="button" style="margin-top:12px">+ Add an expense</button>';
   if(d.entry)s+='<button class="secondary-btn" id="deleteDay" type="button" style="margin-top:10px;color:#bc5650">Delete day entry</button>';
  }
@@ -476,12 +580,11 @@ function saveSheet(){
   if(sheetType==='expense'&&value<=0){toast('Enter an expense greater than £0.');return;}
   const e=ensureEntry(k);
   if(sheetType==='income'){const next=incomeMode==='add'?round(e.earned+value):round(value);if(!validMoney(next)){toast('Income exceeds the maximum amount.');return;}e.earned=next;}
-  else{if(e.expenses.length>=100){toast('Expense limit for this day reached.');return;}e.expenses.push({category:selectedCat,amount:round(value)});}
+  else{if(e.expenses.length>=100){toast('Expense limit for this day reached.');return;}const k=$('chargeKwh'),kv=k?k.value.trim():'';if(selectedCat==='Charging'&&kv!==''&&!validMoney(kv,1000000)){toast('Invalid energy value.');return;}e.expenses.push({category:selectedCat,amount:round(value),...(selectedCat==='Charging'&&kv!==''&&Number(kv)>0?{kwh:round(kv)}:{})});}
  }
  if(!persist())return;
  const after=dataFor(k);closeSheet();render();
- if(before.status!=='hit'&&after.status==='hit'){celebrate();toast('🏆 Target achieved. What a win!');}
- else{toast(saveType==='expense'?'Expense saved.':'Saved! Your numbers are up to date.');}
+ saveFeedback(before,after,saveType);
  if(navigator.vibrate)navigator.vibrate(15);
 }
 function removeExpense(idx){const e=entryFor(sheetDay);if(!e||!e.expenses[idx])return;e.expenses.splice(idx,1);if(persist()){fillSheet();render();toast('Expense removed.');}}
@@ -497,11 +600,11 @@ document.addEventListener('click',function(ev){
  const button=ev.target.closest('button');if(!button)return;
  if(button.dataset.go){navigate(button.dataset.go);return;}
  if(button.dataset.month){changeMonth(Number(button.dataset.month));return;}
- if(button.dataset.open){showSheet(button.dataset.open);return;}
+ if(button.dataset.open){showSheet(button.dataset.open);if(button.dataset.charge==='true'){selectedCat='Charging';fillSheet();}return;}
  if(button.dataset.edit){showSheet('edit',button.dataset.edit);return;}
  if(button.id==='closeSheet'){closeSheet();return;}
  if(button.dataset.mode){incomeMode=button.dataset.mode;fillSheet();return;}
- if(button.dataset.cat){selectedCat=button.dataset.cat;fillSheet();return;}
+ if(button.dataset.cat){const amount=$('sheetAmount')?.value||'';selectedCat=button.dataset.cat;fillSheet();if($('sheetAmount'))$('sheetAmount').value=amount;return;}
  if(button.dataset.amount){const inp=$('sheetAmount');if(inp){inp.value=button.dataset.amount;inp.focus();}return;}
  if(button.id==='sheetSave'){const type=sheetType;saveSheet();return;}
  if(button.dataset.remove!==undefined){removeExpense(Number(button.dataset.remove));return;}
