@@ -406,6 +406,18 @@ body{background:radial-gradient(ellipse 480px 450px at 90% -140px,#eee8d3,transp
 .checkin-foot{font-size:10px;line-height:1.6;color:#8a9b8c;margin:10px 0 0}
 @media(max-width:370px){.daily-checkin{padding:13px}.checkin-field{padding:9px;gap:7px}.checkin-emoji{height:36px;width:36px}.checkin-input input{font-size:19px}.checkin-results b{font-size:15px}}
 
+
+/* final soft gold touches */
+.bar-fill{background:linear-gradient(180deg,#e9d09b,#caa468)}
+.forecast-choices button:not(.selected){border-color:#e9dfce;color:#715c3d}
+.forecast-result b.due{color:#a48551}
+.hero-head .live{color:#ead5b1}
+.sparkle{color:#f1d9a7}
+.charge-status b{color:#e8d0a4}
+.level-card{background:radial-gradient(ellipse at 100% 0%,#e4cf9e33,transparent 59%),linear-gradient(122deg,#0f6147,#0d3c30);border-color:#3f8063}
+.achievement:not(.locked) .emoji{background:linear-gradient(132deg,#f9eed1,#e5c593)}
+.recover-track span{background:linear-gradient(90deg,#267b55,#68b68b)}
+
 </style>
 </head>
 <body>
@@ -702,8 +714,8 @@ function showEarnedFlash(amount){
 function renderCheckin(d){
  $('ciTarget').value=d.goal;
  $('ciIncome').value=d.entry?String(d.baseIncome):'';
- $('ciExpense').value=d.entry?String(d.spent):'';
- $('ciCover').value=d.entry?String(d.extra):'';
+ $('ciExpense').value=d.entry?String(d.spent):'0';
+ $('ciCover').value=d.entry?String(d.extra):'0';
  renderCheckinPreview();
 }
 function checkinValues(){
@@ -794,7 +806,7 @@ function renderStats(){
  const renderBars=last.length?last:[];
  $('bars').innerHTML=renderBars.map(d=>'<div class="bar-col '+(!d.earned?'zero':'')+'"><div class="bar-stand"><div class="bar-fill" style="height:'+Math.max(2,Math.round(d.earned/top*100))+'%" title="'+money(d.earned)+'"></div></div></div>').join('');
  $('barLabels').innerHTML=renderBars.map(d=>'<span>'+d.date.getDate()+'</span>').join('');
- $('chartCaption').textContent=last.length?'Orange bars show gross earnings by logged date ('+monthTitle()+').':'Log a day to start seeing your earnings chart.';
+ $('chartCaption').textContent=last.length?'Gold bars show gross earnings by logged date ('+monthTitle()+').':'Log a day to start seeing your earnings chart.';
  const avg=days.length?s.gross/days.length:0,expenseRatio=s.gross?Math.round(s.spent/s.gross*100):0;
  const highest=days.slice().sort((a,b)=>b.earned-a.earned)[0];
  const cats={};CATS.forEach(c=>cats[c]=0);days.forEach(d=>d.entry.expenses.forEach(e=>cats[e.category]+=e.amount));
@@ -853,6 +865,7 @@ function fillSheet(){
  }else{
   s+=sheetRecovery(d);
   s+='<div class="editor-two"><div><label for="editEarned">Gross earned incl. extra (£)</label><input id="editEarned" type="number" min="0" max="10000000" step=".01" inputmode="decimal" value="'+d.earned+'"></div><div><label for="editTarget">Daily goal (£)</label><input id="editTarget" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+d.goal+'"></div></div>';
+  s+='<label for="editCover">Extra earnings allocated to expenses (£) — already included in the gross figure above</label><input class="input-date" id="editCover" type="number" min="0" max="10000000" step=".01" inputmode="decimal" value="'+d.extra+'">';
   s+='<label for="editNote">Note (optional)</label><textarea id="editNote" maxlength="400" placeholder="A quick memory of today...">'+safe(d.entry?d.entry.note:'')+'</textarea>';
   s+='<label>Expenses</label><div id="existingExpenses">'+(d.entry&&d.entry.expenses.length?d.entry.expenses.map((e,i)=>'<div class="expense-line"><span>'+EMOJI[e.category]+' '+e.category+(e.kwh?' · '+e.kwh+' kWh':'')+'</span><b>'+money2(e.amount)+'</b><button class="remove" data-remove="'+i+'" aria-label="Remove expense '+safe(e.category)+'">×</button></div>').join(''):'<p class="sub">No expenses logged.</p>')+'</div>';
   s+='<button class="secondary-btn" id="addExpenseFromEdit" type="button" style="margin-top:12px">+ Add an expense</button>';
@@ -865,9 +878,9 @@ function updateSheetDate(k){if(!/^\d{4}-\d{2}-\d{2}$/.test(k)||dateKey(fromKey(k
 function saveSheet(){
  const saveType=sheetType,k=sheetDay,before=dataFor(k),value=Number(($('sheetAmount')||{}).value);
  if(sheetType==='edit'){
-  const gross=$('editEarned').value,goal=$('editTarget').value;
-  if(!validMoney(gross)||!validMoney(goal,1000000)){toast('Enter valid non-negative amounts.');return;}
-  const e=ensureEntry(k);e.earned=round(gross);if(e.coverEarned!==undefined)e.coverEarned=Math.min(e.coverEarned,e.earned);e.targetOverride=round(goal)===state.settings.weekdayTargets[weekday(fromKey(k))]?null:round(goal);e.note=$('editNote').value.trim().slice(0,400);
+  const gross=$('editEarned').value,goal=$('editTarget').value,extraCover=$('editCover').value;
+  if(!validMoney(gross)||!validMoney(goal,1000000)||!validMoney(extraCover)||Number(extraCover)>Number(gross)){toast('Enter valid non-negative amounts.');return;}
+  const e=ensureEntry(k);e.earned=round(gross);e.coverEarned=round(extraCover);e.targetOverride=round(goal)===state.settings.weekdayTargets[weekday(fromKey(k))]?null:round(goal);e.note=$('editNote').value.trim().slice(0,400);
  }else{
   const field=$('sheetAmount');if(!field||!validMoney(field.value,sheetType==='income'?10000000:1000000)){toast('Enter a valid amount.');return;}
   if(sheetType==='expense'&&value<=0){toast('Enter an expense greater than £0.');return;}
