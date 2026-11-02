@@ -698,8 +698,56 @@ function showEarnedFlash(amount){
  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
  const el=document.createElement('div');el.className='fx-burst';el.textContent='+'+money2(amount)+' ↗';document.body.appendChild(el);setTimeout(()=>el.remove(),1050);
 }
+
+function renderCheckin(d){
+ $('ciTarget').value=d.goal;
+ $('ciIncome').value=d.entry?String(d.baseIncome):'';
+ $('ciExpense').value=d.entry?String(d.spent):'';
+ $('ciCover').value=d.entry?String(d.extra):'';
+ renderCheckinPreview();
+}
+function checkinValues(){
+ const goal=Number($('ciTarget').value)||0,base=Number($('ciIncome').value)||0;
+ const expenses=Number($('ciExpense').value)||0,cover=Number($('ciCover').value)||0;
+ const gross=round(base+cover),net=round(gross-expenses),recovered=round(Math.min(expenses,cover));
+ return {goal,base,expenses,cover,gross,net,recovered,due:round(expenses-recovered),gap:Math.max(0,round(goal-net))};
+}
+function renderCheckinPreview(){
+ const x=checkinValues(),old=dataFor(currentKey());
+ $('ciGross').textContent=money2(x.gross);$('ciPaid').textContent=money2(x.recovered);$('ciDue').textContent=money2(x.due);
+ $('ciDue').classList.toggle('owing',x.due>0);
+ $('ciNote').textContent=x.expenses===0?'No costs today. Projected take-home: '+money2(x.net)+'.':
+ x.due===0?'✨ All expenses covered by extra earnings! Take-home: '+money2(x.net)+'.':
+ money2(x.cover)+' extra earned covers '+money2(x.recovered)+' of '+money2(x.expenses)+' costs. '+money2(x.due)+' left. Take-home: '+money2(x.net)+'.';
+ const fixed=round((old.entry?.expenses||[]).filter(e=>!e.dailySummary).reduce((n,e)=>n+e.amount,0));
+ $('ciFoot').textContent=fixed>0?'Already itemised today: '+money2(fixed)+' (including EV charges). Total expenses cannot be lower without editing those items.':
+ 'Gross = daily income + extra earnings (only once). Net = gross − expenses. Recovered costs remain recorded as real expenses.';
+}
+function saveCheckin(ev){
+ ev.preventDefault();
+ const inputs=['ciTarget','ciIncome','ciExpense','ciCover'].map(id=>$(id));
+ if(inputs.some((field,i)=>!field||!validMoney(field.value,i===0||i===2?1000000:10000000))){toast('Enter valid non-negative amounts in all four fields.');return;}
+ const x=checkinValues();
+ if(!validMoney(x.gross,10000000)){toast('Combined income exceeds the maximum.');return;}
+ const key=currentKey(),before=dataFor(key),old=entryFor(key);
+ const fixed=old?old.expenses.filter(e=>!e.dailySummary).map(e=>({...e})):[];
+ const fixedCost=round(fixed.reduce((n,e)=>n+e.amount,0));
+ if(x.expenses<fixedCost){toast('Already itemised: '+money2(fixedCost)+'. Remove costs in Calendar → Edit before entering a lower total.');return;}
+ const remainder=round(x.expenses-fixedCost);
+ if(remainder>0&&fixed.length>=100){toast('Expense limit reached. Edit the day first.');return;}
+ const newEntry={earned:x.gross,coverEarned:x.cover,targetOverride:x.goal===state.settings.weekdayTargets[weekday(fromKey(key))]?null:x.goal,expenses:fixed,note:old?.note||''};
+ if(remainder>0)newEntry.expenses.push({category:'Other',amount:remainder,dailySummary:true});
+ state.entries[key]=newEntry;
+ if(!persist()){if(old)state.entries[key]=old;else delete state.entries[key];return;}
+ const after=dataFor(key);
+ render();
+ if(x.gross>before.earned)showEarnedFlash(round(x.gross-before.earned));
+ saveFeedback(before,after,'checkin');
+ if(navigator.vibrate)navigator.vibrate(15);
+}
+
 function renderHome(){
- const now=today(),d=dataFor(currentKey()),s=scores();showMiniLevel(s);renderMissions(d);renderFarePreview();
+ const now=today(),d=dataFor(currentKey()),s=scores();showMiniLevel(s);renderMissions(d);renderFarePreview();renderCheckin(d);
  $('homeDate').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
  const hour=now.getHours(),greeting=hour<12?'Good morning.':hour<17?'Good afternoon.':'Good evening.';
  $('greeting').textContent=d.secured?'You owned today.':d.entry&&d.earned>=d.goal?'One more fare. One more win.':d.entry?'Build your momentum.':greeting;
@@ -837,9 +885,9 @@ function removeExpense(idx){const e=entryFor(sheetDay);if(!e||!e.expenses[idx])r
 function deleteDay(){if(!confirm('Delete the entire entry for '+sheetDay+'?'))return;delete state.entries[sheetDay];if(persist()){closeSheet();render();toast('Day entry deleted.');}}
 function download(name,content,type){const blob=new Blob([content],{type:type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 function csvEsc(v){const str=String(v==null?'':v);return '"'+( /^[=+@\t\r]/.test(str)?"'"+str:str).replace(/"/g,'""')+'"';}
-function exportCSV(){const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m),rows=[['Date','Day','Target GBP','Gross GBP','Expenses GBP','Net GBP','Vs target GBP','Status','Notes']];
- s.days.forEach(d=>rows.push([d.key,WEEKDAYS[weekday(d.date)],d.goal,d.entry?d.earned:'',d.entry?d.spent:'',d.entry?d.net:'',d.entry?d.delta:'',d.status,d.entry?d.entry.note:'']));
- rows.push(['TOTAL','',s.goal,s.gross,s.spent,s.net,'','','']);
+function exportCSV(){const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m),rows=[['Date','Day','Target GBP','Base income GBP','Extra earmarked GBP','Gross GBP','Expenses GBP','Costs recovered GBP','Costs outstanding GBP','Net GBP','Vs target GBP','Status','Notes']];
+ s.days.forEach(d=>rows.push([d.key,WEEKDAYS[weekday(d.date)],d.goal,d.entry?d.baseIncome:'',d.entry?d.extra:'',d.entry?d.earned:'',d.entry?d.spent:'',d.entry?d.covered:'',d.entry?d.due:'',d.entry?d.net:'',d.entry?d.delta:'',d.status,d.entry?d.entry.note:'']));
+ rows.push(['TOTAL','',s.goal,'','',s.gross,s.spent,s.covered,s.due,s.net,'','','']);
  download('Finances-'+y+'-'+String(m+1).padStart(2,'0')+'.csv','\ufeff'+rows.map(r=>r.map(csvEsc).join(',')).join('\r\n'),'text/csv;charset=utf-8');toast('Monthly CSV downloaded.');}
 function backup(){download('Finances-backup-'+currentKey()+'.json',JSON.stringify(state,null,2),'application/json');toast('Backup downloaded. Keep it somewhere safe.');}
 document.addEventListener('click',function(ev){
@@ -868,6 +916,8 @@ document.addEventListener('click',function(ev){
 $('overlay').addEventListener('click',ev=>{if(ev.target===$('overlay'))closeSheet();});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&sheetType)closeSheet();});
 $('sheetBody').addEventListener('change',ev=>{if(ev.target.id==='sheetDate')updateSheetDate(ev.target.value);});
+$('checkinForm').addEventListener('submit',saveCheckin);
+$('checkinForm').addEventListener('input',renderCheckinPreview);
 $('restoreFile').addEventListener('change',async function(){const file=this.files[0];if(!file)return;try{if(file.size>5000000)throw Error('Backup file too large');const incoming=normalize(JSON.parse(await file.text()));if(!confirm('Replace your current entries and settings with this backup?'))return;const old=state;state=incoming;if(!persist()){state=old;return;}render();toast('Backup restored successfully.');}catch(e){toast('Restore failed: '+e.message);}finally{this.value='';}});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false;});
 window.addEventListener('appinstalled',()=>{$('installBtn').hidden=true;installPrompt=null;});
