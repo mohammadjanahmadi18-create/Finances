@@ -1,103 +1,63 @@
-# Finances
+# Finances — Shift Ledger (Version 3)
 
-A premium green, orange and white personal driving-income tracker featuring Expense Recovery, net-goal protection, EV charging intelligence and rewarding daily progress. Built with plain HTML, CSS and JavaScript, bundled into a single `index.html` plus a small offline service worker and install icons. No dependencies, backend, ads or account required.
+A quick, beautiful, offline-friendly income tracker for private-hire drivers who work across midnight.
 
-## November 2026 starter targets
+## Open the app
 
-| Day | Target |
+https://mohammadjanahmadi18-create.github.io/Finances/
+
+On Android: open the link in Chrome, then open Chrome's menu and choose **Install app** or **Add to Home screen**. Once installed, it opens like a standalone app. It is a progressive web app (PWA), not an APK.
+
+## The 20-second end-of-shift routine
+
+1. Select the **day you started driving** and your start time (normally 13:00 or 14:00).
+2. Set your finish time (normally 06:00). If the finish time is earlier than the start time, the app automatically treats it as the following morning. For example, 3 November 13:00–4 November 06:00 is **one shift on 3 November**.
+3. Enter three amounts: **gross earnings**, **EV charging**, and **other expenses**. A note and target override are optional.
+4. Tap **Save this shift**. Monthly and daily figures update automatically.
+
+The starting date is the accounting date, not the finishing date. Opening the logger before 11:00 defaults to the previous date; later opens default to today. You can always edit the date.
+
+## Weekly targets
+
+| Start day | Gross target |
 |---|---:|
 | Monday | £160 |
 | Tuesday | £160 |
 | Wednesday | £200 |
 | Thursday | £230 |
 | Friday | £250 |
-| Saturday | £250 |
-| Sunday | £230 |
+| Saturday | £300 |
+| Sunday | £250 |
 
-**November 2026 total: £6,310** (gross income target; expenses are deducted to determine net income).
+Change any weekday's default in Settings, or enter an override for one shift.
 
-## Finances 2.4 — Performance calendar and metallic finish
+## Calculations
 
-The calendar now uses a seven-state, accessible colour system, calculated on every render from saved earnings, costs, and the user's manual or legacy recovery allocation:
+- Total costs = EV charging + other expenses.
+- Take-home = gross earnings − total costs.
+- Gross target met when gross earnings ≥ daily target.
+- Net target met when take-home ≥ daily target.
+- Daily and monthly summary values count each shift exactly once, on the day it **started**.
 
-- **Metallic gold ✦:** take-home net is at least the day's goal, all expenses are covered by allocated/automatic extra earnings, and any optional expense cap is respected.
-- **Emerald green ✓:** gross income reached the goal, but all the gold criteria are not met (for example, remaining unrecovered costs).
-- **Champagne ↗:** 80–99% of gross target reached.
-- **Bronze ↗:** 70–79% of gross target reached.
-- **Rose-red !:** below 70% of gross target on a recorded day.
-- **Blue-grey −:** expense-only day with £0 recorded income.
-- **Neutral grey ·/○:** nothing recorded or a scheduled zero-target rest day.
+## Screens
 
-Each calendar tile displays a day number, status symbol, **net take-home**, a short status label, and a tiny progress bar. The detailed date, amount, percentage meaning, and remaining expense recovery are included in its accessible label; the current date has a separate outline. A live monthly gold/green/attention breakdown provides a quick overview. Tiles still open the original day editor.
+- **Home:** current driving day, goal progress, four monthly money figures, seven-day gross-vs-target bars and recent shifts.
+- **Log shift:** one fast form with live calculations and safe editing of existing days.
+- **History:** previous/next month selector, summary tiles, tappable shift calendar and detailed day list.
+- **Settings:** custom weekday goals, JSON backup, monthly CSV export, restore, and a link to the original app.
 
-The visual theme now uses metallic champagne-gold, deep emerald, pearl white, tactile highlights, beveled surfaces, gentle reflective gradients, tap feedback and a short, one-time shine on gold days. Motion is suppressed for reduced-motion accessibility. No changes are made to stored finance records; the same local data and backups continue to work.
+## Existing records and privacy
 
-## Finances 2.3 — Daily check-in and champagne-gold theme
+When Version 3 opens on a device that has an existing `finances-local-v1` record, it copies its dated earnings and expenses to `finances-shifts-v3`. Previous records remain untouched. Because the older version did not capture shift times, imported records use visible placeholder times and are marked *imported*; edit these when you know the actual times.
 
-The home screen now includes a three-number **Daily money check-in**, in addition to the daily target: **base daily income**, **total expenses** and **extra earnings earmarked for expenses**. The extra amount is **new real income not already included in base income**, and is included in gross earnings once. Example: a £160 daily target, £160 base income, £50 total expenses and £40 extra earned for expenses produce **£200 gross, £150 net, £40 costs covered, £10 still to cover**, and £10 more required to protect the net goal.
+The original application remains available at [legacy.html](./legacy.html). Existing browser storage isn't shared across different browsers or devices.
 
-When a day uses this manual check-in, **expenses covered = min(total expenses, extra earnings earmarked)**. This tracks the user's allocation of new income towards their costs, not a refund or cancellation of actual expenses. Days created in earlier versions retain their legacy automatic surplus recovery until edited.
+All data is stored locally on the device, with **no account, advertising, or data-sharing server**. Use Settings → JSON backup regularly. Clearing site storage or uninstalling can remove local data.
 
-Existing charging/food/other itemised expenses are never removed by the daily total field: any remainder of the declared expense total is recorded as an **Other** summary expense. A total lower than already itemised costs is rejected with an explanation, so users can edit individual costs first. Repeated saves update the summary amount instead of duplicating it. Previously saved local data and JSON exports remain compatible.
+## Technical details
 
-The income sheet has a **For expenses** mode for additional real fares earmarked for expenses. The day editor lets the user change this allocation without double counting; CSV exports now show base income, extra earnings, expenses recovered and costs outstanding. The interface now uses muted champagne-gold rather than sharp orange.
+A small dependency-free HTML/CSS/JavaScript PWA. `index.html` is the full app, `manifest.webmanifest` provides installation metadata, and `sw.js` supports offline caching. GitHub Pages publishes `main`, building SVG icons into PNG images using `scripts/build_icons.py`.
 
-## Finances 2.2 — Premium money cockpit, with 2.1 financial logic retained
+## Testing
 
-Finances now has a brighter, more animated mobile cockpit: a dual gross/net progress dial, a focused level/XP rail, honest daily mission tiles, a one-tap income button in the main hero, and an interactive **Next Fare** simulator.
-
-The simulator offers +£10, +£20, +£30 and +£50 examples showing projected net and net-goal gap, but **does not record anything** unless you explicitly press the “Log after earning it” action and save the entry. Rewards are for real logged progress: no achievement requires spending money on a charge. An EV recovery mission appears only when actual charging expenses are recorded.
-
-## Finances 2.1 — Expense Recovery and EV charging
-
-**Two targets, one clear picture.** The gross baseline is what you planned to earn. Your net goal is protected only when earnings minus recorded expenses reaches that same baseline. Hitting the gross number alone does not mean your expenses are covered.
-
-- Above-target income = `max(0, gross earned - daily gross target)`.
-- Expenses recovered = `min(above-target income, daily expenses)`.
-- Still to recover = `daily expenses - expenses recovered`.
-- Remaining earnings to secure the net goal = `max(0, daily target - (gross earned - expenses))`.
-- Example: £160 target, £190 gross, £40 expenses = £30 recovered, £10 outstanding, £150 take-home, and £10 more needed to protect the net goal.
-- All recorded Charging expenses are totaled by month, with sessions and optional kWh. The app calculates a p/kWh average **only for charges that have both cost and kWh recorded**.
-- Motivational charging allocation uses above-target earnings to cover charging costs first, then other expenses. This is an accounting visualization, not a change to the actual paid bill and not proof that a particular ride funded a particular charge.
-- A logged day is a full **net target win** only when earnings minus expenses reaches the baseline and any configured daily expense cap is respected. The calendar shows amber for a gross target hit whose net target is not yet protected.
-- Existing local entries and JSON backups remain compatible with `finances-local-v1`; charging kWh is optional and included in new backups.
-
-## Features
-
-- Edit gross income target on any specific day; change weekday defaults in Settings.
-- Enter gross daily income and itemised expenses (charging, food, parking, tolls, car and other).
-- Live take-home calculation: gross income **minus** expenses.
-- Daily recovery view: income above the baseline automatically offsets recorded expenses, without rewriting what you actually spent.
-- Green = net goal protected AND optional expense cap respected. Amber = gross baseline reached but net goal not yet protected, or 80%+ progress toward baseline. Red = further below baseline. Unlogged days remain neutral.
-- Monthly calendar, editable daily records, income/expense analytics, monthly charging sessions and net goal remaining.
-- Monthly CSV export, full JSON backup and restore.
-- Installable progressive web app (PWA); works offline after its first successful online visit.
-- Data saved in **this browser's local storage only**. It does **not sync between devices**. Export a JSON backup regularly. Private/Incognito browsing or clearing site data can delete the local records.
-
-## How the balance works
-
-- Daily gross variance = **gross earned − baseline target**; the protected net goal compares **gross minus expenses** to that same baseline.
-- Monthly net versus baseline = **month-to-date net earnings minus the scheduled whole-month target**; negative is expected early in the month. Daily recovery is separate and cannot make paid expenses vanish.
-- Monthly net take-home = **total gross earnings − total recorded expenses**.
-- The required average net earnings for remaining calendar days = max(0, **whole-month target − net earned**) / number of calendar days left (including today).
-
-The budget cap is **optional** and not prefilled. Green means the net target is protected, and the configured daily expense cap (if any) is respected.
-
-## Run locally
-
-Open `index.html` in a browser, or for offline/service-worker testing, run:
-
-```sh
-python3 -m http.server 8000
-```
-
-Then open `http://localhost:8000`.
-
-## Publish with GitHub Pages
-
-1. Create a new GitHub repository called `finances` (public for free GitHub Pages on most accounts, or private if your plan supports private Pages).
-2. The complete source is already committed to this repository on `main`.
-3. In the repo go to **Settings → Pages → Build and deployment**, select **Deploy from a branch**, select `main` and `/(root)`, and save.
-4. Once GitHub gives you a Pages URL, open it in Chrome on Android and choose **Add to Home screen / Install app** from the menu.
-
-**Important:** The GitHub repository contains only app code, not your financial entries. Personal entries remain on the device where you use the website, and do not become public when publishing the code.
+Verified shift ownership and duration for 3 November 2026 13:00–4 November 2026 06:00 (17 hours), all seven requested weekday targets, imported legacy expenses, net-income arithmetic, saving new shifts, and persistence. The GitHub Pages build and deployment both passed.
