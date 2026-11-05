@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#073d30">
 <meta name="description" content="Finances — a beautiful, fast shift ledger for London private-hire drivers.">
-<link rel="manifest" href="./manifest.webmanifest?v=9">
-<link rel="icon" type="image/svg+xml" href="./icons/icon.svg?v=9">
-<link rel="apple-touch-icon" href="./icons/icon-192.png?v=9">
+<link rel="manifest" href="./manifest.webmanifest?v=10">
+<link rel="icon" type="image/svg+xml" href="./icons/icon.svg?v=10">
+<link rel="apple-touch-icon" href="./icons/icon-192.png?v=10">
 <title>Finances · Your shift, sorted</title>
 <style>
 :root{--forest:#083b2e;--deep:#06281f;--emerald:#187657;--lime:#b8e4c7;--orange:#f4a044;--gold:#efd19a;--paper:#fffefa;--cream:#f6f7f2;--ink:#17392f;--muted:#7d9489;--line:#e1eae3;--red:#d35c58;--shadow:0 9px 27px #0e462716;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
@@ -89,10 +89,10 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
 </head>
 <body>
 <div class="shell">
-<header><div class="identity"><img class="mark" src="./icons/icon.svg?v=9" alt=""><div class="wordmark">Finances<small>Your shift, sorted</small></div></div><div class="header-date"><b id="headerDay">—</b><small id="headerMonth">NOV</small></div></header>
+<header><div class="identity"><img class="mark" src="./icons/icon-192.png?v=10" alt="Personalised Liberty portrait"><div class="wordmark">Finances<small>Your shift, sorted</small></div></div><div class="header-date"><b id="headerDay">—</b><small id="headerMonth">NOV</small></div></header>
 <section class="page active" id="home">
   <div class="kicker">YOUR MONEY AT A GLANCE</div><h1>Drive. Earn. Done.</h1><p class="subtitle">One quick entry after your shift. The rest is automatic.</p>
-  <div class="hero">
+  <div class="hero"><img class="hero-portrait" src="./icons/face-liberty.jpg" alt="" aria-hidden="true">
     <div class="hero-top"><span class="hero-label">YOUR DRIVING DAY</span><span class="pill" id="heroBadge">READY TO GO</span></div>
     <p class="hero-date" id="heroDate">Today</p>
     <div class="hero-value" id="heroIncome">£0<small>Gross earnings</small></div>
@@ -100,7 +100,7 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
     <div class="hero-stats"><div><small>Daily goal</small><strong id="heroTarget">£0</strong></div><div><small>EV + costs</small><strong id="heroCosts">£0</strong></div><div><small>Take-home</small><strong id="heroNet">£0</strong></div></div>
     <div class="hero-foot" id="heroMessage">Your next shift is waiting.</div>
   </div>
-  <button class="primary cta" id="homeLog"><span class="cta-icon">＋</span><span>Log a finished shift</span><span>→</span></button>
+  <section class="gold-win-card" aria-label="Gold target streak"><div class="gold-win-head"><div><small>YOUR GOLD STANDARD</small><h2>Target champions.</h2></div><strong id="goldCount">4 GOLD WINS</strong></div><div id="goldDays" class="gold-days"></div><p>Gold ticks show targets you confirmed. Missing earnings stay unrecorded.</p></section><button class="primary cta" id="homeLog"><span class="cta-icon">＋</span><span>Log a finished shift</span><span>→</span></button>
   <div class="section-title"><h2>This month</h2><span class="kicker" id="homeMonth">NOVEMBER</span></div>
   <div class="tile-grid">
     <div class="tile green"><span class="symbol">💷</span><small>Gross earnings</small><strong id="monthGross">£0</strong></div>
@@ -114,17 +114,12 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
   <div class="card row-list" id="recentList"></div>
 </section>
 <section class="page" id="log">
-  <div class="kicker" id="logKicker">YOUR END-OF-SHIFT CHECK-IN</div><h1 id="logTitle">One shift. Four numbers.</h1><p class="subtitle">Income, charging, expenses, and time. No duplicate typing.</p>
+  <div class="kicker" id="logKicker">YOUR END-OF-SHIFT CHECK-IN</div><h1 id="logTitle">Three numbers. Done.</h1><p class="subtitle">Income. EV charging. Other expenses. No dates or times to select.</p>
   <form id="shiftForm" novalidate>
-    <div class="form-panel">
-      <div class="form-title"><h2>When you drove</h2><span class="step">01 / 02</span></div>
-      <div class="field-row">
-        <label class="field">Shift started on<input id="shiftDate" class="input" type="date" required></label>
-        <label class="field">Started at<input id="startTime" class="input" type="time" value="13:00" required></label>
-      </div>
-      <label class="field">Finished at<input id="endTime" class="input" type="time" value="06:00" required></label>
-      <p class="caption" id="shiftClock">Finishes the following morning automatically.</p>
-    </div>
+  <div class="auto-day-panel">
+    <span class="auto-day-icon">✦</span><div><small>AUTOMATIC DRIVING DAY</small><strong id="logDayLabel">Your driving day</strong><p id="shiftClock">Entered before 11 am? This belongs to yesterday.</p></div><span class="auto-day-tick">✓</span>
+    <input type="hidden" id="shiftDate" required><input type="hidden" id="startTime"><input type="hidden" id="endTime">
+  </div>
     <div class="form-panel">
       <div class="form-title"><h2>Your money</h2><span class="step">02 / 02</span></div>
       <label class="field money-field">Gross income (before costs)<span class="currency">£</span><input id="gross" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="230.00" required></label>
@@ -202,7 +197,9 @@ function clock(k,from,to){const start=new Date(k+'T'+from+':00');if(!Number.isFi
 function goal(k,record){return record&&record.override!=null?record.override:state.targets[weekday(k)]}
 function net(record){return round(record.gross-record.charge-record.other)}
 function costs(record){return round(record.charge+record.other)}
-function newState(){return {version:3,targets:DEFAULT.slice(),shifts:{},legacyImported:false}}
+const VERIFIED_WINS=['2026-11-01','2026-11-02','2026-11-03','2026-11-04'];
+const starterWins=()=>Object.fromEntries(VERIFIED_WINS.map(k=>[k,true]));
+function newState(){return {version:3,targets:DEFAULT.slice(),shifts:{},legacyImported:false,confirmedDays:starterWins()}}
 function migrate(){
  const value=localStorage.getItem(LEGACY);
  const s=newState();if(!value)return s;
@@ -222,7 +219,7 @@ function migrate(){
 }
 function validSaved(s){return s&&s.version===3&&Array.isArray(s.targets)&&s.targets.length===7&&s.targets.every(x=>Number.isFinite(x)&&x>=0&&x<=1000000)&&s.shifts&&typeof s.shifts==='object'&&!Array.isArray(s.shifts);}
 function load(){
- try{const saved=localStorage.getItem(STORE);if(saved){const parsed=JSON.parse(saved);if(validSaved(parsed))return parsed;}}
+ try{const saved=localStorage.getItem(STORE);if(saved){const parsed=JSON.parse(saved);if(validSaved(parsed)){if(!parsed.confirmedDays||typeof parsed.confirmedDays!=='object')parsed.confirmedDays=starterWins();return parsed;}}}
  catch(err){console.warn('Cannot read saved shifts',err)}
  return migrate();
 }
@@ -231,15 +228,20 @@ function save(){try{localStorage.setItem(STORE,JSON.stringify(state));return tru
 function notify(message){const t=el('toast');t.textContent=message;t.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',3500)}
 function switchTo(next){tab=next;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===tab));document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));render();window.scrollTo({top:0,behavior:'instant'})}
 function entry(k){return state.shifts[k]||null}
+function targetHit(k){const a=stats(k);return !!state.confirmedDays?.[k]||!!(a.r&&a.gross>=a.target)}
+function manualOnly(k){return !!state.confirmedDays?.[k]&&!entry(k)}
 function stats(k){const r=entry(k),target=goal(k,r);return {r,target,gross:r?r.gross:0,charge:r?r.charge:0,other:r?r.other:0,net:r?net(r):0}}
 function monthRows(m){const prefix=m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-';return Object.keys(state.shifts).filter(k=>k.startsWith(prefix)&&validKey(k)).sort((a,b)=>b.localeCompare(a))}
-function monthNumbers(m){const rows=monthRows(m);return rows.reduce((a,k)=>{const v=stats(k);a.gross+=v.gross;a.charge+=v.charge;a.other+=v.other;a.net+=v.net;a.hits+=v.gross>=v.target?1:0;return a},{gross:0,charge:0,other:0,net:0,hits:0,count:rows.length})}
+function monthNumbers(m){const rows=monthRows(m),prefix=m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-';const a=rows.reduce((s,k)=>{const v=stats(k);s.gross+=v.gross;s.charge+=v.charge;s.other+=v.other;s.net+=v.net;return s},{gross:0,charge:0,other:0,net:0,hits:0,count:rows.length});const marked=Object.keys(state.confirmedDays||{}).filter(k=>k.startsWith(prefix)&&state.confirmedDays[k]);a.hits=new Set([...rows.filter(targetHit),...marked]).size;return a}
 function formatDay(k){return date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
-function rowMarkup(k){const a=stats(k),status=a.net>=a.target?'Net goal hit':a.gross>=a.target?'Gross goal hit':'Below target',cl=a.net>=a.target?'positive':a.gross>=a.target?'amber':'negative';return '<button class="shift-row" data-edit="'+k+'"><span><b>'+safe(formatDay(k))+'</b><small>'+short(a.gross)+' earned · '+short(a.charge+a.other)+' costs'+(a.r.imported?' · imported':'')+'</small></span><span class="amount"><strong>'+short(a.net)+'</strong><span class="'+cl+'">'+status+'</span></span></button>'}
+function rowMarkup(k){const a=stats(k);if(manualOnly(k))return '<button class="shift-row win-row" data-edit="'+k+'"><span><b>✦ '+safe(formatDay(k))+'</b><small>Gold target achieved · Amount not logged</small></span><span class="amount"><strong class="gold-text">✓</strong><span class="gold-text">Confirmed</span></span></button>';const hit=targetHit(k),status=hit?'✦ Target achieved':a.net>=a.target?'Net goal reached':a.gross>=a.target?'Gross goal hit':'In progress',cl=hit?'gold-text':a.gross>=a.target?'positive':'negative';return '<button class="shift-row'+(hit?' win-row':'')+'" data-edit="'+k+'"><span><b>'+safe(formatDay(k))+'</b><small>'+short(a.gross)+' earned · '+short(a.charge+a.other)+' costs'+(a.r.imported?' · imported':'')+'</small></span><span class="amount"><strong>'+short(a.net)+'</strong><span class="'+cl+'">'+status+'</span></span></button>'}
+function renderGoldDays(){const now=shiftKey(),d=date(now),first=new Date(d);first.setDate(first.getDate()-Math.min(6,d.getDate()-1));const keys=[];for(let day=new Date(first);day<=d;day.setDate(day.getDate()+1))keys.push(key(day));const count=keys.filter(targetHit).length;el('goldCount').textContent=count+' GOLD WIN'+(count===1?'':'S');el('goldDays').innerHTML=keys.map(k=>{const hit=targetHit(k),label=date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});return '<button class="gold-day'+(hit?' achieved':'')+(k===now?' current':'')+'" data-edit="'+k+'" aria-label="'+safe(label)+(hit?', target achieved':', not yet achieved')+'"><b>'+(hit?'✓':'·')+'</b><small>'+safe(label)+'</small></button>'}).join('')}
+
 function renderHome(){
  const k=shiftKey(),a=stats(k),m=new Date();const totals=monthNumbers(m);
- el('heroDate').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
- el('heroBadge').textContent=a.r?(a.net>=a.target?'✦ GOAL REACHED':a.gross>=a.target?'GROSS TARGET HIT':'SHIFT RECORDED'):'READY TO LOG';
+ el('heroDate').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+' · DRIVING DAY';
+ renderGoldDays();
+ el('heroBadge').textContent=targetHit(k)?'✦ GOLD ACHIEVED':a.r?'SHIFT RECORDED':'READY TO LOG';
  el('heroIncome').innerHTML=short(a.gross)+'<small>Gross earnings</small>';el('heroTarget').textContent=short(a.target);el('heroCosts').textContent=short(a.charge+a.other);el('heroNet').textContent=short(a.net);
  el('heroProgress').style.width=Math.min(100,a.target>0?a.gross/a.target*100:100)+'%';
  el('heroMessage').textContent=!a.r?'Finish your shift, then enter three amounts.':a.net>=a.target?'Excellent. You protected your net target.':a.gross>=a.target?'Gross target hit. '+short(Math.max(0,a.target-a.net))+' more would protect your net goal.':short(Math.max(0,a.target-a.gross))+' more to reach your gross target.';
@@ -248,7 +250,7 @@ function renderHome(){
  const now=date(k),dates=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dates.push(key(d))}
  const max=Math.max(1,...dates.map(k=>Math.max(stats(k).gross,stats(k).target)));
  el('weekBars').innerHTML=dates.map(d=>{const a=stats(d);return '<div class="bar-col'+(d===k?' today':'')+'"><div class="bar-wrap"><i class="bar target" style="height:'+Math.max(2,a.target/max*100)+'%"></i><i class="bar earned" style="height:'+Math.max(2,a.gross/max*100)+'%"></i></div><small>'+date(d).toLocaleDateString('en-GB',{weekday:'short'}).slice(0,2)+'</small></div>'}).join('');
- const recent=Object.keys(state.shifts).filter(validKey).sort((a,b)=>b.localeCompare(a)).slice(0,5);
+ const recent=[...new Set([...Object.keys(state.shifts),...Object.keys(state.confirmedDays||{}).filter(k=>state.confirmedDays[k])])].filter(validKey).sort((a,b)=>b.localeCompare(a)).slice(0,5);
  el('recentList').innerHTML=recent.length?recent.map(rowMarkup).join(''):'<div class="empty">No shifts yet. Your first check-in starts here.</div>';
 }
 function prepare(k,reset){
@@ -258,22 +260,23 @@ function prepare(k,reset){
  el('gross').value=r?String(r.gross):'';el('charge').value=r?String(r.charge):'';el('other').value=r?String(r.other):'';
  el('notes').value=r?.notes||'';el('targetOverride').value=r?.override==null?'':r.override;
  el('logKicker').textContent=r?'EDIT A SAVED SHIFT':'YOUR END-OF-SHIFT CHECK-IN';
- el('logTitle').textContent=r?'Make a correction.':'One shift. Four numbers.';
+ el('logTitle').textContent=r?'Make a correction.':'Three numbers. Done.';
  el('saveShift').textContent=r?'✓ Update this shift':'✓ Save this shift';
  el('importedWarning').classList.toggle('hidden',!r?.imported);
+ el('logDayLabel').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
  updatePreview();
 }
 function updatePreview(){
- const k=el('shiftDate').value,r=entry(k),from=el('startTime').value,to=el('endTime').value,shift=validKey(k)&&from&&to?clock(k,from,to):null;
- el('shiftClock').textContent=shift?'Ends '+(shift.endKey===k?'the same day':'the next day')+' · '+formatDay(shift.endKey)+' at '+to+' · '+(shift.minutes/60).toFixed(1)+' hours':'Choose valid shift times';
+ const k=el('shiftDate').value,r=entry(k);
+ el('shiftClock').textContent='Automatically assigned. Entries before 11 am count towards the previous day.';
  const override=el('targetOverride').value.trim();const target=validKey(k)?override!==''&&Number.isFinite(Number(override))?Number(override):goal(k,r):0;
  const gross=moneyField('gross'),charge=moneyField('charge'),other=moneyField('other'),takehome=round(gross-charge-other);
  el('previewTarget').textContent=amount(target);el('previewCosts').textContent=amount(charge+other);el('previewNet').textContent=amount(takehome);
  el('previewStatus').textContent=el('gross').value.trim()===''?'Enter your earnings to see your result.':takehome>=target?'✦ You have protected your net target.':gross>=target?'Gross goal reached; costs bring take-home below target.':amount(Math.max(0,target-gross))+' to reach your gross target.';
 }
 function record(event){
- event.preventDefault();const k=el('shiftDate').value,from=el('startTime').value,to=el('endTime').value,c=validKey(k)&&from&&to?clock(k,from,to):null;
- if(!c||c.minutes<=0||c.minutes>24*60){notify('Check your shift date and times.');return}
+ event.preventDefault();const k=el('shiftDate').value,from='',to='';
+ if(!validKey(k)){notify('Invalid driving day.');return}
  if(el('gross').value.trim()===''){notify('Please enter your gross income.');el('gross').focus();return}
  const ids=['gross','charge','other'];for(const id of ids){const v=el(id).value;if(v.trim()!==''&&(!Number.isFinite(Number(v))||Number(v)<0||Number(v)>1000000)){notify('Enter valid non-negative amounts.');el(id).focus();return}}
  const rawOverride=el('targetOverride').value.trim();if(rawOverride!==''&&(!Number.isFinite(Number(rawOverride))||Number(rawOverride)<0||Number(rawOverride)>1000000)){notify('Check the custom target.');return}
@@ -283,17 +286,17 @@ function record(event){
  notify('✓ Shift saved. All totals updated.');switchTo('home');
 }
 function renderHistory(){
- const m=historyMonth,rows=monthRows(m),t=monthNumbers(m);
+ const m=historyMonth,t=monthNumbers(m),rows=[...new Set([...monthRows(m),...Object.keys(state.confirmedDays||{}).filter(k=>state.confirmedDays[k]&&k.startsWith(m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-'))])].filter(validKey).sort((a,b)=>b.localeCompare(a));
  el('historyMonth').textContent=m.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
- el('histGross').textContent=short(t.gross);el('histNet').textContent=short(t.net);el('histCharge').textContent=short(t.charge);el('histHits').textContent=t.hits+' / '+t.count;
- el('histCount').textContent=t.count+' SHIFT'+(t.count===1?'':'S');
+ el('histGross').textContent=short(t.gross);el('histNet').textContent=short(t.net);el('histCharge').textContent=short(t.charge);el('histHits').textContent=t.hits+' ✓';
+ el('histCount').textContent=rows.length+' DAY'+(rows.length===1?'':'S');
  const first=(new Date(m.getFullYear(),m.getMonth(),1).getDay()+6)%7,last=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),now=key(new Date());
  let content=['Mo','Tu','We','Th','Fr','Sa','Su'].map(d=>'<div class="cal-head">'+d+'</div>').join('');
  for(let i=0;i<first;i++)content+='<div></div>';
- for(let d=1;d<=last;d++){const k=key(new Date(m.getFullYear(),m.getMonth(),d)),a=stats(k),cls=a.r?(a.net>=a.target?'win':a.gross>=a.target?'has':'low'):'';
- content+='<button type="button" class="day '+cls+(k===now?' today':'')+'" data-edit="'+k+'" aria-label="'+safe(formatDay(k))+(a.r?', '+amount(a.net)+' net':' not logged')+'"><b>'+d+'</b><small>'+(a.r?short(a.net):'·')+'</small>'+(a.r?'<i class="cal-dot"></i>':'')+'</button>';}
+ for(let d=1;d<=last;d++){const k=key(new Date(m.getFullYear(),m.getMonth(),d)),a=stats(k),cls=targetHit(k)?'win':a.r?'low':'';
+ content+='<button type="button" class="day '+cls+(k===now?' today':'')+'" data-edit="'+k+'" aria-label="'+safe(formatDay(k))+(a.r?', '+amount(a.net)+' net':' not logged')+'"><b>'+d+'</b><small>'+(a.r?short(a.net):targetHit(k)?'✓':'·')+'</small>'+(a.r||targetHit(k)?'<i class="cal-dot"></i>':'')+'</button>';}
  el('calendar').innerHTML=content;el('historyList').innerHTML=rows.length?rows.map(rowMarkup).join(''):'<div class="empty">No shifts recorded in this month.</div>';
- const costsTotal=round(t.charge+t.other);el('histNote').textContent='Recorded '+t.count+' shifts · '+amount(costsTotal)+' total expenses · '+amount(t.net)+' take-home. Monthly totals count each shift on its start date.';
+ const costsTotal=round(t.charge+t.other);el('histNote').textContent=t.count+' money entries · '+t.hits+' verified targets · '+amount(costsTotal)+' costs · '+amount(t.net)+' take-home. Confirmed targets without amounts do not add fictitious earnings.';
 }
 function renderSettings(){
  el('targets').innerHTML=DAYS.map((d,i)=>'<div class="target-row"><label for="goal'+i+'">'+d+'</label><div class="target-inner"><b>£</b><input id="goal'+i+'" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+state.targets[i]+'"></div></div>').join('');
@@ -304,7 +307,7 @@ function download(filename,body,type){const blob=new Blob([body],{type});const u
 function csvExport(){
  const m=historyMonth,rows=monthRows(m).reverse();
  const grid=[['Shift date','Start','End date','End time','Daily target GBP','Gross income GBP','EV charging GBP','Other expenses GBP','Total costs GBP','Take-home GBP','Gross vs goal GBP','Net vs goal GBP','Notes']];
- for(const k of rows){const r=entry(k),s=stats(k),c=clock(k,r.start||'13:00',r.finish||'06:00');grid.push([k,r.imported?'unknown':r.start,r.imported?'unknown':c?.endKey,r.imported?'unknown':r.finish,s.target,s.gross,s.charge,s.other,costs(r),s.net,round(s.gross-s.target),round(s.net-s.target),r.notes])}
+ for(const k of rows){const r=entry(k),s=stats(k),c=r.start&&r.finish?clock(k,r.start,r.finish):null;grid.push([k,r.imported?'unknown':r.start||'',r.imported?'unknown':c?.endKey||'',r.imported?'unknown':r.finish||'',s.target,s.gross,s.charge,s.other,costs(r),s.net,round(s.gross-s.target),round(s.net-s.target),r.notes])}
  const esc=v=>'"'+String(v??'').replace(/^([=+\-@\t\r])/,"'$1").replace(/"/g,'""')+'"';
  download('Finances-shifts-'+m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'.csv','\ufeff'+grid.map(r=>r.map(esc).join(',')).join('\r\n'),'text/csv;charset=utf-8');
 }
