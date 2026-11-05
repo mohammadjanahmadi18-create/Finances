@@ -1,1129 +1,347 @@
 <!doctype html>
 <html lang="en-GB">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0d3228">
-<meta name="description" content="Finances — your daily earning game. Track income, expenses, streaks and wins.">
-<link rel="manifest" href="./manifest.webmanifest?v=8">
-<link rel="icon" href="./icons/icon.svg?v=8" type="image/svg+xml">
-<link rel="icon" href="./icons/icon-192.png?v=8" type="image/png" sizes="192x192">
-<link rel="apple-touch-icon" href="./icons/icon-192.png?v=8">
-<title>Finances · Make every day count</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#073d30">
+<meta name="description" content="Finances — a beautiful, fast shift ledger for London private-hire drivers.">
+<link rel="manifest" href="./manifest.webmanifest?v=9">
+<link rel="icon" type="image/svg+xml" href="./icons/icon.svg?v=9">
+<link rel="apple-touch-icon" href="./icons/icon-192.png?v=9">
+<title>Finances · Your shift, sorted</title>
 <style>
-:root{
-  --green:#103c2f;--deep:#09271f;--green2:#1b5b45;--pearl:#f5f7f1;--paper:#fffefa;
-  --orange:#ef994e;--gold:#e9ba73;--ink:#172c23;--muted:#829286;--line:#e5ebe3;
-  --soft:#eaf2e8;--red:#c95652;--amber:#bc812a;--shadow:0 16px 44px rgba(17,57,38,.07);
-  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);
-}
+:root{--forest:#083b2e;--deep:#06281f;--emerald:#187657;--lime:#b8e4c7;--orange:#f4a044;--gold:#efd19a;--paper:#fffefa;--cream:#f6f7f2;--ink:#17392f;--muted:#7d9489;--line:#e1eae3;--red:#d35c58;--shadow:0 9px 27px #0e462716;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--pearl);-webkit-font-smoothing:antialiased}
-button,input,textarea{font:inherit}button{cursor:pointer}
-button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #f3b570;outline-offset:3px}
-button:disabled{opacity:.46;cursor:not-allowed}a{color:inherit}
-svg{display:block}
-.app{width:100%;max-width:620px;min-height:100dvh;margin:auto;padding:0 20px calc(118px + env(safe-area-inset-bottom));position:relative}
-.top{display:flex;justify-content:space-between;align-items:center;padding:27px 0 22px}
-.identity{display:flex;align-items:center;gap:10px}
-.logo{width:43px;height:43px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#245d45,#072c22);box-shadow:inset 1px 2px 1px #ffffff55,0 8px 18px #1a56372b;color:#f6efe2;font:italic 700 29px Georgia,serif;position:relative}
-.logo:after{content:"";position:absolute;width:7px;height:7px;background:var(--orange);border-radius:50%;right:9px;top:9px}
-.brand{font-size:17px;font-weight:900;letter-spacing:2.6px;line-height:1.1}
-.brand span{display:block;color:var(--muted);font-size:9px;letter-spacing:2.4px;font-weight:700;margin-top:5px}
-.date-bubble{width:45px;height:45px;border-radius:16px;background:var(--paper);box-shadow:0 5px 20px #1538290a;display:grid;place-items:center;line-height:1.05;border:1px solid var(--line)}
-.date-bubble b{font-size:16px}.date-bubble small{font-weight:900;color:var(--green2);font-size:9px;letter-spacing:.7px}
-.page{display:none;animation:pageIn .32s both}.page.active{display:block}
-@keyframes pageIn{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.kicker{font-size:10px;font-weight:900;letter-spacing:2.2px;color:#72917e;text-transform:uppercase}
-.title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(31px,7.7vw,40px);font-weight:600;line-height:1.12;letter-spacing:-1.2px;margin:8px 0 7px}
-.sub{color:var(--muted);font-size:13px;line-height:1.6;margin:0}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin:27px 0 13px;gap:10px}
-.section-head h2{font-family:Georgia,serif;letter-spacing:-.45px;font-size:22px;font-weight:600;margin:0}
-.mini-action{border:0;background:transparent;color:var(--green2);font-weight:800;font-size:12px;padding:8px}
-.hero{overflow:hidden;position:relative;border:1px solid #2f674d;border-radius:30px;background:radial-gradient(ellipse at 104% 0%,#347255 0%,transparent 44%),linear-gradient(135deg,#184f3b,#0d3529 56%,#09271f);color:#fff;margin-top:23px;padding:25px 24px 22px;box-shadow:0 20px 40px #0d39262a,inset 0 1px #ffffff35}
-.hero:before,.hero:after{content:"";position:absolute;pointer-events:none;border:1px solid #ffffff13;border-radius:50%;width:330px;height:330px;right:-160px;top:-156px}
-.hero:after{width:265px;height:265px;right:-127px;top:-122px}
-.hero-head{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
-.hero-head small{font-size:10px;letter-spacing:1.5px;font-weight:900;color:#bcddc9}
-.live{display:flex;align-items:center;gap:7px;color:#f7d19a;font-size:10px;font-weight:800}
-.live i{height:7px;width:7px;background:#efab65;display:block;border-radius:50%;box-shadow:0 0 0 4px #ed9e4552}
-.hero-main{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:0;margin-top:24px;margin-bottom:18px}
-.hero-copy{flex:1;min-width:0}
-.hero-copy>span{display:block;color:#bdd9c6;font-size:12px;font-weight:550;margin-bottom:8px}
-.hero-number{font-size:clamp(34px,8vw,53px);font-weight:850;letter-spacing:-2px;line-height:1.05;font-variant-numeric:tabular-nums}
-.hero-caption{font-size:11px;color:#a4cdb3;margin-top:11px;line-height:1.4}
-.ring-wrap{position:relative;width:128px;height:128px;flex:none;margin-right:-4px}
-.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 5px 10px #0002)}
-.ring-bg{stroke:#386f56}.ring-active{stroke:#f6b573;stroke-linecap:round;stroke-dasharray:327;stroke-dashoffset:327;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
-.ring-middle{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-middle b{font-size:25px;letter-spacing:-1px}.ring-middle small{font-size:9px;color:#b3d4c0;font-weight:800;letter-spacing:.8px}
-.hero-divider{height:1px;background:#ffffff22;position:relative;z-index:1}
-.hero-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:17px;position:relative;z-index:1}
-.hero-metrics small{display:block;font-size:9px;color:#a9cdb7;letter-spacing:.3px;margin-bottom:6px}
-.hero-metrics b{font-size:17px;letter-spacing:-.6px;font-variant-numeric:tabular-nums;white-space:nowrap}
-.hero-metrics>div+div{border-left:1px solid #ffffff20;padding-left:12px}
-.hero-message{display:flex;gap:10px;align-items:center;background:#ffffff11;padding:12px 14px;border-radius:14px;margin-top:19px;color:#f5e6cb;font-size:11px;line-height:1.4;position:relative;z-index:1}
-.sparkle{color:#ffbd78;font-size:17px}
-.quick{display:grid;grid-template-columns:1.1fr 1fr;gap:12px;margin-top:16px}
-.quick button{border:0;border-radius:20px;min-height:72px;padding:13px 16px;display:flex;align-items:center;gap:11px;text-align:left;transition:transform .15s,box-shadow .15s;box-shadow:var(--shadow);font-size:13px;font-weight:900}
-.quick button:active,.press:active{transform:scale(.97)}
-.quick .earn{background:linear-gradient(130deg,#f9b978,#ee9645);color:#4d2b12;box-shadow:0 12px 24px #e4a05d36,inset 0 1px #fff8}
-.quick .spend{background:#fff;border:1px solid var(--line);color:var(--ink)}
-.quick .iconbox{width:38px;height:38px;border-radius:13px;background:#ffffff65;display:grid;place-items:center;font-size:24px;flex:none}
-.quick .spend .iconbox{background:#eef3e9}
-.quick small{display:block;font-size:10px;font-weight:650;opacity:.75;margin-top:4px}
-.signal{padding:15px 17px;background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);display:flex;align-items:center;gap:13px}
-.signal-icon{width:43px;height:43px;display:grid;place-items:center;background:#eaf4e9;border-radius:14px;color:var(--green);font-size:21px}
-.signal b{font-size:13px}.signal p{font-size:11px;color:var(--muted);margin:5px 0 0;line-height:1.4}
-.week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.day-chip{min-width:0;text-align:center;border:1px solid #e4ebe2;border-radius:15px;background:#fff;padding:10px 1px 9px}
-.day-chip span{display:block;color:#99a89d;font-size:10px;font-weight:750;margin-bottom:9px}
-.day-chip b{font-size:12px;background:#e9eee8;color:#768a7a;width:25px;height:25px;display:grid;place-items:center;margin:auto;border-radius:50%}
-.day-chip.hit b{background:#d9f1df;color:#217c52}.day-chip.close b{background:#fff0d2;color:#b97b24}.day-chip.miss b{background:#fce2df;color:#b5514c}
-.day-chip.today{border:2px solid #eba365;padding:9px 0 8px;box-shadow:0 3px 12px #e1aa7030}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:23px;padding:20px;box-shadow:var(--shadow)}
-.recent-item{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;text-align:left;padding:14px 2px;gap:12px}
-.recent-item:last-child{border-bottom:0}
-.recent-item strong{display:block;font-size:13px}.recent-item small{display:block;font-size:10px;color:var(--muted);margin-top:4px}
-.recent-item b{font-size:14px;white-space:nowrap}
-.recent-item em{font-size:10px;font-style:normal;display:block;text-align:right;margin-top:5px;font-weight:800}
-.pos{color:#2e9160}.neg{color:var(--red)}.warning{color:#bd8434}
-.empty{text-align:center;color:var(--muted);padding:25px 8px;font-size:12px;line-height:1.6}
-.empty span{display:block;font-size:33px;margin-bottom:10px}
-.page-top{margin:8px 0 22px}
-.period-switch{display:flex;align-items:center;justify-content:space-between;margin:19px 0 15px}
-.period-switch h2{font:600 25px Georgia,serif;margin:0}
-.arrows{display:flex;gap:8px}.arrow{width:38px;height:38px;background:white;border:1px solid var(--line);border-radius:13px;color:var(--green);font-size:19px}
-.summary3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:14px}
-.summary3>div{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px 10px;min-width:0}
-.summary3 small{color:var(--muted);font-size:10px;display:block;margin-bottom:7px}
-.summary3 b{font-size:clamp(14px,4vw,20px);letter-spacing:-.6px;white-space:nowrap}
-.calendar{background:#fff;border:1px solid var(--line);border-radius:24px;padding:16px 12px 12px;box-shadow:var(--shadow)}
-.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
-.cal-dow{text-align:center;font-size:10px;font-weight:800;color:#9caaa0;padding:7px 0 13px}
-.cal-cell{min-height:63px;border:1px solid #f0f2ec;background:#fafbf8;border-radius:11px;padding:8px 2px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:5px}
-.cal-cell b{font-size:12px;font-weight:800}.cal-cell small{font-size:9px;letter-spacing:-.35px;font-weight:750}
-.cal-cell.hit{background:#e3f3e7;border-color:#cdebd6;color:#25734b}
-.cal-cell.close{background:#fff2d9;border-color:#ffebbc;color:#a87322}
-.cal-cell.miss{background:#fceae6;border-color:#f4dad7;color:#bc514a}
-.cal-cell.today{outline:2px solid var(--orange);outline-offset:1px}
-.cal-cell.blank{visibility:hidden}.cal-cell.future{color:#a8b4aa}
-.legend{display:flex;justify-content:center;gap:12px;margin:14px 0 0;flex-wrap:wrap}
-.legend span{font-size:10px;color:var(--muted)}.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
-.mini-breakdown{margin-top:17px}
-.mini-breakdown>div{padding:13px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;font-size:12px}
-.mini-breakdown>div:last-child{border:0}.mini-breakdown b{font-weight:800}
-.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.metric{min-height:124px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
-.metric .sym{font-size:22px}.metric small{display:block;color:var(--muted);font-size:11px;margin:12px 0 6px}
-.metric b{font-size:25px;letter-spacing:-.9px}
-.metric.dark{background:linear-gradient(135deg,#194f3c,#0b3026);color:#fff}.metric.dark small{color:#c2d8c9}
-.bar-card{padding:20px 15px;background:#fff;border:1px solid var(--line);border-radius:23px;box-shadow:var(--shadow)}
-.bars{height:178px;display:grid;grid-template-columns:repeat(7,1fr);gap:11px;align-items:end;padding:15px 5px 0;border-bottom:1px solid var(--line)}
-.bar-col{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px}
-.bar-stand{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;position:relative}
-.bar-fill{width:min(100%,29px);min-height:2px;background:linear-gradient(180deg,#edaa6b,#e89148);border-radius:8px 8px 2px 2px;transition:height .7s}
-.bar-col.zero .bar-fill{background:#e8eee8}
-.bar-col b{font-size:10px;color:var(--muted);font-weight:700;position:absolute;bottom:calc(100% + 3px);display:none}
-.bar-labels{display:grid;grid-template-columns:repeat(7,1fr);gap:11px;padding:9px 5px 0;text-align:center;color:var(--muted);font-size:10px;font-weight:800}
-.bar-caption{font-size:11px;color:var(--muted);margin:14px 3px 0}
-.level-card{background:linear-gradient(125deg,#143e30,#0a2d23);border:1px solid #35674e;color:#fff;position:relative;overflow:hidden;border-radius:26px;padding:23px;box-shadow:0 15px 35px #0d3c2930}
-.level-card:after{content:'✦';font-size:170px;color:#fff1;position:absolute;right:-3px;top:-30px}
-.level-label{font-size:10px;letter-spacing:2px;color:#b6d6c3;font-weight:850}
-.level-num{font:600 54px Georgia,serif;letter-spacing:-2px;margin:9px 0 2px}
-.level-name{color:#f1ba79;font-weight:750;font-size:14px}
-.track{height:9px;border-radius:99px;background:#ffffff2a;overflow:hidden;margin-top:23px;position:relative;z-index:1}
-.track span{display:block;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#faad69,#f7d198);transition:width .7s}
-.level-foot{display:flex;justify-content:space-between;color:#bbd2c1;font-size:10px;margin-top:9px}
-.badge-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-.achievement{background:#fff;border:1px solid var(--line);border-radius:21px;padding:19px 14px;min-height:154px}
-.achievement.locked{background:#f8faf7;opacity:.57;filter:grayscale(.6)}
-.achievement .emoji{width:47px;height:47px;background:#f9efe0;border-radius:15px;display:grid;place-items:center;font-size:26px;margin-bottom:12px}
-.achievement b{display:block;font-size:13px}.achievement small{display:block;margin-top:6px;font-size:10px;line-height:1.5;color:var(--muted)}
-.achievement .unlock{color:#298458;font-size:10px;font-weight:850;margin-top:9px}
-.settings-card{background:#fff;border:1px solid var(--line);border-radius:23px;padding:20px;margin-top:14px}
-.settings-card h2{font:600 22px Georgia,serif;margin:0 0 6px}.settings-card p{font-size:11px;line-height:1.55;color:var(--muted);margin:0 0 15px}
-.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;font-weight:750}
-.setting-row:last-child{border:0}
-.field-money{display:flex;align-items:center;background:#f6f8f4;border:1px solid #e1e9df;border-radius:12px;padding:0 10px;min-width:0;width:110px}
-.field-money>span{font-size:12px;color:#7e9786;font-weight:800}
-.field-money input{width:100%;padding:11px 4px;background:none;border:0;outline:0;min-width:0;font-weight:850;color:var(--green);font-size:14px}
-.field-money input:focus{outline:0}
-.action-btn{width:100%;border:0;border-radius:15px;background:var(--green);color:#fff;padding:15px;font-weight:850;font-size:13px;margin-top:15px}
-.secondary-btn{border:1px solid #dae7dc;border-radius:15px;background:#fff;color:var(--green);padding:14px;font-weight:850;font-size:12px;width:100%}
-.button-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
-.privacy{font-size:11px;line-height:1.6;color:var(--muted);padding:14px 0}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,620px);height:calc(77px + env(safe-area-inset-bottom));padding:8px 12px calc(7px + env(safe-area-inset-bottom));background:#fffefaed;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid #e2e9e1;display:grid;grid-template-columns:repeat(5,1fr);gap:0;z-index:20}
-.nav{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#95a49a;border-radius:14px;font-size:9px;font-weight:850;padding:5px 0}
-.nav svg{width:21px;height:21px;stroke-width:1.9}.nav.active{color:var(--green);background:#e9f2e8}.nav.active svg{stroke:#1c7450}
-.overlay{position:fixed;inset:0;background:#071b14a8;z-index:50;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(5px)}
-.overlay.open{display:flex}
-.sheet{width:min(100%,620px);max-height:min(90dvh,850px);overflow-y:auto;overscroll-behavior:contain;background:#fffefa;border-radius:28px 28px 0 0;padding:10px 21px calc(25px + env(safe-area-inset-bottom));box-shadow:0 -18px 55px #0002;animation:rise .28s ease both}
-@keyframes rise{from{transform:translateY(35px);opacity:.7}to{transform:translateY(0);opacity:1}}
-.handle{width:45px;height:5px;border-radius:9px;background:#dbe3d9;margin:0 auto 20px}
-.sheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.sheet h2{font:600 27px Georgia,serif;letter-spacing:-.6px;margin:0}
-.close{background:#eff3ed;border:0;border-radius:50%;width:36px;height:36px;font-size:20px;color:var(--green)}
-.sheet-sub{color:var(--muted);font-size:12px;margin:9px 0 18px}
-.segment{display:grid;grid-template-columns:1fr 1fr;background:#eef3ec;border-radius:14px;padding:4px;gap:3px;margin:12px 0 18px}
-.segment button{border:0;border-radius:11px;background:transparent;padding:12px 8px;font-size:12px;font-weight:850;color:#829488}
-.segment button.selected{background:#fff;color:var(--green);box-shadow:0 3px 10px #20422b13}
-.sheet label{display:block;font-size:11px;font-weight:850;color:#537360;margin:16px 0 8px}
-.money-input{display:flex;align-items:center;border:1px solid #dce8dc;background:#f9fbf7;border-radius:18px;padding:9px 17px;gap:9px}
-.money-input span{font-size:29px;color:#8ca592;font-weight:750}
-.money-input input{border:0;background:transparent;width:100%;font-size:35px;letter-spacing:-1px;font-weight:900;color:var(--green);outline:none;min-width:0;padding:6px 0}
-.money-input input:focus{outline:0}
-.amount-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.amount-chips button,.category-chip{border:1px solid #e0e9dc;background:#f7f9f3;border-radius:12px;padding:10px 13px;font-size:12px;font-weight:850;color:var(--green)}
-.amount-chips button:active,.category-chip:active{background:#e7f0e2}
-.category-list{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.category-chip{padding:15px 5px;text-align:center;font-size:11px}
-.category-chip span{display:block;font-size:22px;margin-bottom:7px}
-.category-chip.active{border-color:#e3a46c;background:#fff0df;color:#9a5c22;box-shadow:0 0 0 1px #edbc90}
-.primary-save{width:100%;margin-top:23px;background:linear-gradient(120deg,#1d6047,#103729);color:#fff;border:0;border-radius:17px;min-height:58px;font-weight:900;font-size:14px;box-shadow:0 12px 24px #204a3430}
-.input-date{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #dce7d9;background:#fafcf8;color:var(--green);font-weight:750}
-textarea{width:100%;border-radius:13px;border:1px solid #e1e9df;background:#fafcf8;padding:12px;min-height:67px;resize:vertical;color:var(--ink)}
-.editor-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.editor-two input{width:100%;border:1px solid #e0e9df;background:#f8fbf5;border-radius:13px;padding:14px;font-weight:900;color:var(--green);font-size:17px;min-width:0}
-.expense-line{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12px}
-.remove{border:0;background:#fff0ec;border-radius:10px;color:#b95b52;padding:8px 11px;font-weight:850}
-.toast{position:fixed;bottom:calc(95px + env(safe-area-inset-bottom));left:50%;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#133d2e;color:#fff;padding:13px 18px;border-radius:14px;box-shadow:0 10px 30px #122a2044;font-size:12px;font-weight:750;z-index:75;max-width:90%;transition:opacity .2s,transform .2s;text-align:center}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.confetti{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}
-.confetti i{position:absolute;left:50%;top:44%;height:13px;width:8px;border-radius:2px;background:#ecae6e;animation:burst 1s ease-out forwards}
-@keyframes burst{to{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
-@media(min-width:800px){body{background:linear-gradient(125deg,#e4eee3,#faf9f3)}.app{margin:20px auto;min-height:calc(100dvh - 20px);background:#f6f8f2;border-radius:32px 32px 0 0;box-shadow:0 24px 90px #274c2a15;padding-left:26px;padding-right:26px}}
-@media(max-width:370px){.app{padding-left:14px;padding-right:14px}.hero{padding:21px 16px}.ring-wrap{width:107px;height:107px}.hero-number{font-size:34px}.hero-metrics b{font-size:15px}.quick button{padding:11px 9px}.calendar{padding:11px 7px}.cal-cell{min-height:59px}.cal-cell small{font-size:8px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
-
-/* Expense recovery and EV charging — Finances 2.1 */
-.recover{border-radius:25px;background:linear-gradient(135deg,#fffefa,#e7f3e8);border:1px solid #d8e7d8;padding:20px;box-shadow:0 12px 34px #17512c13}
-.recover-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.recover-eyebrow{color:#609173;letter-spacing:1.3px;font-size:9px;font-weight:900}
-.recover h3{font:600 23px Georgia,serif;margin:7px 0 5px}
-.recover p{font-size:11px;color:#7a9180;line-height:1.55;margin:0}
-.recover-pct{min-width:83px;padding:12px 7px;border-radius:18px;background:#dcebdc;box-shadow:inset 0 2px 7px #22582b12;text-align:center}
-.recover-pct b{font-size:24px;color:#28784f;display:block}
-.recover-pct small{font-size:9px;color:#6b9378;font-weight:850}
-.recover-track{border-radius:100px;background:#dce7da;height:13px;overflow:hidden;margin:17px 0 14px;box-shadow:inset 0 2px 6px #153a1c16}
-.recover-track span{height:100%;width:0;display:block;background:linear-gradient(90deg,#278a57,#6ac184);transition:width .7s;border-radius:100px}
-.recover-numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.recover-numbers>div+div{padding-left:8px;border-left:1px solid #d3e3d2}
-.recover-numbers small{display:block;font-size:9px;color:#799383;margin-bottom:6px}
-.recover-numbers b{font-size:17px;color:#1f6a44;letter-spacing:-.4px;white-space:nowrap}
-.recover-numbers b.due{color:#bb7738}
-.recover-note{display:flex;gap:9px;align-items:flex-start;margin-top:15px;background:#fff5e8;border:1px solid #f2e1d0;border-radius:14px;padding:12px;font-size:11px;line-height:1.6;color:#856030}
-.recover-note i{font-style:normal;font-size:18px}
-.recover.complete .recover-note{background:#e0f3e5;color:#206b41;border-color:#cee7d3}
-.recover-foot{margin-top:11px!important;font-size:10px!important}
-.recovery-mission{margin-top:13px;width:100%;border:0;background:linear-gradient(120deg,#205f42,#123d2e);color:#fff;padding:14px 12px;border-radius:14px;font-size:12px;font-weight:850;box-shadow:0 7px 17px #15503424}.charge-card{border-radius:25px;background:linear-gradient(120deg,#143e30,#235c44);border:1px solid #336c51;padding:20px;color:#fff;box-shadow:0 14px 30px #15463230;position:relative;overflow:hidden}
-.charge-card:after{content:"⚡";font-size:125px;color:#fff;position:absolute;right:-10px;top:-5px;opacity:.075;pointer-events:none}
-.charge-head{display:flex;align-items:center;justify-content:space-between;gap:9px;position:relative;z-index:1}
-.charge-head h3{font:600 23px Georgia,serif;margin:5px 0}
-.charge-head small{font-size:10px;color:#badac5}
-.charge-head button{border:1px solid #ffffff40;background:#ffffff1b;color:#fff;border-radius:12px;padding:11px;font-size:11px;font-weight:850}
-.charge-amount{font-size:39px;font-weight:850;letter-spacing:-1.4px;margin:14px 0 5px;position:relative;z-index:1}
-.charge-details{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:#c3decf;position:relative;z-index:1}
-.charge-rule{height:1px;background:#ffffff2b;margin:17px 0 14px}
-.charge-status{display:flex;justify-content:space-between;gap:7px;font-size:11px;position:relative;z-index:1}
-.charge-status span{color:#b9d7c4}.charge-status b{color:#ffd2a7;font-size:12px}
-.charge-hint{font-size:10px;color:#bfd4c4;line-height:1.55;margin:11px 0 0}
-.charge-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #ffffff25;padding:11px 0;font-size:11px}
-.charge-row:last-child{border-bottom:0}.charge-row span{color:#c3dfce}.charge-row b{color:#fff}
-.editor-recovery{background:#eaf5e8;color:#246245;border:1px solid #d2e6d1;border-radius:14px;padding:13px;margin:10px 0;font-size:12px;line-height:1.6}
-.editor-recovery strong{color:#155636}
-.charge-kwh{display:block;margin-top:12px}
-.charge-kwh[hidden]{display:none}
-
-
-/* FINANCES 2.2 — A brighter, motion-led money cockpit */
-:root{--green:#073e30;--deep:#052c22;--orange:#ffa444;--gold:#ffd281;--pearl:#f4f8ee;--paper:#fff;--line:#e2eadf;--ink:#113627;--muted:#71897b;--shadow:0 14px 42px rgba(10,67,34,.075)}
-html{background:#eaf3e7}
-body{background:radial-gradient(ellipse 440px 420px at 75% -90px,#d9eccf 0%,transparent 75%),radial-gradient(ellipse 460px 600px at -170px 410px,#fff0d1 0%,transparent 75%),#f4f8ef;min-height:100dvh}
-.app{padding-left:18px;padding-right:18px}
-.top{padding:24px 0 23px}
-.logo{height:48px;width:48px;border-radius:16px;background:linear-gradient(142deg,#0f7850,#083627);font-size:30px;box-shadow:inset 0 1px 1px #ffffffa0,0 9px 22px #0d4e3333;transform:rotate(-3deg)}
-.brand{font-size:19px;letter-spacing:2.3px;color:#104230}.brand span{font-size:9px;color:#719885}
-.date-bubble{width:53px;height:53px;border-radius:18px;background:linear-gradient(135deg,#fffefa,#f7f5e7);border:1px solid #e3eadb;box-shadow:0 7px 21px #22612c12}
-.date-bubble b{font-size:20px;color:#184c34}.date-bubble small{font-size:10px;color:#ce8740}
-.kicker{color:#658c72;font-size:10px;letter-spacing:1.6px}
-.welcome-row{display:flex;justify-content:space-between;align-items:center;gap:9px}
-.day-live{display:flex;align-items:center;gap:7px;font-size:9px;color:#166746;background:#e4f2df;border:1px solid #cee7ca;padding:8px 10px;border-radius:99px;font-weight:850;letter-spacing:.3px;white-space:nowrap}
-.day-live i{width:7px;height:7px;display:block;border-radius:50%;background:#36ae69;box-shadow:0 0 0 4px #3cb56d22;animation:livePulse 3s ease-in-out infinite}
-@keyframes livePulse{50%{box-shadow:0 0 0 8px #40b96b08}}
-.title{color:#123e2b;font-size:clamp(31px,8vw,43px);letter-spacing:-1.4px;margin:8px 0 6px;font-weight:600}
-.sub{color:#7a9281}
-.hero{margin-top:22px;border:1px solid #2f8b63;border-radius:32px;padding:25px 23px 19px;background:
- radial-gradient(ellipse 120px 160px at 94% 2%,#ffca758a,transparent 94%),
- radial-gradient(ellipse 250px 260px at 95% 22%,#3e936c5c,transparent 90%),
- linear-gradient(127deg,#0f6446 0%,#0b4a39 47%,#072d25 100%);
- box-shadow:0 22px 38px #07583b38,inset 0 1px 0 #d5ffd167;isolation:isolate;transform:translateZ(0)}
-.hero:before{background:radial-gradient(circle,#ffffff17,transparent 65%);border:0;width:330px;height:330px;right:-110px;top:-170px;animation:heroFloat 8s ease-in-out infinite}
-.hero:after{border:1px solid #ffffff24;width:310px;height:310px;right:-141px;top:-140px;box-shadow:0 0 0 30px #ffffff06,0 0 0 72px #ffffff03}
-@keyframes heroFloat{50%{transform:translate(-17px,38px)}}
-.hero-head small{color:#d6f7df;font-size:10px;letter-spacing:1.3px}
-.hero-head .live{color:#f9d2a1;background:#ffffff15;padding:8px 10px;border-radius:99px;border:1px solid #ffffff26;letter-spacing:.5px}
-.live i{background:#ffc46f;box-shadow:0 0 0 4px #ffc46f26}
-.hero-main{margin:29px 0 23px;gap:5px}
-.hero-copy>span{font-weight:750;color:#c3e4d2}
-.hero-number{font-size:clamp(43px,11vw,62px);font-weight:900;letter-spacing:-2.7px;text-shadow:0 3px 26px #030d0866}
-.hero-caption{font-size:11px;color:#d0e8db;max-width:200px;line-height:1.6;margin-top:10px}
-.ring-wrap{width:145px;height:145px;margin-right:-9px;filter:drop-shadow(0 11px 14px #05221d55)}
-.ring-wrap svg{overflow:visible}
-.ring-bg{stroke:#ffffff25}
-.ring-active{stroke:#ffb55e;filter:drop-shadow(0 0 4px #ffbb5880)}
-.net-bg{stroke:#ffffff21}
-.net-active{stroke:#7ce4a5;stroke-linecap:round;stroke-dasharray:245;stroke-dashoffset:245;transition:stroke-dashoffset 1.05s cubic-bezier(.16,.8,.25,1);filter:drop-shadow(0 0 3px #84ffc392)}
-.ring-middle b{font-size:27px;color:#fff}.ring-middle small{color:#ffd2a0;font-size:9px;font-weight:900}
-.ring-middle em{font-size:8px;font-style:normal;color:#bceecf;letter-spacing:.1px;margin-top:3px}
-.dial-legend{display:flex;gap:12px;align-items:center;justify-content:center;color:#d3e8d9;font-size:9px;font-weight:800;margin-top:-5px;margin-bottom:13px;position:relative;z-index:1}
-.dial-legend i{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
-.hero-metrics{background:#ffffff0d;border:1px solid #ffffff21;border-radius:15px;padding:15px 13px;margin-top:14px;gap:4px}
-.hero-metrics>div+div{border-color:#ffffff30;padding-left:9px}
-.hero-metrics small{font-size:9px;color:#bbdec9}
-.hero-metrics b{font-size:16px;color:#fff}
-.hero-message{background:#ffe3b21a;color:#fff4dc;border:1px solid #f6d09132;border-radius:13px;margin-top:12px;font-size:11px}
-.hero-booster{border:0;border-radius:14px;background:linear-gradient(120deg,#ffd793,#ffad50);font-size:12px;font-weight:950;color:#57320e;width:100%;padding:14px 12px;margin-top:12px;box-shadow:inset 0 1px 1px #fff8,0 6px 20px #0002;display:flex;justify-content:center;gap:9px;align-items:center;position:relative;z-index:1}
-.hero-booster span{font-size:17px}
-.xp-mini{display:flex;gap:12px;align-items:center;padding:14px 15px;border-radius:21px;border:1px solid #d7e8d5;background:#fffcf6;box-shadow:0 8px 24px #1a6b3913;margin-top:14px}
-.xp-medal{height:44px;width:44px;border-radius:15px;background:linear-gradient(135deg,#fff5df,#f8ce8e);display:grid;place-items:center;font-size:26px;color:#965a21;box-shadow:inset 0 1px #fff}
-.xp-info{flex:1;min-width:0}.xp-top{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:850;color:#184b34}.xp-top small{font-size:10px;color:#ac7942}
-.xp-line{height:6px;border-radius:50px;background:#e6ebe1;overflow:hidden;margin-top:9px}.xp-line i{width:0;height:100%;display:block;background:linear-gradient(90deg,#f2a44c,#fcd398);border-radius:50px;transition:width .8s}
-.xp-mini button{border:0;background:#eaf3e6;border-radius:11px;padding:10px;color:#286e48;font-size:12px;font-weight:900}
-.quick{margin-top:14px;gap:11px}
-.quick button{min-height:76px;border-radius:19px}
-.quick .earn{background:linear-gradient(135deg,#ffcb78,#ffa34c);color:#4d2a10;box-shadow:0 10px 24px #dd96484d,inset 0 1px #fff8}
-.quick .spend{background:#fff;border:1px solid #e1eadc;box-shadow:0 8px 24px #204d2d12}
-.quick .iconbox{width:41px;height:41px;border-radius:14px;font-weight:800}
-.section-head{margin:24px 0 11px}
-.section-head h2{font-size:23px;color:#183e2d}
-.mission-board{background:#fff;border:1px solid #e0ebde;border-radius:24px;padding:15px;box-shadow:0 10px 30px #1e62400d}
-.mission-list{display:flex;flex-direction:column;gap:8px}
-.mission-item{border:1px solid #e4ece1;background:#f9fbf6;border-radius:16px;padding:11px 12px;width:100%;display:flex;gap:12px;align-items:center;text-align:left;transition:transform .15s,border-color .15s,background .2s}
-.mission-item:active{transform:scale(.98)}
-.mission-symbol{height:41px;width:41px;border-radius:14px;background:#eef2e6;display:grid;place-items:center;font-size:21px;flex:none}
-.mission-item b{display:block;color:#214a35;font-size:12px}.mission-item small{color:#819587;font-size:10px;display:block;line-height:1.45;margin-top:4px}
-.mission-copy{flex:1}.mission-arrow{font-size:17px;font-weight:800;color:#9caa9e}
-.mission-item.done{background:linear-gradient(100deg,#e8f6e5,#f8fff6);border-color:#cce7cb}
-.mission-item.done .mission-symbol{background:#cdebcb}.mission-item.done .mission-arrow{color:#329361}
-.mission-item.current{border-color:#f5c991;background:linear-gradient(100deg,#fff9ed,#fffefa)}
-.mission-item.current .mission-symbol{background:#fce9cf}
-.mission-header{display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:800;color:#698675;margin-bottom:12px}
-.mission-count{background:#e8f4e5;color:#2f8856;border-radius:99px;padding:6px 10px}
-.nextfare{position:relative;overflow:hidden;border-radius:24px;padding:20px;background:linear-gradient(129deg,#fff5e7,#fffefa 62%,#e9f3e6);border:1px solid #f4dfc0;box-shadow:0 12px 32px #c7893c14}
-.nextfare:before{content:"↗";font:600 160px Georgia,serif;position:absolute;right:-20px;top:-78px;color:#d6a35e20;pointer-events:none}
-.nextfare-top{display:flex;justify-content:space-between;gap:9px;align-items:center;position:relative;z-index:1}
-.nextfare-top strong{font:600 24px Georgia,serif;letter-spacing:-.6px;color:#1d5439}
-.nextfare-top span{background:#ffe6c3;border-radius:99px;padding:7px 10px;color:#ae7030;font-weight:850;font-size:9px;letter-spacing:1px}
-.nextfare p{color:#788f7d;font-size:11px;line-height:1.5;margin:6px 0 15px}
-.forecast-choices{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;position:relative;z-index:1}
-.forecast-choices button{border:1px solid #eedfc8;background:#fffefa;color:#795a2c;font-size:14px;font-weight:900;padding:13px 0;border-radius:13px;box-shadow:inset 0 1px #fff}
-.forecast-choices button.selected{background:linear-gradient(140deg,#196847,#0d4233);color:#fff;border-color:#176045;box-shadow:0 7px 15px #0b5a3230;transform:translateY(-2px)}
-.forecast-result{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.forecast-result>div{background:#ffffffc9;border:1px solid #eceddf;border-radius:15px;padding:13px 12px}
-.forecast-result small{font-size:9px;color:#809187;display:block;margin-bottom:7px;font-weight:800}
-.forecast-result b{font-size:22px;color:#1d704a;letter-spacing:-.7px}
-.forecast-result b.due{color:#b67434}
-.forecast-message{margin:13px 0 0;color:#3c6e4b;font-size:11px;line-height:1.6;font-weight:700}
-.forecast-save{display:flex;align-items:center;justify-content:center;width:100%;background:#104d37;color:#fff;border:0;border-radius:14px;padding:14px;margin-top:12px;font-size:12px;font-weight:850;box-shadow:0 9px 15px #0f51342c}
-.forecast-footnote{font-size:10px;color:#9a8a73;margin-top:9px}
-.recover{background:linear-gradient(120deg,#fff,#e7f7e7);border-color:#cde7cf;box-shadow:0 10px 28px #1b784119}
-.recover-pct{background:linear-gradient(138deg,#d9f7da,#c4eace);box-shadow:inset 0 2px 5px #33794414}
-.recover-track{height:14px}
-.recover-fill-glow{box-shadow:0 0 16px #69d08a67}
-.charge-card{background:radial-gradient(ellipse at 95% 0%,#44856c,transparent 65%),linear-gradient(130deg,#0f6245,#073c30);box-shadow:0 16px 28px #0e51302e}
-.card,.calendar,.metric,.achievement,.settings-card{box-shadow:0 12px 34px #0a603018;border-color:#dfe9db}
-.level-card{background:radial-gradient(ellipse at 100% 0%,#ecb65c41,transparent 56%),linear-gradient(125deg,#0c694a,#063a2d);border-color:#268962}
-.achievement:not(.locked){background:linear-gradient(130deg,#fffdf6,#ecf8e8);border-color:#d8e9ca;box-shadow:0 9px 26px #286b301c}
-.achievement:not(.locked) .emoji{box-shadow:inset 0 2px 2px #fff,0 5px 13px #daaf6533;background:linear-gradient(135deg,#fff0cf,#ffc977)}
-.bottom{background:#fffffff2;border-top-color:#dce9da;box-shadow:0 -10px 34px #123c1c10}
-.nav.active{color:#176a44;background:linear-gradient(125deg,#e2f4df,#fff3db)}
-.nav{transition:transform .18s,background .18s}.nav:active{transform:scale(.92)}
-.btn,.primary-save,.secondary-btn,.action-btn,.hero-booster,.forecast-save{transition:transform .17s,filter .17s}
-.btn:active,.primary-save:active,.secondary-btn:active,.action-btn:active,.hero-booster:active,.forecast-save:active{transform:scale(.975)}
-.sheet{background:linear-gradient(160deg,#fffefa,#f6faf4);box-shadow:0 -18px 60px #0a3b2a50}
-.money-input{background:#f5faf2;border-color:#cfe4cf;box-shadow:inset 0 2px 8px #174a2511}
-.money-input input{font-size:39px}
-.toast{background:linear-gradient(110deg,#146243,#073a2b);box-shadow:0 15px 34px #0d49325c}
-.fx-burst{position:fixed;pointer-events:none;z-index:95;left:50%;top:37%;transform:translate(-50%,-50%);font-size:31px;font-weight:950;color:#fff;text-shadow:0 4px 10px #05351d99,0 0 25px #ffcb66;animation:fxFly .95s both}
-@keyframes fxFly{0%{opacity:0;transform:translate(-50%,-10%) scale(.7)}25%{opacity:1;transform:translate(-50%,-35%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-160%) scale(.9)}}
-@media(min-width:800px){body{background:radial-gradient(circle at 80% 0%,#dcefd5,#f2f9ee 58%,#e9f2e4)}.app{background:#f6f9f1}}
-@media(max-width:370px){.app{padding-left:13px;padding-right:13px}.hero{padding:20px 16px 17px}.ring-wrap{width:124px;height:124px}.hero-number{font-size:41px}.hero-metrics b{font-size:14px}.ring-middle b{font-size:25px}.recover-numbers b{font-size:15px}.mission-item{padding:9px}}
-@media(prefers-reduced-motion:reduce){.day-live i,.hero:before{animation:none!important}.fx-burst{animation-duration:.01ms!important}}
-
-
-/* Soft champagne-gold palette */
-:root{--orange:#d0a86a;--gold:#ebd3a4;--orange-soft:#f6ead7;--amber:#aa834b;--pearl:#f8f9f2}
-body{background:radial-gradient(ellipse 480px 450px at 90% -140px,#eee8d3,transparent 85%),radial-gradient(ellipse 500px 450px at -180px 380px,#f7e9d0,transparent 85%),#f7f9f1}
-.hero{background:radial-gradient(ellipse 160px 220px at 93% 2%,#cfba8a65,transparent 90%),radial-gradient(ellipse 260px 280px at 95% 27%,#3c926b58,transparent 92%),linear-gradient(128deg,#125e45,#0d4a38 50%,#0b3227)}
-.ring-active{stroke:#e1c48f;filter:drop-shadow(0 0 4px #e8ca9699)}
-.ring-middle small{color:#eedab5}
-.dial-legend i[style*="ffb55e"]{background:#e1c48f!important}
-.hero-booster{background:linear-gradient(125deg,#f6ebd0,#e3c18a);color:#644a2c;box-shadow:inset 0 1px #fff8,0 8px 20px #161f1636}
-.quick .earn{background:linear-gradient(140deg,#f4e7cc,#d6b17a);color:#5b4529;box-shadow:0 9px 25px #aa8b5540,inset 0 1px #fff}
-.xp-medal{background:linear-gradient(135deg,#fff5dd,#e3c493)}
-.xp-line i,.track span{background:linear-gradient(90deg,#c09d65,#e6cd9b)}
-.forecast-choices button.selected{background:linear-gradient(120deg,#1e6c4c,#124634);border-color:#276c4c}
-.nextfare{background:linear-gradient(126deg,#f9f3e7,#fffefa 62%,#eef7e9);border-color:#e8dec7}
-.nextfare-top span{background:#f0e3c9;color:#846239}
-.forecast-result b.due,.recover-numbers b.due{color:#a17c42}
-.charge-status b{color:#ebd8b3}
-.mission-item.current{border-color:#e0cba3;background:#fbf8ee}
-.mission-item.current .mission-symbol{background:#f4e9d1}
-.amount-chips button:active,.category-chip.active{background:#f5ebd8;color:#826a42;border-color:#dcc49c}
-.recover-note{background:#fcf7ed;border-color:#e8dcc5;color:#795d38}
-.checkin-income-modes{grid-template-columns:repeat(3,1fr)}
-.checkin-income-modes button{font-size:11px;padding:11px 5px}
-/* Daily check-in: clear, tactile and practical */
-.daily-checkin{position:relative;overflow:hidden;background:linear-gradient(145deg,#fffefa,#fff 56%,#edf6eb);border:1px solid #d9e6d7;padding:19px;border-radius:25px;box-shadow:0 14px 34px #1c64421a}
-.daily-checkin:before{content:'';position:absolute;width:130px;height:130px;border-radius:50%;top:-65px;right:-50px;background:radial-gradient(circle,#e8d0a07a,transparent 72%);pointer-events:none}
-.daily-checkin-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.daily-checkin-top h2{font:600 26px Georgia,serif;color:#175338;letter-spacing:-.6px;margin:7px 0 5px}
-.daily-checkin-top p{font-size:11px;line-height:1.55;color:#788f7e;margin:0}
-.checkin-pill{white-space:nowrap;font-size:9px;font-weight:900;letter-spacing:.4px;color:#82643d;background:#f1e5cd;border:1px solid #e6d3af;padding:8px 10px;border-radius:99px}
-.daily-goal{display:flex;align-items:center;justify-content:space-between;gap:11px;background:#f0f5ed;border:1px solid #e0eade;border-radius:14px;padding:13px;margin-top:17px}
-.daily-goal b{font-size:12px;color:#264e38}.daily-goal small{font-size:10px;color:#8ca08f;display:block;margin-top:4px}
-.daily-goal label{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid #dae8da;padding:8px 10px;border-radius:12px;color:#6f8b71;font-weight:850;font-size:13px;width:124px;flex:none}
-.daily-goal input{border:0;outline:0;font-size:20px;color:#1b543b;font-weight:900;background:transparent;width:100%;min-width:0}
-.checkin-fields{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
-.checkin-field{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;border:1px solid #dde9db;background:white;min-width:0;transition:border-color .2s,box-shadow .2s}
-.checkin-field:focus-within{border-color:#c5a574;box-shadow:0 0 0 3px #e9d5b266}
-.checkin-emoji{display:grid;place-items:center;width:41px;height:41px;border-radius:13px;background:#edf3e9;font-size:20px;flex:none}
-.checkin-field.expenses .checkin-emoji{background:#f8eddf}
-.checkin-field.cover .checkin-emoji{background:#e5f4e7}
-.checkin-copy{flex:1;min-width:0}
-.checkin-copy label{font-size:12px;font-weight:850;color:#30543d;display:block}
-.checkin-copy small{font-size:10px;color:#8a9c8d;line-height:1.45;margin-top:4px;display:block}
-.checkin-input{display:flex;align-items:center;gap:3px;color:#7b9881;font-size:13px;font-weight:850;min-width:89px;width:33%;max-width:120px}
-.checkin-input input{width:100%;min-width:0;border:0;outline:0;background:transparent;font-size:22px;font-weight:900;color:#13563b;text-align:right;letter-spacing:-.5px}
-.checkin-input input:focus{outline:0}
-.checkin-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:12px}
-.checkin-results>div{padding:11px 8px;border:1px solid #e2e9dc;background:#f5f9f3;border-radius:13px;min-width:0}
-.checkin-results small{font-size:9px;line-height:1.4;color:#87998a;display:block;margin-bottom:5px}
-.checkin-results b{font-size:17px;font-weight:900;color:#1f6341;letter-spacing:-.5px;white-space:nowrap}
-.checkin-results b.owing{color:#9b7540}
-.checkin-status{font-size:11px;line-height:1.6;margin:10px 2px 0;color:#4c704f}
-.checkin-submit{background:linear-gradient(135deg,#1d7751,#0c4b35);color:white;border:0;border-radius:15px;box-shadow:0 9px 21px #144d322b;width:100%;font-weight:950;font-size:13px;padding:16px;margin-top:15px}
-.checkin-submit:active{transform:scale(.98)}
-.checkin-foot{font-size:10px;line-height:1.6;color:#8a9b8c;margin:10px 0 0}
-@media(max-width:370px){.daily-checkin{padding:13px}.checkin-field{padding:9px;gap:7px}.checkin-emoji{height:36px;width:36px}.checkin-input input{font-size:19px}.checkin-results b{font-size:15px}}
-
-
-/* final soft gold touches */
-.bar-fill{background:linear-gradient(180deg,#e9d09b,#caa468)}
-.forecast-choices button:not(.selected){border-color:#e9dfce;color:#715c3d}
-.forecast-result b.due{color:#a48551}
-.hero-head .live{color:#ead5b1}
-.sparkle{color:#f1d9a7}
-.charge-status b{color:#e8d0a4}
-.level-card{background:radial-gradient(ellipse at 100% 0%,#e4cf9e33,transparent 59%),linear-gradient(122deg,#0f6147,#0d3c30);border-color:#3f8063}
-.achievement:not(.locked) .emoji{background:linear-gradient(132deg,#f9eed1,#e5c593)}
-.recover-track span{background:linear-gradient(90deg,#267b55,#68b68b)}
-
-
-/* FINANCES 2.4 — metallic atelier, tactile gloss and performance calendar */
-:root{
- --metal-gold:#d8b673;--metal-gold-light:#fbecc3;--metal-gold-dark:#91632e;
- --polished-white:#fffefb;--mint:#2c9067;--bronze:#ab7b47;
- --rose:#be565f;--blue-steel:#657d93;
-}
-body{background:
- radial-gradient(ellipse 520px 470px at 84% -140px,#edecd8 0%,transparent 84%),
- radial-gradient(ellipse 420px 400px at -140px 400px,#f3e7d0 0%,transparent 85%),
- linear-gradient(160deg,#f6f8f2,#f5f8f0 58%,#f8f5ec)}
-/* Tiny, angled reflective highlights bring the satin-metal quality without flicker. */
-.top .logo,.date-bubble,.hero,.calendar,.card,.metric,.level-card,.charge-card,.recover,.daily-checkin,
-.nextfare,.mission-board,.settings-card,.achievement,.xp-mini,.signal,.summary3>div{position:relative;isolation:isolate}
-.date-bubble,.calendar,.card,.metric,.recover,.daily-checkin,.nextfare,.mission-board,
-.settings-card,.achievement,.xp-mini,.signal,.summary3>div{
- background-image:linear-gradient(139deg,#ffffffec 0%,#fffefaef 38%,#f3f8f1 100%);
- border:1px solid #e0e8db;
- box-shadow:inset 0 1.5px 0 #fff,0 9px 17px #163b2610,0 22px 40px #1e593008;
-}
-.hero,.charge-card,.level-card{
- box-shadow:inset 0 1px 0 #ffffff69,inset 0 -1px 0 #071a132c,0 10px 18px #083d292b,0 24px 42px #103c292b;
-}
-.hero:before{background:radial-gradient(ellipse at 25% 18%,#ffffff27 0%,transparent 68%);opacity:.8}
-.hero-booster,.quick button,.checkin-submit,.forecast-save,.action-btn,.primary-save,.recovery-mission,
-.charge-head button,.nav,.day-chip,.cal-cell,.arrow,.mini-action,.mission-item,.forecast-choices button{
- -webkit-tap-highlight-color:transparent;
- transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .18s,border-color .18s,filter .18s,background .18s;
-}
-.hero-booster,.quick .earn{
- background:linear-gradient(152deg,#fff4d7 0%,#f1dab0 24%,#d9b473 55%,#f0d6a1 82%,#c7a16b 100%);
- border:1px solid #d7b479;
- box-shadow:inset 0 2px 0 #ffffffc5,inset 0 -2px 0 #9a764250,0 6px 10px #84633f2c,0 14px 24px #75634018;
- color:#583f23;
-}
-.hero-booster:active,.quick button:active,.checkin-submit:active,.forecast-save:active,
-.action-btn:active,.primary-save:active,.recovery-mission:active,.arrow:active,.mission-item:active,
-.cal-cell:active,.day-chip:active{transform:translateY(2px) scale(.977);filter:brightness(.97);box-shadow:inset 0 2px 7px #183e2619,0 2px 7px #315a291b}
-.quick .spend,.arrow,.secondary-btn{
- background:linear-gradient(145deg,#ffffff,#f6f8f3 80%,#eaf1e6);
- box-shadow:inset 0 2px 0 #fff,0 6px 14px #19462415;
- border:1px solid #dce8da;
-}
-.hero .hero-metrics{background:linear-gradient(140deg,#ffffff1b,#ffffff07);box-shadow:inset 0 1px #ffffff2b}
-.ring-active{stroke:#e7cd99;filter:drop-shadow(0 0 5px #ffda8b9c)}
-.level-card:after{color:#f7dba021}
-.level-name{color:#f5d49f}
-.xp-medal{background:linear-gradient(144deg,#fffbea,#e9cc9c 58%,#b99965)}
-.xp-line i,.track span,.forecast-choices button.selected{background:linear-gradient(92deg,#ba9056,#edcc90,#e3b46d)}
-.xp-line i,.track span{box-shadow:0 0 8px #e7c68578}
-.forecast-choices button.selected{color:#4b351c;border-color:#c9a470;box-shadow:inset 0 1px 0 #fff9,0 6px 12px #a88b6240}
-.recover-track span{background:linear-gradient(90deg,#1c7c58,#5bb77e,#9ae0aa)}
-.mission-item.done .mission-symbol{box-shadow:inset 0 2px 2px #ffffffa9}
-.daily-checkin .checkin-field:focus-within{border-color:#bd9f68;box-shadow:0 0 0 3px #ead6a483}
-.bottom{background:linear-gradient(156deg,#fffffffa,#fffef6f6);border-top:1px solid #e0e6d9;box-shadow:0 -10px 30px #1c503010}
-.nav.active{background:linear-gradient(148deg,#eff9e9,#f0e3c9);box-shadow:inset 0 1px #fff,0 3px 7px #60734818}
-/* Full-width calendar header + high information density without cramped targets. */
-.calendar{border-radius:27px;padding:16px 11px 14px;overflow:hidden;background:linear-gradient(145deg,#fffefa,#f7faf5)}
-.calendar::before{content:"";position:absolute;top:0;left:18px;right:18px;height:1px;background:linear-gradient(90deg,transparent,#e8cc91,transparent);pointer-events:none}
-.calendar-grid{gap:6px}
-.cal-dow{font-size:10px;font-weight:900;letter-spacing:.5px;color:#72917e;padding:9px 0 13px}
-.cal-cell{
- position:relative;isolation:isolate;
- min-height:78px;display:flex;flex-direction:column;align-items:stretch;
- justify-content:space-between;gap:6px;text-align:left;
- padding:7px 5px 8px;border-radius:13px;
- border:1px solid var(--tile-stroke,#e1e9de);
- background:var(--tile-bg,linear-gradient(150deg,#fefefe,#f1f5f0));
- color:var(--tile-ink,#748a7b);
- box-shadow:inset 0 1px 0 #ffffffb8,0 3px 7px #12382010,0 7px 15px #13392009;
- overflow:hidden;
-}
-.cal-cell::before{
- content:"";position:absolute;left:0;right:0;top:0;height:48%;pointer-events:none;
- background:linear-gradient(154deg,#ffffff75 0%,#ffffff20 58%,transparent 70%);
- border-radius:inherit;
- opacity:.84;
-}
-.cal-cell::after{content:"";position:absolute;inset:-110% auto auto -75%;width:58%;height:280%;background:linear-gradient(90deg,transparent,#ffffff9c,transparent);transform:rotate(23deg);opacity:0;pointer-events:none}
-.cal-cell:active::after{opacity:.8;animation:calGleam .4s ease-out both}
-.cal-cell:focus-visible{outline:2px solid #245c48;outline-offset:2px}
-@keyframes calGleam{from{left:-75%}to{left:125%}}
-.cal-cell .cal-top{display:flex;justify-content:space-between;align-items:center;gap:1px;position:relative;z-index:1}
-.cal-cell .cal-num{font-size:12px;font-weight:950;color:inherit;line-height:1}
-.cal-cell .cal-mark{font-size:10px;font-weight:900;line-height:1}
-.cal-cell .cal-money{font-size:10px;font-weight:900;letter-spacing:-.55px;white-space:nowrap;position:relative;z-index:1;text-align:center;overflow:hidden;text-overflow:clip}
-.cal-cell .cal-label{font-size:8px;font-weight:850;letter-spacing:.05px;line-height:1.1;position:relative;z-index:1;text-align:center}
-.cal-cell .cal-progress{height:3px;border-radius:10px;background:#ffffff73;overflow:hidden;position:relative;z-index:1}
-.cal-cell .cal-progress i{height:100%;width:0;display:block;border-radius:10px;background:var(--tile-accent,#9bb09d);box-shadow:0 0 6px var(--tile-accent,#9bb09d)}
-.cal-cell.gold{
- --tile-bg:linear-gradient(155deg,#fff3c5 0%,#edcb83 43%,#c59a51 78%,#f9e0a5 100%);
- --tile-stroke:#b88a43;--tile-ink:#634319;--tile-accent:#815b23;
- box-shadow:inset 0 2px 1px #fff8,inset 0 -2px 1px #966b2a55,0 5px 11px #b1904a43;
-}
-.cal-cell.gold .cal-mark{color:#76501e;text-shadow:0 1px #fff5}
-.cal-cell.green{
- --tile-bg:linear-gradient(153deg,#def7e6,#8fd4ab 42%,#3f956d 100%);
- --tile-stroke:#4b9d71;--tile-ink:#115135;--tile-accent:#17603d;
-}
-.cal-cell.champagne{
- --tile-bg:linear-gradient(155deg,#fffbef,#f2e4c8 57%,#dfc99c);
- --tile-stroke:#d9c399;--tile-ink:#78613d;--tile-accent:#b49b69;
-}
-.cal-cell.bronze{
- --tile-bg:linear-gradient(150deg,#f5e4ce,#d5ae81 58%,#ba885d);
- --tile-stroke:#b88961;--tile-ink:#71451e;--tile-accent:#986637;
-}
-.cal-cell.red{
- --tile-bg:linear-gradient(150deg,#fff0ee,#efc4c1 57%,#da9294);
- --tile-stroke:#db9d9e;--tile-ink:#913c44;--tile-accent:#b9545e;
-}
-.cal-cell.steel{
- --tile-bg:linear-gradient(152deg,#f1f5f9,#d8e2eb 52%,#afc1d0);
- --tile-stroke:#b3c6d5;--tile-ink:#4f687b;--tile-accent:#698aa0;
-}
-.cal-cell.unlogged,.cal-cell.rest{
- --tile-bg:linear-gradient(155deg,#ffffff,#eef2ec);
- --tile-stroke:#e2e8e0;--tile-ink:#9aa99d;--tile-accent:#c8d7c8;
-}
-.cal-cell.today{outline:2px solid #e0be83;outline-offset:2px}
-.cal-cell.today .cal-num:after{content:"";display:inline-block;width:3px;height:3px;background:currentColor;border-radius:50%;margin-left:2px;vertical-align:middle}
-.cal-cell.future:not(.gold):not(.green):not(.champagne):not(.bronze):not(.red):not(.steel){opacity:.7}
-.cal-cell.blank{border:0;visibility:hidden}
-.cal-cell:hover{filter:brightness(1.025)}
-/* A single, gentle reflected glint on a gold win when the month opens. */
-.cal-cell.gold::after{opacity:.45;animation:goldSheen 1.05s cubic-bezier(.2,.7,.4,1) .2s both}
-@keyframes goldSheen{0%{left:-75%;opacity:0}25%{opacity:.38}100%{left:130%;opacity:0}}
-@media(prefers-reduced-motion:reduce){.cal-cell.gold::after{animation:none!important;opacity:0}}
-.calendar .legend{margin:17px 0 1px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;justify-content:stretch}
-.calendar .legend span{font-size:10px;font-weight:650;color:#647f69;display:flex;align-items:center;gap:7px;line-height:1.35}
-.calendar .legend i{width:12px;height:12px;flex:none;border-radius:4px;border:1px solid #00000014;box-shadow:inset 0 1px #fff9,0 1px 2px #00000012;margin:0}
-.cal-summary{margin:15px 0 3px;padding:12px 13px;border-radius:17px;background:linear-gradient(120deg,#f7f8f0,#f6f2e5);border:1px solid #e9e4d6}
-.cal-summary-main{font-size:12px;color:#426148;font-weight:800;line-height:1.5}
-.cal-summary-sub{font-size:10px;color:#829483;margin-top:5px}
-.cal-summary strong{color:#85612d}
-.cal-performance{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
-.cal-performance span{padding:8px 11px;border-radius:99px;font-size:10px;font-weight:800;background:#fffefa;border:1px solid #e5e9df;color:#536c55;box-shadow:inset 0 1px #fff,0 3px 8px #2046220c}
-.cal-performance b{color:#23593c}
-.cal-performance .gold-count{background:linear-gradient(140deg,#fff7df,#f2deab);border-color:#e4d09d;color:#7c5928}
-.cal-performance .gold-count b{color:#91632e}
-@media(max-width:410px){
- .calendar-grid{gap:4px}.calendar{padding:13px 8px 12px}
- .cal-cell{min-height:73px;padding:7px 2px 7px;border-radius:11px}
- .cal-cell .cal-num{font-size:11px}.cal-cell .cal-money{font-size:9px}
- .cal-cell .cal-label{font-size:7px;letter-spacing:-.15px}
-}
-@media(min-width:470px){.cal-cell{min-height:86px;padding:9px 7px}.cal-cell .cal-money{font-size:11px}.cal-cell .cal-label{font-size:9px}}
-@media(prefers-reduced-motion:reduce){.cal-cell::after{animation:none!important}.cal-cell{transition:none!important}}
-
+html{background:var(--cream)}
+body{margin:0;-webkit-font-smoothing:antialiased;background:linear-gradient(160deg,#f3f8f2,#fffefa 50%,#f6f7f2);min-height:100dvh}
+button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+button:active{transform:scale(.987)}
+a{color:var(--emerald)}
+.shell{max-width:570px;margin:0 auto;min-height:100dvh;padding:0 18px calc(112px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:24px 2px 19px}
+.identity{display:flex;align-items:center;gap:12px}.mark{width:49px;height:49px;object-fit:cover;border-radius:15px;box-shadow:0 6px 16px #143e2a30;border:1px solid #d2ab57}
+.wordmark{font:800 22px Georgia,serif;letter-spacing:-.5px}.wordmark small{display:block;font:750 9px Inter,system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.header-date{background:white;border:1px solid var(--line);border-radius:16px;padding:9px 12px;text-align:center;min-width:60px;box-shadow:var(--shadow)}.header-date b{display:block;font-size:18px}.header-date small{font-weight:800;font-size:10px;color:var(--muted)}
+section.page{display:none;animation:appear .22s ease}section.page.active{display:block}@keyframes appear{from{opacity:.65;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.kicker{font-size:10px;font-weight:850;letter-spacing:1.8px;text-transform:uppercase;color:#66947f}
+h1{font:600 clamp(28px,7vw,35px)/1.16 Georgia,serif;letter-spacing:-.8px;margin:6px 0 5px}h2{font:600 22px Georgia,serif;letter-spacing:-.4px;margin:0}
+.muted{color:var(--muted)}.subtitle{font-size:13px;color:var(--muted);line-height:1.5;margin:6px 0 0}.section-title{display:flex;align-items:center;justify-content:space-between;margin:25px 0 13px;gap:12px}
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 100% -24%,#2b805e,transparent 50%),linear-gradient(138deg,#145b42,#08382d 67%,#05241c);color:white;border-radius:28px;padding:23px 22px 21px;box-shadow:0 18px 34px #0e452a30;border:1px solid #327d5b}
+.hero:after{content:"";width:230px;height:230px;border:1px solid #ffffff13;border-radius:50%;position:absolute;right:-120px;top:-105px;pointer-events:none}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
+.hero-label{font-size:10px;letter-spacing:1.7px;font-weight:850;color:#c3e7d1}
+.pill{padding:6px 10px;font-size:10px;border-radius:999px;background:#ffffff18;color:#f9dcac;font-weight:850}
+.hero-date{font-size:12px;color:#e4f2e6;margin:16px 0 5px;position:relative;z-index:1}
+.hero-value{font-size:clamp(42px,12vw,62px);font-weight:850;letter-spacing:-2.3px;line-height:1.14;font-variant-numeric:tabular-nums;position:relative;z-index:1}
+.hero-value small{font-size:12px;letter-spacing:0;color:#b7d8c5;font-weight:600;display:block;margin-top:4px}
+.progress-track{height:9px;border-radius:100px;background:#ffffff2a;margin:21px 0 16px;overflow:hidden;position:relative;z-index:1}.progress-track i{display:block;width:0;height:100%;background:linear-gradient(90deg,#f2b263,#ffdda0);border-radius:100px;transition:width .32s}
+.hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));position:relative;z-index:1}.hero-stats div{min-width:0}.hero-stats div+div{border-left:1px solid #ffffff29;padding-left:11px}.hero-stats small{display:block;font-size:10px;color:#bedbcc;margin-bottom:6px}.hero-stats strong{display:block;font-size:clamp(14px,4vw,18px);font-variant-numeric:tabular-nums}
+.hero-foot{position:relative;z-index:1;font-size:11px;color:#f2dba9;margin-top:18px;line-height:1.4}
+.primary{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;border:0;border-radius:19px;min-height:60px;background:linear-gradient(125deg,#ffc77d,#f1a149 52%,#e48b2b);color:#4c2b0c;box-shadow:0 10px 24px #d38a3030,inset 0 2px #ffffff90;font-weight:900;font-size:15px}
+.primary.dark{background:linear-gradient(125deg,#1f815c,#0c553f 70%,#093d30);color:#fff;box-shadow:0 10px 25px #13573e2a}
+.cta{margin-top:15px}.cta-icon{font-size:25px;line-height:1}
+.tile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.tile{background:white;border:1px solid var(--line);border-radius:20px;padding:17px 16px;min-width:0;box-shadow:var(--shadow)}
+.tile .symbol{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:11px;background:#f0f6ed;font-size:18px;margin-bottom:10px}
+.tile small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.tile strong{display:block;font-size:clamp(21px,6vw,29px);font-weight:850;letter-spacing:-.9px;line-height:1.12;font-variant-numeric:tabular-nums}
+.tile.green{background:linear-gradient(160deg,#e5f7eb,#f6fff9);border-color:#b5dfc6}.tile.green strong{color:#086943}
+.tile.gold{background:linear-gradient(155deg,#fff1d8,#fffdf6);border-color:#ecd4a3}
+.card{background:white;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:23px;padding:19px}
+.small-note{font-size:11px;color:var(--muted);line-height:1.5}
+.row-list{display:flex;flex-direction:column}.shift-row{border:0;background:transparent;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 0;border-bottom:1px solid var(--line);width:100%}.shift-row:last-child{border-bottom:0}.shift-row b{display:block;font-size:14px}.shift-row small{display:block;font-size:11px;color:var(--muted);margin-top:5px}.shift-row .amount{text-align:right}.shift-row .amount strong{font-size:17px;display:block}.shift-row .amount span{display:block;font-size:10px;font-weight:800;margin-top:3px}
+.positive{color:#16845a}.negative{color:var(--red)}.amber{color:#b67b2a}
+.empty{text-align:center;padding:19px 9px;color:var(--muted);font-size:13px}
+.weekbars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;align-items:end;padding-top:7px}
+.bar-col{text-align:center;min-width:0}.bar-wrap{height:105px;display:flex;align-items:flex-end;justify-content:center;gap:3px;position:relative;border-bottom:1px solid #ccd9cc}
+.bar{width:33%;border-radius:6px 6px 0 0;min-height:2px}.bar.target{background:#f2d4a4}.bar.earned{background:linear-gradient(#50bf84,#0a6d4f)}
+.bar-col small{font-weight:750;font-size:9px;color:var(--muted);margin-top:9px;display:block}.bar-col.today small{color:var(--forest)}.legend{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:13px}.legend i{display:inline-block;width:8px;height:8px;border-radius:3px;margin-right:4px;background:#0b875e}.legend .target-dot{background:#eccb91}
+.form-panel{background:white;border:1px solid var(--line);border-radius:24px;padding:19px;margin-top:18px;box-shadow:var(--shadow)}
+.form-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.step{font-size:11px;font-weight:850;color:#11805b;letter-spacing:1.1px}
+label.field{display:block;margin-top:13px;font-size:12px;font-weight:800;color:#395c4d}
+.input{display:block;margin-top:8px;width:100%;min-width:0;height:52px;border:1px solid #dce6dc;background:#fbfdf9;border-radius:13px;padding:0 13px;color:#163b30;font-weight:700;font-size:16px}
+.input:focus{outline:2px solid #efb063;outline-offset:1px;border-color:#edbb7c}
+.input[type=date],.input[type=time]{font-size:14px}
+.field-row{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:11px}
+.money-field{position:relative}.money-field .input{padding-left:34px;font-size:22px;font-weight:850;font-variant-numeric:tabular-nums}.currency{position:absolute;left:13px;bottom:14px;font-size:17px;color:#769182;font-weight:800}
+.caption{color:#91a496;font-size:11px;line-height:1.5;margin:10px 2px 0}
+.money-preview{background:linear-gradient(150deg,#0f5c42,#073e30);color:#fff;border-radius:20px;padding:17px 18px;margin-top:17px;box-shadow:0 8px 22px #165d3920}
+.preview-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0}.preview-row small{color:#b9dcc9;font-size:11px}.preview-row b{font-size:16px;font-variant-numeric:tabular-nums}.preview-row.large{padding-top:14px;border-top:1px solid #ffffff25;margin-top:8px}.preview-row.large b{font-size:27px;letter-spacing:-1px}.preview-status{font-size:11px;color:#ffe0a9;margin-top:11px}
+.fold{border-top:1px solid var(--line);margin-top:14px;padding-top:13px}.fold summary{cursor:pointer;font-size:12px;font-weight:850;color:var(--emerald);min-height:28px}
+textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;font-size:14px}
+.form-actions{display:flex;gap:9px;align-items:center;margin-top:15px}.form-actions .primary{flex:1}.secondary{border:1px solid #d5e2d7;color:#2c7056;background:#f4faf3;border-radius:15px;min-height:52px;padding:0 16px;font-weight:850;font-size:13px}
+.month-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:19px 0 14px}.month-nav strong{font-size:16px}.round-btn{border:1px solid var(--line);border-radius:13px;background:white;min-width:43px;height:42px;font-size:24px;color:var(--forest)}
+.calendar{padding:14px 10px 12px}.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.cal-head{text-align:center;font-size:9px;font-weight:900;color:var(--muted);padding:5px 0 8px}.day{min-width:0;min-height:62px;padding:7px 2px 6px;border:1px solid #e6ece5;border-radius:10px;text-align:center;background:#f8faf6;color:#758a7f}.day b{font-size:11px;display:block}.day small{font-size:9px;display:block;margin-top:8px;font-weight:800;overflow:hidden;text-overflow:clip}.day.has{background:#e7f3e9;border-color:#c6e3d1;color:#145e40}.day.win{background:#f9edd3;border-color:#ddbc75;color:#77501d}.day.low{background:#fbeae8;border-color:#f1cfcb;color:#a14c43}.day.today{box-shadow:inset 0 0 0 2px #f0a650}.day:disabled{visibility:hidden}.day .cal-dot{width:5px;height:5px;border-radius:50%;background:currentColor;margin:4px auto 0}
+.month-summary{font-size:12px;color:var(--muted);margin:9px 0 18px}
+.week-targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.target-row{border:1px solid var(--line);border-radius:15px;padding:10px 13px;background:#fbfdf9}.target-row label{display:block;color:var(--muted);font-size:11px;font-weight:850;margin-bottom:6px}.target-row .target-inner{display:flex;align-items:center;gap:5px}.target-row input{width:100%;min-width:0;border:0;background:transparent;color:var(--forest);font-size:19px;font-weight:900;outline:0}
+.settings-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:15px}.settings-actions button{min-height:49px}
+.nav{position:fixed;z-index:20;bottom:0;left:0;right:0;padding:10px max(14px,calc((100vw - 570px)/2)) calc(10px + env(safe-area-inset-bottom));background:#ffffffed;backdrop-filter:blur(18px);border-top:1px solid #dce9de;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));box-shadow:0 -7px 29px #113b2516}
+.nav button{min-height:58px;border:0;background:transparent;color:#83978b;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:10px;font-weight:850}.nav button .ico{font-size:21px;line-height:1}.nav button.active{color:#084734;background:linear-gradient(155deg,#e8f6e7,#fff0d8)}
+.toast{position:fixed;z-index:50;left:50%;transform:translateX(-50%);bottom:calc(93px + env(safe-area-inset-bottom));max-width:calc(100vw - 34px);background:#104f39;color:#fff;padding:13px 17px;border-radius:14px;box-shadow:0 13px 25px #0a442b44;font-size:13px;font-weight:750;text-align:center;display:none}
+.notice{padding:13px 14px;border:1px solid #efdcb8;border-radius:16px;background:#fff9e9;color:#795b2d;font-size:12px;line-height:1.5;margin-top:12px}
+.between{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hidden{display:none!important}
+@media(max-width:365px){.shell{padding-left:12px;padding-right:12px}.tile{padding:13px}.hero{padding:19px}.field-row{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute">
-<symbol id="homeicon" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<symbol id="calendaricon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor"/><path d="M7 2v6M17 2v6M3 11h18" fill="none" stroke="currentColor" stroke-linecap="round"/></symbol>
-<symbol id="statsicon" viewBox="0 0 24 24"><path d="M4 20V11m6 9V5m6 15v-8m5 8V8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"/></symbol>
-<symbol id="trophyicon" viewBox="0 0 24 24"><path d="M7 3h10v7a5 5 0 0 1-10 0V3Zm0 2H4v3a4 4 0 0 0 4 4m9-7h3v3a4 4 0 0 1-4 4m-4 3v4m-5 2h10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<symbol id="settingsicon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16M9 4v4m6 2v4m-6 2v4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></symbol>
-</svg>
-<div class="app">
-<header class="top">
-  <div class="identity"><div class="logo">F</div><div class="brand">FINANCES<span>THE DAILY DRIVE</span></div></div>
-  <div class="date-bubble" aria-label="Today's date"><b id="dateDay">2</b><small id="dateMonth">NOV</small></div>
-</header>
-<main>
+<div class="shell">
+<header><div class="identity"><img class="mark" src="./icons/icon.svg?v=9" alt=""><div class="wordmark">Finances<small>Your shift, sorted</small></div></div><div class="header-date"><b id="headerDay">—</b><small id="headerMonth">NOV</small></div></header>
 <section class="page active" id="home">
-  <div class="welcome-row"><div class="kicker" id="homeDate">MONDAY · 2 NOVEMBER</div><div class="day-live"><i></i>YOUR MONEY DAY</div></div>
-  <h1 class="title" id="greeting">Make today count.</h1>
-  <p class="sub">Every fare. Every pound. Every win.</p>
+  <div class="kicker">YOUR MONEY AT A GLANCE</div><h1>Drive. Earn. Done.</h1><p class="subtitle">One quick entry after your shift. The rest is automatic.</p>
   <div class="hero">
-    <div class="hero-head"><small>TODAY'S PERFORMANCE</small><div class="live"><i></i>LIVE TRACKER</div></div>
-    <div class="hero-main">
-      <div class="hero-copy"><span>Earned today</span><div class="hero-number" id="heroEarned">£0</div><div class="hero-caption" id="heroSub">Your next win starts here.</div></div>
-      <div class="ring-wrap">
-        <svg viewBox="0 0 128 128" aria-label="Progress to today's target"><circle class="ring-bg" cx="64" cy="64" r="52" stroke-width="11" fill="none"/><circle id="ring" class="ring-active" cx="64" cy="64" r="52" stroke-width="11" fill="none"/><circle class="net-bg" cx="64" cy="64" r="39" stroke-width="6" fill="none"/><circle id="netRing" class="net-active" cx="64" cy="64" r="39" stroke-width="6" fill="none"/></svg>
-        <div class="ring-middle"><b id="ringPercent">0%</b><small>GROSS</small><em id="netRingLabel">0% NET</em></div>
+    <div class="hero-top"><span class="hero-label">YOUR DRIVING DAY</span><span class="pill" id="heroBadge">READY TO GO</span></div>
+    <p class="hero-date" id="heroDate">Today</p>
+    <div class="hero-value" id="heroIncome">£0<small>Gross earnings</small></div>
+    <div class="progress-track"><i id="heroProgress"></i></div>
+    <div class="hero-stats"><div><small>Daily goal</small><strong id="heroTarget">£0</strong></div><div><small>EV + costs</small><strong id="heroCosts">£0</strong></div><div><small>Take-home</small><strong id="heroNet">£0</strong></div></div>
+    <div class="hero-foot" id="heroMessage">Your next shift is waiting.</div>
+  </div>
+  <button class="primary cta" id="homeLog"><span class="cta-icon">＋</span><span>Log a finished shift</span><span>→</span></button>
+  <div class="section-title"><h2>This month</h2><span class="kicker" id="homeMonth">NOVEMBER</span></div>
+  <div class="tile-grid">
+    <div class="tile green"><span class="symbol">💷</span><small>Gross earnings</small><strong id="monthGross">£0</strong></div>
+    <div class="tile"><span class="symbol">⚡</span><small>EV charging</small><strong id="monthCharge">£0</strong></div>
+    <div class="tile"><span class="symbol">🧾</span><small>Other expenses</small><strong id="monthOther">£0</strong></div>
+    <div class="tile gold"><span class="symbol">✦</span><small>Take-home</small><strong id="monthNet">£0</strong></div>
+  </div>
+  <div class="section-title"><h2>Last 7 driving days</h2><span class="legend"><span><i></i>Earned</span><span><i class="target-dot"></i>Target</span></span></div>
+  <div class="card"><div id="weekBars" class="weekbars"></div><div class="small-note" style="margin-top:14px">Each shift belongs to the date it started, even if you finish after midnight.</div></div>
+  <div class="section-title"><h2>Recent shifts</h2><button class="secondary" id="seeHistory" style="min-height:36px">See all →</button></div>
+  <div class="card row-list" id="recentList"></div>
+</section>
+<section class="page" id="log">
+  <div class="kicker" id="logKicker">YOUR END-OF-SHIFT CHECK-IN</div><h1 id="logTitle">One shift. Four numbers.</h1><p class="subtitle">Income, charging, expenses, and time. No duplicate typing.</p>
+  <form id="shiftForm" novalidate>
+    <div class="form-panel">
+      <div class="form-title"><h2>When you drove</h2><span class="step">01 / 02</span></div>
+      <div class="field-row">
+        <label class="field">Shift started on<input id="shiftDate" class="input" type="date" required></label>
+        <label class="field">Started at<input id="startTime" class="input" type="time" value="13:00" required></label>
       </div>
+      <label class="field">Finished at<input id="endTime" class="input" type="time" value="06:00" required></label>
+      <p class="caption" id="shiftClock">Finishes the following morning automatically.</p>
     </div>
-    <div class="dial-legend"><span><i style="background:#ffb55e"></i>GROSS PROGRESS</span><span><i style="background:#7ce4a5"></i>NET PROGRESS</span></div>
-    <div class="hero-divider"></div>
-    <div class="hero-metrics"><div><small>Today's target</small><b id="heroTarget">£160</b></div><div><small>Net goal gap</small><b id="heroLeft">£160</b></div><div><small>Take-home</small><b id="heroNet">£0</b></div></div>
-    <div class="hero-message"><span class="sparkle">✦</span><span id="heroMessage">Start with one entry and build momentum.</span></div><button class="hero-booster" data-open="income"><span>＋</span> LOG YOUR NEXT WIN</button>
-  </div>
-  <div class="section-head"><h2>Daily money check-in</h2><span class="kicker">YOUR THREE NUMBERS</span></div>
-  <section class="daily-checkin" aria-label="Record daily earnings and expense recovery">
-    <div class="daily-checkin-top"><div><span class="kicker">MAKE TODAY COUNT</span><h2>Your money. Your move.</h2><p>Fill in your income, costs, and what you earned extra to cover them.</p></div><span class="checkin-pill">✦ CHECK-IN</span></div>
-    <form id="checkinForm">
-      <div class="daily-goal"><div><b>Daily earning target</b><small>Change it just for today</small></div><label for="ciTarget">£ <input id="ciTarget" type="number" min="0" max="1000000" step=".01" inputmode="decimal" required></label></div>
-      <div class="checkin-fields">
-        <div class="checkin-field"><div class="checkin-emoji">💷</div><div class="checkin-copy"><label for="ciIncome">1. Daily income</label><small>Before extra earnings for expenses</small></div><div class="checkin-input">£ <input id="ciIncome" type="number" min="0" max="10000000" step=".01" placeholder="0" inputmode="decimal" required></div></div>
-        <div class="checkin-field expenses"><div class="checkin-emoji">🧾</div><div class="checkin-copy"><label for="ciExpense">2. Total expenses today</label><small>Charging, food and other costs</small></div><div class="checkin-input">£ <input id="ciExpense" type="number" min="0" max="1000000" step=".01" placeholder="0" inputmode="decimal" required></div></div>
-        <div class="checkin-field cover"><div class="checkin-emoji">🛡️</div><div class="checkin-copy"><label for="ciCover">3. Extra earned for expenses</label><small>New earnings not included in box 1</small></div><div class="checkin-input">£ <input id="ciCover" type="number" min="0" max="10000000" step=".01" placeholder="0" inputmode="decimal" required></div></div>
+    <div class="form-panel">
+      <div class="form-title"><h2>Your money</h2><span class="step">02 / 02</span></div>
+      <label class="field money-field">Gross income (before costs)<span class="currency">£</span><input id="gross" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="230.00" required></label>
+      <div class="field-row" style="grid-template-columns:1fr 1fr">
+        <label class="field money-field">⚡ EV charging<span class="currency">£</span><input id="charge" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+        <label class="field money-field">🧾 Other expenses<span class="currency">£</span><input id="other" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="0.00"></label>
       </div>
-      <div class="checkin-results" aria-live="polite"><div><small>Gross total</small><b id="ciGross">£0</b></div><div><small>Costs covered</small><b id="ciPaid">£0</b></div><div><small>Still to cover</small><b id="ciDue" class="owing">£0</b></div></div>
-      <p class="checkin-status" id="ciNote">Live totals appear as you type.</p>
-      <button class="checkin-submit" type="submit">UPDATE TODAY'S FIGURES ✦</button>
-      <p class="checkin-foot" id="ciFoot">Gross = income + extra. Net = gross minus total expenses. Your expenses always remain on the books.</p>
-    </form>
-  </section>
-  <div class="xp-mini"><div class="xp-medal">✦</div><div class="xp-info"><div class="xp-top"><span id="miniLevel">LEVEL 01</span><small id="miniXP">0 / 500 XP</small></div><div class="xp-line"><i id="miniXpFill"></i></div></div><button data-go="wins" aria-label="See achievements">›</button></div>
-  <div class="quick"><button class="earn press" data-open="income"><div class="iconbox">＋</div><div>Add income<small>Log a fare or total</small></div></button><button class="spend press" data-open="expense"><div class="iconbox">−</div><div>Add expense<small>Keep your net clear</small></div></button></div>
-  <div class="section-head"><h2>Today's power-ups</h2><button class="mini-action" data-go="wins">Trophy cabinet ↗</button></div>
-  <div class="mission-board"><div class="mission-header"><span>COMPLETE YOUR MONEY MISSIONS</span><span class="mission-count" id="missionCount">0 / 3 done</span></div><div class="mission-list" id="missionList"></div></div>
-  <div class="section-head"><h2>The next fare effect</h2><span class="kicker">TRY IT BEFORE YOU DRIVE</span></div>
-  <div class="nextfare"><div class="nextfare-top"><strong>What if I earn…</strong><span>LIVE PREVIEW</span></div><p>Choose a possible next fare. See what it would do to your take-home and recovery before logging it.</p>
-    <div class="forecast-choices" id="fareChoices"><button data-forecast="10">+£10</button><button class="selected" data-forecast="20">+£20</button><button data-forecast="30">+£30</button><button data-forecast="50">+£50</button></div>
-    <div class="forecast-result"><div><small>PROJECTED NET</small><b id="fareNet">£0</b></div><div><small>NET GOAL STILL NEEDED</small><b class="due" id="fareGap">£0</b></div></div>
-    <div class="forecast-message" id="fareStory">Choose a fare to preview its impact.</div><button class="forecast-save" id="fareLog">Log +£20 once earned ↗</button>
-    <div class="forecast-footnote">Preview only. Nothing is recorded until you explicitly log the fare.</div></div>
-  <div class="section-head"><h2>Recover your expenses</h2><button class="mini-action" data-go="stats">Full breakdown ↗</button></div>
-  <div class="recover" id="recover">
-   <div class="recover-top"><div><span class="recover-eyebrow">EXTRA EARNINGS VS EXPENSES</span><h3 id="recoverTitle">Make expenses disappear</h3><p id="recoverSubtitle">Your costs, paid back by your extra effort.</p></div><div class="recover-pct"><b id="recoverPct">0%</b><small>RECOVERED</small></div></div>
-   <div class="recover-track"><span id="recoverFill"></span></div>
-   <div class="recover-numbers"><div><small>Expenses</small><b id="recoverCosts">£0</b></div><div><small>Recovered</small><b id="recoverCovered">£0</b></div><div><small>Still to cover</small><b id="recoverDue" class="due">£0</b></div></div>
-   <div class="recover-note"><i id="recoverEmoji">🛡️</i><span id="recoverText">Track a fare and see your progress.</span></div><button class="recovery-mission" id="recoveryMission" data-open="income">+ Log earnings</button>
-   <p class="recover-foot">Recovery is calculated using earnings ABOVE your gross target. Net always equals earnings minus actual expenses.</p>
+      <p class="caption">Other expenses can include food, parking, tolls or anything else. Don't include EV charging twice.</p>
+      <div class="money-preview" aria-live="polite">
+        <div class="preview-row"><small>Daily income target</small><b id="previewTarget">£0</b></div>
+        <div class="preview-row"><small>Total costs</small><b id="previewCosts">£0</b></div>
+        <div class="preview-row large"><small>Estimated take-home</small><b id="previewNet">£0</b></div>
+        <div class="preview-status" id="previewStatus">Enter your earnings to see your result.</div>
+      </div>
+      <details class="fold"><summary>✎ Add a note or adjust this day's target</summary><label class="field">Notes (optional)<textarea id="notes" class="input" maxlength="500" placeholder="e.g. busy evening, charging stop, parking"></textarea></label><label class="field money-field">Override this day's target<span class="currency">£</span><input id="targetOverride" class="input" type="number" step=".01" min="0" max="1000000" inputmode="decimal" placeholder="Leave blank for weekday goal"></label></details>
+      <p class="caption hidden" id="importedWarning">This entry was imported from the previous app. Its actual shift times were never recorded there.</p>
+      <div class="form-actions"><button type="submit" class="primary dark" id="saveShift">✓ Save this shift</button><button type="button" class="secondary" id="newShift">New</button></div>
+    </div>
+  </form>
+  <p class="small-note" style="text-align:center;margin:16px 0">Saved on this phone. Update or correct any shift later in History.</p>
+</section>
+<section class="page" id="history">
+  <div class="kicker">YOUR FINANCIAL JOURNEY</div><h1>Every shift matters.</h1><p class="subtitle">Daily records, monthly totals and the progress you made.</p>
+  <div class="month-nav"><button class="round-btn" id="monthPrev" aria-label="Previous month">‹</button><strong id="historyMonth">November 2026</strong><button class="round-btn" id="monthNext" aria-label="Next month">›</button></div>
+  <div class="tile-grid">
+    <div class="tile green"><span class="symbol">💷</span><small>Gross earned</small><strong id="histGross">£0</strong></div>
+    <div class="tile gold"><span class="symbol">✦</span><small>Take-home</small><strong id="histNet">£0</strong></div>
+    <div class="tile"><span class="symbol">⚡</span><small>EV costs</small><strong id="histCharge">£0</strong></div>
+    <div class="tile"><span class="symbol">🎯</span><small>Targets hit</small><strong id="histHits">0 / 0</strong></div>
   </div>
-  <div class="section-head"><h2>EV charging station</h2><button class="mini-action" data-go="stats">Monthly report ↗</button></div>
-  <div class="charge-card"><div class="charge-head"><div><small>⚡ YOUR ELECTRICITY COST</small><h3>Charging tracker</h3></div><button data-open="expense" data-charge="true">+ Log charge</button></div><div class="charge-amount" id="evMonthAmount">£0</div><div class="charge-details"><span id="evMonthName">This month</span><span id="evSessions">0 sessions</span><span id="evKwh"></span></div><div class="charge-rule"></div><div class="charge-status"><span>Today's charging recovered</span><b id="evRecovered">£0 / £0</b></div><p class="charge-hint" id="evHint">Add a charging expense to begin.</p></div>
-  <div class="section-head"><h2>This week's pulse</h2><button class="mini-action" data-go="calendar">Calendar ↗</button></div>
-  <div class="week-strip" id="weekStrip"></div>
-  <div class="section-head"><h2>Your momentum</h2><button class="mini-action" data-go="wins">View wins ↗</button></div>
-  <div class="signal"><div class="signal-icon" id="momentumIcon">✦</div><div><b id="momentumTitle">Your streak starts now</b><p id="momentumText">Protect your net target to start stacking wins.</p></div></div>
-  <div class="section-head"><h2>Recent activity</h2><button class="mini-action" data-go="calendar">All days ↗</button></div>
-  <div class="card" id="recent"></div>
-</section>
-<section class="page" id="calendar">
-  <div class="page-top"><div class="kicker">YOUR JOURNEY</div><h1 class="title">The daily ledger.</h1><p class="sub">Tap any date to view or update that day.</p></div>
-  <div class="period-switch"><h2 id="calMonth">November 2026</h2><div class="arrows"><button class="arrow" data-month="-1" aria-label="Previous month">‹</button><button class="arrow" data-month="1" aria-label="Next month">›</button></div></div>
-  <div class="summary3"><div><small>Gross</small><b id="calGross">£0</b></div><div><small>Expenses</small><b id="calSpent">£0</b></div><div><small>Net</small><b id="calNet">£0</b></div></div>
-  <div class="calendar"><div class="calendar-grid" id="calGrid"></div><div class="cal-summary" id="calMessage" role="status"></div><div class="legend" aria-label="Calendar performance legend">
-  <span><i style="background:linear-gradient(145deg,#fff0bf,#d4a85c 70%,#b98b46)"></i><b>Gold:</b> net target + costs covered</span>
-  <span><i style="background:linear-gradient(145deg,#def6e5,#75bf92)"></i><b>Green:</b> gross goal hit, costs remaining</span>
-  <span><i style="background:linear-gradient(145deg,#fffaf0,#e2c99e)"></i><b>Champagne:</b> 80–99% of gross goal</span>
-  <span><i style="background:linear-gradient(145deg,#f6e3c6,#c18e5f)"></i><b>Bronze:</b> 70–79% of gross goal</span>
-  <span><i style="background:linear-gradient(145deg,#ffe7e5,#df9b9d)"></i><b>Red:</b> below 70%</span>
-  <span><i style="background:linear-gradient(145deg,#e8eff4,#b2c5d5)"></i><b>Blue-grey:</b> expense only</span>
-  <span><i style="background:linear-gradient(145deg,#fff,#e8eee7)"></i><b>Grey:</b> no entry / rest day</span>
- </div></div><div id="calPerformance" class="cal-performance" aria-label="Monthly performance colour totals"></div>
-  <div class="section-head"><h2>Monthly checkpoint</h2></div><div class="card" id="calBreakdown"></div><div class="section-head"><h2>⚡ EV charging this month</h2></div><div class="charge-card" id="calendarEv"></div>
-</section>
-<section class="page" id="stats">
-  <div class="page-top"><div class="kicker">THE BIG PICTURE</div><h1 class="title">Numbers that move you.</h1><p class="sub">Your performance, without the spreadsheet.</p></div>
-  <div class="period-switch"><h2 id="statsMonth"></h2><div class="arrows"><button class="arrow" data-month="-1" aria-label="Previous month">‹</button><button class="arrow" data-month="1" aria-label="Next month">›</button></div></div>
-  <div class="metric-grid">
-    <div class="metric dark"><div class="sym">↗</div><small>Gross earnings</small><b id="statsGross">£0</b></div>
-    <div class="metric"><div class="sym">💎</div><small>Net take-home</small><b id="statsNet">£0</b></div>
-    <div class="metric"><div class="sym">🎯</div><small>Goal hit days</small><b id="statsHits">0</b></div>
-    <div class="metric"><div class="sym">⚡</div><small>Total expenses</small><b id="statsSpent">£0</b></div>
-  </div>
-  <div class="section-head"><h2 id="chartTitle">Daily earnings</h2></div>
-  <div class="bar-card"><div class="bars" id="bars"></div><div class="bar-labels" id="barLabels"></div><p class="bar-caption" id="chartCaption"></p></div>
-  <div class="section-head"><h2>Cost recovery report</h2></div><div class="card" id="monthlyRecovery"></div><div class="section-head"><h2>⚡ Charging log</h2></div><div class="charge-card" id="statsEv"></div>
-  <div class="section-head"><h2>Money intelligence</h2></div><div class="card" id="insights"></div>
-</section>
-<section class="page" id="wins">
-  <div class="page-top"><div class="kicker">PROGRESS IS A GAME</div><h1 class="title">Earn your crown.</h1><p class="sub">Real achievements. No fake points. Just consistency.</p></div>
-  <div class="level-card"><div class="level-label">YOUR DRIVER LEVEL</div><div class="level-num" id="levelNumber">01</div><div class="level-name" id="levelName">Rising Star</div><div class="track"><span id="levelProgress"></span></div><div class="level-foot"><span id="levelXp">0 XP earned</span><span id="nextXp">500 XP to next level</span></div></div>
-  <div class="summary3" style="margin-top:13px"><div><small>Current streak</small><b id="winStreak">0 🔥</b></div><div><small>Best streak</small><b id="winBest">0 days</b></div><div><small>Total wins</small><b id="winCount">0</b></div></div>
-  <div class="section-head"><h2>Trophy cabinet</h2></div><div class="badge-grid" id="badges"></div>
-  <p class="privacy">XP is earned by logging your actual results and hitting goals. Your numbers stay on this device.</p>
+  <div class="section-title"><h2>Shift calendar</h2><span class="kicker">TAP A DATE TO EDIT</span></div>
+  <div class="card calendar"><div id="calendar" class="cal-grid"></div><p class="small-note" style="margin:14px 3px 0">Gold = net hit goal · Green = gross hit goal · Rose = below goal.</p></div>
+  <div class="section-title"><h2>Shift breakdown</h2><span class="kicker" id="histCount">0 SHIFTS</span></div>
+  <div class="card row-list" id="historyList"></div>
+  <div class="month-summary" id="histNote"></div>
 </section>
 <section class="page" id="settings">
-  <div class="page-top"><div class="kicker">YOUR RULES</div><h1 class="title">Make it yours.</h1><p class="sub">Set the targets that work for your driving week.</p></div>
-  <div class="settings-card"><h2>Weekly targets</h2><p>These apply to future and unedited days. Individual day overrides stay unchanged.</p><div id="weekdaySettings"></div><button class="action-btn press" id="saveGoals">Save weekly targets</button></div>
-  <div class="settings-card"><h2>Expense guardrail</h2><p>Optional daily expense cap. Leave blank to switch it off.</p><div class="setting-row"><span>Daily cap</span><div class="field-money"><span>£</span><input id="expenseCap" type="number" min="0" max="1000000" step=".01" inputmode="decimal" placeholder="Off"></div></div><button class="secondary-btn" id="saveCap" style="margin-top:14px">Save expense cap</button></div>
-  <div class="settings-card"><h2>Your data, your control</h2><p>Entries are stored only in this browser. Keep regular backups, particularly before changing phones or clearing browser data.</p><div class="button-row"><button class="secondary-btn" id="backup">↓ JSON backup</button><button class="secondary-btn" id="exportCsv">↓ Monthly CSV</button></div><button class="secondary-btn" id="restoreBtn" style="margin-top:10px">↑ Restore from backup</button><input id="restoreFile" type="file" accept=".json,application/json" hidden></div>
-  <div class="settings-card"><h2>Install on your phone</h2><p>In Chrome, open the app link, tap ⋮ and choose <b>Add to Home screen</b> or <b>Install app</b>. It works offline after the first successful visit.</p><button id="installBtn" class="secondary-btn" hidden>Install Finances</button></div>
-  <p class="privacy">FINANCES 2.0 · Private, offline-ready, no accounts, no ads. Designed to make each day's progress worth opening.</p>
+  <div class="kicker">YOUR RULES</div><h1>Set your pace.</h1><p class="subtitle">Your normal target is applied automatically based on the day your shift starts.</p>
+  <div class="form-panel"><div class="between"><h2>Daily targets</h2><span class="step">£ / DAY</span></div><div class="week-targets" id="targets" style="margin-top:15px"></div><button class="primary dark" id="saveTargets" style="margin-top:16px">Save my weekly targets</button></div>
+  <div class="form-panel"><h2>Your records</h2><p class="subtitle">Your data stays on this device. Back it up before changing phones, deleting the app or clearing browser storage.</p>
+    <div class="settings-actions"><button class="secondary" id="backup">↓ JSON backup</button><button class="secondary" id="csv">↓ Month CSV</button><button class="secondary" id="restore">↑ Restore backup</button><button class="secondary" id="classic">Classic app ↗</button></div><input type="file" id="restoreFile" accept=".json,application/json" hidden>
+    <p class="small-note" style="margin-top:15px" id="importState">Existing data is kept on this device.</p>
+  </div>
+  <div class="notice"><strong>About your numbers:</strong> Gross income is what you earned before costs. Take-home is gross income minus charging and other expenses. A gross target win is different from a net target win.</div>
 </section>
-</main>
 </div>
-<nav class="bottom" aria-label="Main navigation">
-<button class="nav active" data-go="home"><svg><use href="#homeicon"></use></svg>Home</button>
-<button class="nav" data-go="calendar"><svg><use href="#calendaricon"></use></svg>Calendar</button>
-<button class="nav" data-go="stats"><svg><use href="#statsicon"></use></svg>Stats</button>
-<button class="nav" data-go="wins"><svg><use href="#trophyicon"></use></svg>Wins</button>
-<button class="nav" data-go="settings"><svg><use href="#settingsicon"></use></svg>Settings</button>
+<nav class="nav" aria-label="Main navigation">
+ <button data-tab="home" class="active"><span class="ico">⌂</span>Home</button>
+ <button data-tab="log"><span class="ico">＋</span>Log shift</button>
+ <button data-tab="history"><span class="ico">▦</span>History</button>
+ <button data-tab="settings"><span class="ico">⚙</span>Settings</button>
 </nav>
-<div class="overlay" id="overlay" role="presentation">
-<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-<div class="handle"></div><div class="sheet-head"><h2 id="sheetTitle">Add income</h2><button class="close" id="closeSheet" aria-label="Close">×</button></div>
-<p class="sheet-sub" id="sheetSub">Every pound brings you closer.</p>
-<div id="sheetBody"></div>
-</div>
-</div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div><div class="confetti" id="confetti" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
 'use strict';
-const STORAGE='finances-local-v1';
-const DEFAULTS=[160,160,200,230,250,250,230];
-const WEEKDAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const CATS=['Charging','Food','Parking','Tolls','Car','Other'];
-const EMOJI={Charging:'⚡',Food:'🥪',Parking:'🅿️',Tolls:'🛣️',Car:'🚗',Other:'🧾'};
-const GBP=new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0});
-const GBP2=new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'});
-const $=id=>document.getElementById(id);
+const STORE='finances-shifts-v3';
+const LEGACY='finances-local-v1';
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const DEFAULT=[160,160,200,230,250,300,250];
+const el=id=>document.getElementById(id);
+const amount=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:2}).format(Number(n)||0);
+const short=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(Number(n)||0);
 const round=n=>Math.round((Number(n)+Number.EPSILON)*100)/100;
-const money=n=>GBP.format(Number(n)||0);
-const money2=n=>GBP2.format(Number(n)||0);
-const safe=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const dateKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-const fromKey=k=>{const p=k.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]);};
-const today=()=>new Date();
-const currentKey=()=>dateKey(today());
-const weekday=d=>(d.getDay()+6)%7;
-const startOfWeek=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-weekday(x));return x;};
-const validMoney=(v,max=10000000)=>v!==''&&v!==null&&v!==undefined&&Number.isFinite(Number(v))&&Number(v)>=0&&Number(v)<=max;
-const newState=()=>({settings:{weekdayTargets:DEFAULTS.slice(),expenseBudget:null},entries:{}});
-function normalize(obj){
- if(!obj||typeof obj!=='object'||!obj.settings||!obj.entries||typeof obj.entries!=='object'||Array.isArray(obj.entries))throw Error('Not a Finances backup');
- const t=obj.settings.weekdayTargets;
- if(!Array.isArray(t)||t.length!==7||!t.every(v=>validMoney(v,1000000)))throw Error('Invalid targets');
- const cap=obj.settings.expenseBudget;
- if(cap!=null&&!validMoney(cap,1000000))throw Error('Invalid expense cap');
- const out={settings:{weekdayTargets:t.map(round),expenseBudget:cap==null?null:round(cap)},entries:{}};
- Object.entries(obj.entries).forEach(pair=>{
-  const k=pair[0],e=pair[1];if(!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(k)||!e||typeof e!=='object')return;
-  const d=fromKey(k);if(isNaN(d.getTime())||dateKey(d)!==k||!validMoney(e.earned))return;
-  const to=e.targetOverride;if(to!=null&&!validMoney(to,1000000))return;
-  const expenses=(Array.isArray(e.expenses)?e.expenses:[]).slice(0,100).filter(x=>x&&CATS.includes(x.category)&&validMoney(x.amount,1000000)).map(x=>({category:x.category,amount:round(x.amount),...(x.category==='Charging'&&validMoney(x.kwh,1000000)&&Number(x.kwh)>0?{kwh:round(x.kwh)}:{}),...(x.category==='Other'&&x.dailySummary===true?{dailySummary:true}:{})}));
-  out.entries[k]={earned:round(e.earned),targetOverride:to==null?null:round(to),expenses:expenses,note:String(e.note||'').slice(0,400)};
-  if(e.coverEarned!==undefined&&validMoney(e.coverEarned,10000000))out.entries[k].coverEarned=Math.min(round(e.earned),round(e.coverEarned));
- });
- return out;
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const key=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const date=k=>{const p=k.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const validKey=k=>/^\d{4}-(0[1-9]|1[0-2])-([012]\d|3[01])$/.test(k)&&key(date(k))===k;
+const weekday=k=>(date(k).getDay()+6)%7;
+const n=v=>round(Number(v)||0);
+function shiftKey(){const d=new Date();if(d.getHours()<11)d.setDate(d.getDate()-1);return key(d);}
+function plusMonth(d,v){return new Date(d.getFullYear(),d.getMonth()+v,1)}
+function moneyField(id){const x=el(id).value.trim();return x===''?0:Number(x)}
+function clock(k,from,to){const start=new Date(k+'T'+from+':00');if(!Number.isFinite(start.getTime()))return null;const end=new Date(k+'T'+to+':00');if(end<=start)end.setDate(end.getDate()+1);return {endKey:key(end),minutes:Math.round((end-start)/60000)}}
+function goal(k,record){return record&&record.override!=null?record.override:state.targets[weekday(k)]}
+function net(record){return round(record.gross-record.charge-record.other)}
+function costs(record){return round(record.charge+record.other)}
+function newState(){return {version:3,targets:DEFAULT.slice(),shifts:{},legacyImported:false}}
+function migrate(){
+ const value=localStorage.getItem(LEGACY);
+ const s=newState();if(!value)return s;
+ try{
+  const old=JSON.parse(value);if(!old||!old.entries||typeof old.entries!=='object')return s;
+  for(const [k,e] of Object.entries(old.entries)){
+   if(!validKey(k)||!e||typeof e!=='object')continue;
+   const ex=Array.isArray(e.expenses)?e.expenses:[];
+   const charging=round(ex.filter(x=>x.category==='Charging').reduce((a,x)=>a+(Number(x.amount)||0),0));
+   const spending=round(ex.reduce((a,x)=>a+(Number(x.amount)||0),0));
+   const gross=Number(e.earned);
+   if(!Number.isFinite(gross)||gross<0||gross>1000000)continue;
+   s.shifts[k]={gross:round(gross),charge:Math.max(0,charging),other:Math.max(0,round(spending-charging)),start:'13:00',finish:'06:00',notes:String(e.note||'').slice(0,500),override:e.targetOverride!=null&&Number.isFinite(Number(e.targetOverride))?Math.max(0,Number(e.targetOverride)):null,imported:true};
+  }
+  s.legacyImported=Object.keys(s.shifts).length>0;return s;
+ }catch(err){console.warn('Legacy migration skipped',err);return s}
 }
-function load(){try{const s=localStorage.getItem(STORAGE);if(s)return normalize(JSON.parse(s));}catch(e){console.warn('Could not read saved data',e);}return newState();}
-let state=load(),page='home',viewDate=today(),sheetType='',sheetDay=currentKey(),incomeMode='add',selectedCat='Charging',installPrompt=null,forecastFare=20;
-function persist(){try{localStorage.setItem(STORAGE,JSON.stringify(state));return true;}catch(e){toast('Could not save. Check phone storage and export a backup.');return false;}}
-function entryFor(k){return state.entries[k]||null;}
-function targetFor(k){const e=entryFor(k);return e&&e.targetOverride!=null?e.targetOverride:state.settings.weekdayTargets[weekday(fromKey(k))];}
-function dataFor(k){
- const e=entryFor(k),goal=targetFor(k),earned=e?e.earned:0,spent=e?round(e.expenses.reduce((n,x)=>n+x.amount,0)):0,net=round(earned-spent);
- const charge=e?round(e.expenses.filter(x=>x.category==='Charging').reduce((n,x)=>n+x.amount,0)):0;
- const kwh=e?round(e.expenses.filter(x=>x.category==='Charging').reduce((n,x)=>n+(x.kwh||0),0)):0;
- const manual=!!e&&e.coverEarned!==undefined;
- // Newly tracked days use designated extra earnings; older days retain automatic surplus recovery.
- const extra=manual?e.coverEarned:Math.max(0,round(earned-goal));
- const baseIncome=round(earned-extra),covered=Math.min(extra,spent),due=round(spent-covered);
- const chargeCovered=Math.min(charge,covered),chargeDue=round(charge-chargeCovered),gap=Math.max(0,round(goal-net));
- const secured=!!e&&goal>0&&net>=goal;
- const ratio=goal>0?earned/goal:1;let status='blank';
- if(e){if(goal===0)status='rest';else if(secured&&(state.settings.expenseBudget==null||spent<=state.settings.expenseBudget))status='hit';else if(earned>=goal||ratio>=.8)status='close';else status='miss';}
- return {key:k,date:fromKey(k),entry:e,goal,earned,spent,net,charge,kwh,baseIncome,manual,extra,covered,due,chargeCovered,chargeDue,gap,secured,ratio,status,delta:round(earned-goal)};
+function validSaved(s){return s&&s.version===3&&Array.isArray(s.targets)&&s.targets.length===7&&s.targets.every(x=>Number.isFinite(x)&&x>=0&&x<=1000000)&&s.shifts&&typeof s.shifts==='object'&&!Array.isArray(s.shifts);}
+function load(){
+ try{const saved=localStorage.getItem(STORE);if(saved){const parsed=JSON.parse(saved);if(validSaved(parsed))return parsed;}}
+ catch(err){console.warn('Cannot read saved shifts',err)}
+ return migrate();
 }
-function monthDays(y,m){const count=new Date(y,m+1,0).getDate(),a=[];for(let d=1;d<=count;d++)a.push(dataFor(dateKey(new Date(y,m,d))));return a;}
-function monthInfo(y,m){
- const days=monthDays(y,m),sum=k=>round(days.reduce((n,d)=>n+d[k],0));
- const charges=days.flatMap(d=>(d.entry?.expenses||[]).filter(x=>x.category==='Charging').map(x=>({key:d.key,date:d.date,amount:x.amount,kwh:x.kwh||0})));
- return {days,gross:sum('earned'),spent:sum('spent'),net:sum('net'),goal:sum('goal'),hits:days.filter(x=>x.status==='hit').length,logged:days.filter(x=>x.entry).length,charge:sum('charge'),kwh:sum('kwh'),covered:sum('covered'),due:sum('due'),chargeCovered:sum('chargeCovered'),chargeDue:sum('chargeDue'),secured:days.filter(d=>d.secured).length,charges};
-}
-function monthTitle(){return viewDate.toLocaleDateString('en-GB',{month:'long',year:'numeric'});}
-function shortDate(d){return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}
-function ensureEntry(k){if(!state.entries[k])state.entries[k]={earned:0,targetOverride:null,expenses:[],note:''};return state.entries[k];}
-function allData(){return Object.keys(state.entries).sort().map(dataFor);}
-function isHit(d){return d.status==='hit';}
-function scores(){const a=allData(),hits=a.filter(isHit).length,logged=a.length,xp=logged*20+hits*60;let best=0,run=0,last=null;
- a.filter(d=>d.date<=today()).forEach(d=>{if(isHit(d)&&(!last||Math.round((d.date-last)/86400000)===1)){run++;}else{run=isHit(d)?1:0;}if(run>best)best=run;last=d.date;});
- let streak=0;const begin=new Date(today().getFullYear(),today().getMonth(),today().getDate());const todayD=dataFor(currentKey());if(!isHit(todayD))begin.setDate(begin.getDate()-1);
- while(isHit(dataFor(dateKey(begin)))){streak++;begin.setDate(begin.getDate()-1);if(streak>10000)break;}
- return {xp:xp,level:Math.floor(xp/500)+1,logged:logged,hits:hits,streak:streak,best:best};
-}
-function toast(s){const n=$('toast');n.textContent=s;n.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>n.classList.remove('show'),3000);}
-function celebrate(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const n=$('confetti');n.innerHTML='';for(let i=0;i<28;i++){const el=document.createElement('i');el.style.setProperty('--x',((Math.random()-.5)*560)+'px');el.style.setProperty('--y',((Math.random()-.65)*650)+'px');el.style.setProperty('--r',(Math.random()*1000)+'deg');el.style.background=['#f3b26d','#fff','#5ab27a','#d9a550'][i%4];el.style.animationDelay=(Math.random()*.14)+'s';n.appendChild(el);}setTimeout(()=>n.innerHTML='',1300);}
-function render(){
- const now=today();$('dateDay').textContent=now.getDate();$('dateMonth').textContent=now.toLocaleDateString('en-GB',{month:'short'}).toUpperCase();
- document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));
- document.querySelectorAll('.nav').forEach(el=>el.classList.toggle('active',el.dataset.go===page));
- if(page==='home')renderHome();if(page==='calendar')renderCalendar();if(page==='stats')renderStats();if(page==='wins')renderWins();if(page==='settings')renderSettings();
-}
-function evReport(m,withHistory){
- const avg=m.charges.length?m.charge/m.charges.length:0,matchedCost=m.charges.filter(x=>x.kwh>0).reduce((n,x)=>n+x.amount,0),price=m.kwh>0?Math.round(matchedCost/m.kwh*100):0;
- return '<div class="charge-head"><div><small>YOUR EV ENERGY</small><h3>'+ (withHistory?'Electricity ledger':'Monthly charging')+'</h3></div><button data-open="expense" data-charge="true">+ Log charge</button></div>'+
- '<div class="charge-amount">'+money2(m.charge)+'</div><div class="charge-details"><span>'+m.charges.length+' charge'+(m.charges.length===1?'':'s')+'</span><span>Average '+money2(avg)+'</span>'+(m.kwh>0?'<span>'+m.kwh.toFixed(1)+' kWh · '+price+'p/kWh (measured charges)</span>':'')+'</div>'+
- '<div class="charge-rule"></div><div class="charge-status"><span>Charging allocated to extra earnings</span><b>'+money2(m.chargeCovered)+' / '+money2(m.charge)+'</b></div>'+
- '<p class="charge-hint">For motivation, extra earnings recover charging first and then other costs. Your actual paid expenses remain unchanged. Recovery is measured per day.</p>'+
- (withHistory?'<div class="charge-rule"></div>'+(m.charges.length?m.charges.slice().reverse().map(x=>'<div class="charge-row"><span>⚡ '+safe(shortDate(x.date))+(x.kwh?' · '+x.kwh+' kWh':'')+'</span><b>'+money2(x.amount)+'</b></div>').join(''):'<div class="charge-row"><span>No charges logged this month.</span></div>'):'');
-}
-function showRecovery(d){
- const p=d.spent?Math.round(Math.min(100,100*d.covered/d.spent)):0;
- $('recoverPct').textContent=d.spent?p+'%':'—';$('recoverFill').style.width=p+'%';
- $('recoverCosts').textContent=money2(d.spent);$('recoverCovered').textContent=money2(d.covered);$('recoverDue').textContent=money2(d.due);
- $('recover').classList.toggle('complete',d.spent>0&&d.due===0&&d.earned>=d.goal);
- $('recoverTitle').textContent=d.spent===0?'Keep your earnings.':d.due===0?'Costs recovered!':'Earn back your costs.';
- $('recoverSubtitle').textContent=d.manual?'Your extra income assigned to expenses is tracked separately.':'Surplus beyond '+money(d.goal)+' gross target is applied to expenses.';
- let message;
- if(!d.entry)message='Log earnings and expenses to start the recovery game.';
- else if(d.spent===0)message=d.secured?'Net target protected. No expenses to recover.':'No expenses recorded yet. Keep growing your earnings.';
- else if(d.due===0&&d.earned>=d.goal)message='🏆 You recovered all '+money2(d.spent)+' of today’s costs!'+(d.net>d.goal?' Bonus take-home above goal: '+money2(d.net-d.goal)+'.':' Net goal protected!');
- else if(d.extra===0)message=d.manual?'No extra income assigned to expenses yet. Record it in your daily check-in.':d.earned>=d.goal?'Gross goal reached. Earn '+money2(d.due)+' extra to recover the expenses.':'Earn '+money2(d.goal-d.earned)+' to reach gross target, then '+money2(d.spent)+' extra to cover costs.';
- else message='You have recovered '+money2(d.covered)+' with extra earnings. Just '+money2(d.gap)+' more protects your net target.';
- $('recoverText').textContent=message;$('recoverEmoji').textContent=d.due===0&&d.spent>0?'🏆':'🛡️';$('recoveryMission').textContent=d.secured?'＋ Bank another fare':d.gap>0?'＋ Next mission: earn '+money2(d.gap):'＋ Log more earnings';
-}
-function showEv(d){
- const m=monthInfo(today().getFullYear(),today().getMonth());
- $('evMonthAmount').textContent=money2(m.charge);$('evMonthName').textContent=today().toLocaleDateString('en-GB',{month:'long'})+' spend';
- $('evSessions').textContent=m.charges.length+' session'+(m.charges.length===1?'':'s');
- $('evKwh').textContent=m.kwh?m.kwh+' kWh':'';
- $('evRecovered').textContent=money2(d.chargeCovered)+' / '+money2(d.charge);
- $('evHint').textContent=d.charge===0?'Log a charge to track its cost and recovery.':d.chargeDue===0?'⚡ Today’s charging has been covered by extra earnings.':money2(d.chargeDue)+' more extra earnings covers all of today’s charging.';
-}
-function sheetRecovery(d){
- return '<div class="editor-recovery">🛡️ <strong>'+ (d.secured?'Net target protected!':d.earned>=d.goal?'Gross target hit; costs not fully recovered.':'Goal in progress.')+'</strong> Extra '+money2(d.extra)+' · recovered '+money2(d.covered)+' · still to recover '+money2(d.due)+' · net '+money2(d.net)+'.</div>';
-}
-function saveFeedback(before,after,type){
- if(!before.secured&&after.secured){celebrate();toast('🏆 NET target protected — all costs covered!');return;}
- if(before.chargeDue>0&&after.charge>0&&after.chargeDue===0){celebrate();toast('⚡ EV charge covered by extra earnings!');return;}
- if(after.spent>0&&after.earned>=after.goal&&after.due>0){toast(money2(after.due)+' more to recover today’s expenses.');return;}
- toast(type==='expense'?'Expense logged. Recovery updated.':'Income saved. Your progress is updated.');
-}
-
-function showMiniLevel(score){
- const names=['Rising Star','Consistent Driver','Road Performer','Elite Driver','Money Machine','Legend'];
- $('miniLevel').textContent='LVL '+String(score.level).padStart(2,'0')+' · '+names[Math.min(score.level-1,names.length-1)];
- $('miniXP').textContent=score.xp%500+' / 500 XP';
- $('miniXpFill').style.width=(score.xp%500/500*100)+'%';
-}
-function renderMissions(d){
- const logged=!!d.entry,gross=logged&&d.goal>0&&d.earned>=d.goal,net=logged&&d.secured,hasCharge=d.charge>0;
- const all=[
- {done:logged,icon:'✍️',title:logged?'Day recorded':'Start the day',
-  desc:logged?'Your first entry is in the books.':'Log one real income entry to start earning progress.',action:'income'},
- {done:gross,icon:'🎯',title:gross?'Gross target reached':'Reach your gross goal',
-  desc:gross?'You have hit '+money2(d.goal)+' in gross earnings.':money2(Math.max(0,d.goal-d.earned))+' until your '+money2(d.goal)+' gross goal.',action:'income'},
- ...(hasCharge?[{done:logged&&d.chargeDue===0&&d.earned>=d.goal,icon:'⚡',title:d.chargeDue===0&&d.earned>=d.goal?'EV charging recovered':'Recover EV charging',
-  desc:d.chargeDue===0&&d.earned>=d.goal?'Extra earnings covered '+money2(d.charge)+' in charging.':'Another '+money2(d.chargeDue)+' in earnings above the gross target covers charging.',action:'income'}]:[]),
- {done:net,icon:'🛡️',title:net?'Net goal protected':'Protect your take-home goal',
-  desc:net?'Take-home is at least '+money2(d.goal)+' — goal protected.':money2(d.gap)+' more earnings to protect your net target.',action:'income'}
- ];
- $('missionCount').textContent=all.filter(x=>x.done).length+' / '+all.length+' done';
- $('missionList').innerHTML=all.map(x=>'<button class="mission-item '+(x.done?'done':'current')+'" '+(x.done?'data-go="wins"':'data-open="'+x.action+'"')+'><span class="mission-symbol">'+x.icon+'</span><span class="mission-copy"><b>'+safe(x.title)+'</b><small>'+safe(x.desc)+'</small></span><span class="mission-arrow">'+(x.done?'✓':'›')+'</span></button>').join('');
-}
-function renderFarePreview(){
- const d=dataFor(currentKey()),fare=forecastFare,possibleNet=round(d.net+fare),remaining=Math.max(0,round(d.goal-possibleNet));
- const surplus=Math.max(0,round(d.earned+fare-d.goal)),recover=Math.min(d.spent,surplus);
- $('fareNet').textContent=money2(possibleNet);$('fareGap').textContent=money2(remaining);
- $('fareGap').classList.toggle('due',remaining>0);
- $('fareStory').textContent=d.spent>0?
-  (remaining===0?'✨ This ride could protect your net target and recover '+money2(recover)+' of today’s costs.':
-   'This fare would recover '+money2(recover)+' of '+money2(d.spent)+' in expenses. '+money2(remaining)+' would remain for your net goal.'):
-  (remaining===0?'✨ This ride would take you past your net target.':'This fare would bring your net to '+money2(possibleNet)+'.');
- $('fareLog').textContent='Log '+money2(fare)+' after earning it ↗';
- document.querySelectorAll('[data-forecast]').forEach(btn=>btn.classList.toggle('selected',Number(btn.dataset.forecast)===fare));
-}
-function showEarnedFlash(amount){
- if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- const el=document.createElement('div');el.className='fx-burst';el.textContent='+'+money2(amount)+' ↗';document.body.appendChild(el);setTimeout(()=>el.remove(),1050);
-}
-
-function renderCheckin(d){
- $('ciTarget').value=d.goal;
- $('ciIncome').value=d.entry?String(d.baseIncome):'';
- $('ciExpense').value=d.entry?String(d.spent):'0';
- $('ciCover').value=d.entry?String(d.extra):'0';
- renderCheckinPreview();
-}
-function checkinValues(){
- const goal=Number($('ciTarget').value)||0,base=Number($('ciIncome').value)||0;
- const expenses=Number($('ciExpense').value)||0,cover=Number($('ciCover').value)||0;
- const gross=round(base+cover),net=round(gross-expenses),recovered=round(Math.min(expenses,cover));
- return {goal,base,expenses,cover,gross,net,recovered,due:round(expenses-recovered),gap:Math.max(0,round(goal-net))};
-}
-function renderCheckinPreview(){
- const x=checkinValues(),old=dataFor(currentKey());
- $('ciGross').textContent=money2(x.gross);$('ciPaid').textContent=money2(x.recovered);$('ciDue').textContent=money2(x.due);
- $('ciDue').classList.toggle('owing',x.due>0);
- $('ciNote').textContent=x.expenses===0?'No costs today. Projected take-home: '+money2(x.net)+'.':
- x.due===0?'✨ All expenses covered by extra earnings! Take-home: '+money2(x.net)+'.':
- money2(x.cover)+' extra earned covers '+money2(x.recovered)+' of '+money2(x.expenses)+' costs. '+money2(x.due)+' left. Take-home: '+money2(x.net)+'.';
- const fixed=round((old.entry?.expenses||[]).filter(e=>!e.dailySummary).reduce((n,e)=>n+e.amount,0));
- $('ciFoot').textContent=fixed>0?'Already itemised today: '+money2(fixed)+' (including EV charges). Total expenses cannot be lower without editing those items.':
- 'Gross = daily income + extra earnings (only once). Net = gross − expenses. Recovered costs remain recorded as real expenses.';
-}
-function saveCheckin(ev){
- ev.preventDefault();
- const inputs=['ciTarget','ciIncome','ciExpense','ciCover'].map(id=>$(id));
- if(inputs.some((field,i)=>!field||!validMoney(field.value,i===0||i===2?1000000:10000000))){toast('Enter valid non-negative amounts in all four fields.');return;}
- const x=checkinValues();
- if(!validMoney(x.gross,10000000)){toast('Combined income exceeds the maximum.');return;}
- const key=currentKey(),before=dataFor(key),old=entryFor(key);
- const fixed=old?old.expenses.filter(e=>!e.dailySummary).map(e=>({...e})):[];
- const fixedCost=round(fixed.reduce((n,e)=>n+e.amount,0));
- if(x.expenses<fixedCost){toast('Already itemised: '+money2(fixedCost)+'. Remove costs in Calendar → Edit before entering a lower total.');return;}
- const remainder=round(x.expenses-fixedCost);
- if(remainder>0&&fixed.length>=100){toast('Expense limit reached. Edit the day first.');return;}
- const newEntry={earned:x.gross,coverEarned:x.cover,targetOverride:x.goal===state.settings.weekdayTargets[weekday(fromKey(key))]?null:x.goal,expenses:fixed,note:old?.note||''};
- if(remainder>0)newEntry.expenses.push({category:'Other',amount:remainder,dailySummary:true});
- state.entries[key]=newEntry;
- if(!persist()){if(old)state.entries[key]=old;else delete state.entries[key];return;}
- const after=dataFor(key);
- render();
- if(x.gross>before.earned)showEarnedFlash(round(x.gross-before.earned));
- saveFeedback(before,after,'checkin');
- if(navigator.vibrate)navigator.vibrate(15);
-}
-
+let state=load(),tab='home',focus=shiftKey(),historyMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1),toastTimer=0;
+function save(){try{localStorage.setItem(STORE,JSON.stringify(state));return true}catch(err){notify('Could not save. Check your phone storage.');return false}}
+function notify(message){const t=el('toast');t.textContent=message;t.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',3500)}
+function switchTo(next){tab=next;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===tab));document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));render();window.scrollTo({top:0,behavior:'instant'})}
+function entry(k){return state.shifts[k]||null}
+function stats(k){const r=entry(k),target=goal(k,r);return {r,target,gross:r?r.gross:0,charge:r?r.charge:0,other:r?r.other:0,net:r?net(r):0}}
+function monthRows(m){const prefix=m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-';return Object.keys(state.shifts).filter(k=>k.startsWith(prefix)&&validKey(k)).sort((a,b)=>b.localeCompare(a))}
+function monthNumbers(m){const rows=monthRows(m);return rows.reduce((a,k)=>{const v=stats(k);a.gross+=v.gross;a.charge+=v.charge;a.other+=v.other;a.net+=v.net;a.hits+=v.gross>=v.target?1:0;return a},{gross:0,charge:0,other:0,net:0,hits:0,count:rows.length})}
+function formatDay(k){return date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
+function rowMarkup(k){const a=stats(k),status=a.net>=a.target?'Net goal hit':a.gross>=a.target?'Gross goal hit':'Below target',cl=a.net>=a.target?'positive':a.gross>=a.target?'amber':'negative';return '<button class="shift-row" data-edit="'+k+'"><span><b>'+safe(formatDay(k))+'</b><small>'+short(a.gross)+' earned · '+short(a.charge+a.other)+' costs'+(a.r.imported?' · imported':'')+'</small></span><span class="amount"><strong>'+short(a.net)+'</strong><span class="'+cl+'">'+status+'</span></span></button>'}
 function renderHome(){
- const now=today(),d=dataFor(currentKey()),s=scores();showMiniLevel(s);renderMissions(d);renderFarePreview();renderCheckin(d);
- $('homeDate').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
- const hour=now.getHours(),greeting=hour<12?'Good morning.':hour<17?'Good afternoon.':'Good evening.';
- $('greeting').textContent=d.secured?'You owned today.':d.entry&&d.earned>=d.goal?'One more fare. One more win.':d.entry?'Build your momentum.':greeting;
- $('heroEarned').textContent=money(d.earned);$('heroTarget').textContent=money(d.goal);$('heroLeft').textContent=money2(d.gap);
- $('heroNet').textContent=money(d.net);
- const pct=d.goal?Math.round(d.earned/d.goal*100):100;
- $('ringPercent').textContent=pct+'%';$('ring').style.strokeDashoffset=String(2*Math.PI*52*(1-Math.min(1,pct/100)));
- $('ring').style.strokeDasharray=String(2*Math.PI*52);
- const netPct=d.goal>0?Math.max(0,Math.round(d.net/d.goal*100)):100;
- $('netRing').style.strokeDasharray=String(2*Math.PI*39);
- $('netRing').style.strokeDashoffset=String(2*Math.PI*39*(1-Math.min(1,netPct/100)));
- $('netRingLabel').textContent=netPct+'% NET';
- $('heroSub').textContent=d.entry?'Expenses '+money2(d.spent)+' · Net '+money2(d.net):'Fresh day, fresh target.';
- $('heroMessage').textContent=d.secured?'🛡️ Net target protected — you earned back your costs!':d.earned>=d.goal&&d.due>0?'Gross target reached. '+money2(d.gap)+' more to protect your NET goal.':d.spent>0?'Your extra earnings can cover '+money2(d.spent)+' of costs.':'Every fare brings you closer.';
- showRecovery(d);showEv(d);
- const start=startOfWeek(now),week=[];
- for(let i=0;i<7;i++){const dt=new Date(start);dt.setDate(start.getDate()+i);const x=dataFor(dateKey(dt));
- const cls=x.status==='hit'?'hit':x.status==='close'?'close':x.status==='miss'?'miss':'';
- week.push('<div class="day-chip '+cls+(x.key===currentKey()?' today':'')+'" aria-label="'+safe(shortDate(dt))+': '+safe(x.status)+'"><span>'+['M','T','W','T','F','S','S'][i]+'</span><b>'+(x.status==='hit'?'✓':dt.getDate())+'</b></div>');
- }
- $('weekStrip').innerHTML=week.join('');
- $('momentumIcon').textContent=s.streak>=3?'🔥':s.streak?'⚡':'✦';
- $('momentumTitle').textContent=s.streak?s.streak+'-day target streak':'Your winning streak starts now';
- $('momentumText').textContent=s.streak?'Consistency pays. Keep your streak alive.':'Hit a daily goal to start building a streak.';
- const recent=allData().slice().reverse().slice(0,4);
- $('recent').innerHTML=recent.length?recent.map(x=>'<button class="recent-item" data-edit="'+x.key+'"><span><strong>'+safe(shortDate(x.date))+'</strong><small>Gross '+money(x.earned)+' · Costs '+money(x.spent)+'</small></span><span><b>'+money(x.net)+'</b><em class="'+(x.delta>=0?'pos':'neg')+'">'+(x.delta>=0?'+':'−')+money(Math.abs(x.delta))+' vs target</em></span></button>').join(''):'<div class="empty"><span>🌱</span>No entries yet. Tap Add income and start your first day.</div>';
+ const k=shiftKey(),a=stats(k),m=new Date();const totals=monthNumbers(m);
+ el('heroDate').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+ el('heroBadge').textContent=a.r?(a.net>=a.target?'✦ GOAL REACHED':a.gross>=a.target?'GROSS TARGET HIT':'SHIFT RECORDED'):'READY TO LOG';
+ el('heroIncome').innerHTML=short(a.gross)+'<small>Gross earnings</small>';el('heroTarget').textContent=short(a.target);el('heroCosts').textContent=short(a.charge+a.other);el('heroNet').textContent=short(a.net);
+ el('heroProgress').style.width=Math.min(100,a.target>0?a.gross/a.target*100:100)+'%';
+ el('heroMessage').textContent=!a.r?'Finish your shift, then enter three amounts.':a.net>=a.target?'Excellent. You protected your net target.':a.gross>=a.target?'Gross target hit. '+short(Math.max(0,a.target-a.net))+' more would protect your net goal.':short(Math.max(0,a.target-a.gross))+' more to reach your gross target.';
+ el('monthGross').textContent=short(totals.gross);el('monthCharge').textContent=short(totals.charge);el('monthOther').textContent=short(totals.other);el('monthNet').textContent=short(totals.net);
+ el('homeMonth').textContent=m.toLocaleDateString('en-GB',{month:'long'}).toUpperCase();
+ const now=date(k),dates=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dates.push(key(d))}
+ const max=Math.max(1,...dates.map(k=>Math.max(stats(k).gross,stats(k).target)));
+ el('weekBars').innerHTML=dates.map(d=>{const a=stats(d);return '<div class="bar-col'+(d===k?' today':'')+'"><div class="bar-wrap"><i class="bar target" style="height:'+Math.max(2,a.target/max*100)+'%"></i><i class="bar earned" style="height:'+Math.max(2,a.gross/max*100)+'%"></i></div><small>'+date(d).toLocaleDateString('en-GB',{weekday:'short'}).slice(0,2)+'</small></div>'}).join('');
+ const recent=Object.keys(state.shifts).filter(validKey).sort((a,b)=>b.localeCompare(a)).slice(0,5);
+ el('recentList').innerHTML=recent.length?recent.map(rowMarkup).join(''):'<div class="empty">No shifts yet. Your first check-in starts here.</div>';
 }
-
-function calendarTier(d){
- // Colours always reflect the recorded day's real income and costs, never an artificial bonus.
- if(!d.entry)return {id:'unlogged',label:'Not logged',mark:'·',short:'—',progress:0};
- if(d.goal===0)return {id:'rest',label:'Rest',mark:'○',short:'Rest',progress:0};
- if(d.earned<=0&&d.spent>0)return {id:'steel',label:'Expense only',mark:'−',short:'Costs',progress:0};
- const pct=d.goal>0?Math.max(0,100*d.earned/d.goal):0;
- const capOK=state.settings.expenseBudget==null||d.spent<=state.settings.expenseBudget;
- if(d.secured&&d.due===0&&capOK)return {id:'gold',label:'Net protected and costs covered',mark:'✦',short:'GOLD',progress:100};
- if(d.earned>=d.goal)return {id:'green',label:d.secured?'Gross achieved; some costs not allocated':'Gross achieved; net still below target',mark:'✓',short:'Hit gross',progress:100};
- if(pct>=80)return {id:'champagne',label:'80–99% of gross goal',mark:'↗',short:Math.floor(pct)+'%',progress:Math.min(100,pct)};
- if(pct>=70)return {id:'bronze',label:'70–79% of gross goal',mark:'↗',short:Math.floor(pct)+'%',progress:pct};
- return {id:'red',label:'Below 70% of gross goal',mark:'!',short:Math.floor(pct)+'%',progress:pct};
+function prepare(k,reset){
+ if(!validKey(k))k=shiftKey();focus=k;el('shiftDate').value=k;
+ const r=!reset?entry(k):null;
+ el('startTime').value=r?.start||'13:00';el('endTime').value=r?.finish||'06:00';
+ el('gross').value=r?String(r.gross):'';el('charge').value=r?String(r.charge):'';el('other').value=r?String(r.other):'';
+ el('notes').value=r?.notes||'';el('targetOverride').value=r?.override==null?'':r.override;
+ el('logKicker').textContent=r?'EDIT A SAVED SHIFT':'YOUR END-OF-SHIFT CHECK-IN';
+ el('logTitle').textContent=r?'Make a correction.':'One shift. Four numbers.';
+ el('saveShift').textContent=r?'✓ Update this shift':'✓ Save this shift';
+ el('importedWarning').classList.toggle('hidden',!r?.imported);
+ updatePreview();
 }
-function renderCalendar(){
- const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m);
- $('calMonth').textContent=monthTitle();
- $('calGross').textContent=money(s.gross);$('calSpent').textContent=money(s.spent);$('calNet').textContent=money(s.net);
- const heads=['M','T','W','T','F','S','S'].map(x=>'<div class="cal-dow">'+x+'</div>');
- const start=weekday(new Date(y,m,1));
- for(let i=0;i<start;i++)heads.push('<div class="cal-cell blank" aria-hidden="true"></div>');
- const counts={gold:0,green:0,champagne:0,bronze:0,red:0,steel:0,unlogged:0,rest:0};
- s.days.forEach(d=>{
-  const tier=calendarTier(d);counts[tier.id]=(counts[tier.id]||0)+1;
-  const accessible=shortDate(d.date)+': '+tier.label+'. Gross '+money2(d.earned)+', target '+money2(d.goal)+', net '+money2(d.net)+', expenses '+money2(d.spent)+', costs still to recover '+money2(d.due)+'. Tap to edit.';
-  heads.push('<button class="cal-cell '+tier.id+' '+(d.key===currentKey()?'today ':'')+(d.key>currentKey()?'future':'')+'" type="button" data-edit="'+d.key+'" aria-label="'+safe(accessible)+'" title="'+safe(tier.label)+'">'+
-   '<span class="cal-top"><b class="cal-num">'+d.date.getDate()+'</b><span class="cal-mark" aria-hidden="true">'+tier.mark+'</span></span>'+
-   '<span class="cal-money">'+(d.entry?money(d.net):'—')+'</span>'+
-   '<span class="cal-label">'+tier.short+'</span>'+
-   '<span class="cal-progress" aria-hidden="true"><i style="width:'+Math.max(0,Math.min(100,Math.round(tier.progress)))+'%"></i></span></button>');
- });
- $('calGrid').innerHTML=heads.join('');
- const gold=counts.gold,amber=counts.champagne+counts.bronze,risky=counts.red+counts.steel;
- $('calMessage').innerHTML='<div class="cal-summary-main">'+(s.logged===0?'Your calendar is ready. Every saved day gets its own colour.':gold?'✦ <strong>'+gold+' gold day'+(gold===1?'':'s')+'</strong> this month — your take-home goal and expenses were both covered.':'Make your first gold day: protect your net target and cover all expenses.')+'</div><div class="cal-summary-sub">'+s.logged+' logged · '+amber+' building momentum · '+risky+' needing attention. Tap any day to update it.</div>';
- $('calPerformance').innerHTML='<span class="gold-count"><b>✦ '+gold+'</b> Gold</span><span><b>'+counts.green+'</b> Green</span><span><b>'+amber+'</b> 70–99%</span><span><b>'+risky+'</b> Costs / low</span>';
- const remaining=s.days.filter(d=>d.key>=currentKey()).length;
- const needed=remaining?Math.max(0,(s.goal-s.net)/remaining):0;
- $('calBreakdown').innerHTML='<div class="mini-breakdown"><div><span>Gross target baseline</span><b>'+money(s.goal)+'</b></div><div><span>Monthly net vs goal</span><b class="'+(s.net>=s.goal?'pos':'neg')+'">'+money2(s.net-s.goal)+'</b></div><div><span>Expenses recovered via extra earnings</span><b>'+money2(s.covered)+'</b></div><div><span>Gross versus target</span><b class="'+(s.gross>=s.goal?'pos':'warning')+'">'+(s.gross>=s.goal?'+':'−')+money(Math.abs(s.gross-s.goal))+'</b></div><div><span>Days logged</span><b>'+s.logged+' / '+s.days.length+'</b></div><div><span>Net target wins</span><b>'+s.hits+' days</b></div><div><span>Average net needed per remaining day</span><b>'+money(needed)+'</b></div></div>';
- $('calendarEv').innerHTML=evReport(s,false);
+function updatePreview(){
+ const k=el('shiftDate').value,r=entry(k),from=el('startTime').value,to=el('endTime').value,shift=validKey(k)&&from&&to?clock(k,from,to):null;
+ el('shiftClock').textContent=shift?'Ends '+(shift.endKey===k?'the same day':'the next day')+' · '+formatDay(shift.endKey)+' at '+to+' · '+(shift.minutes/60).toFixed(1)+' hours':'Choose valid shift times';
+ const override=el('targetOverride').value.trim();const target=validKey(k)?override!==''&&Number.isFinite(Number(override))?Number(override):goal(k,r):0;
+ const gross=moneyField('gross'),charge=moneyField('charge'),other=moneyField('other'),takehome=round(gross-charge-other);
+ el('previewTarget').textContent=amount(target);el('previewCosts').textContent=amount(charge+other);el('previewNet').textContent=amount(takehome);
+ el('previewStatus').textContent=el('gross').value.trim()===''?'Enter your earnings to see your result.':takehome>=target?'✦ You have protected your net target.':gross>=target?'Gross goal reached; costs bring take-home below target.':amount(Math.max(0,target-gross))+' to reach your gross target.';
 }
-
-function renderStats(){
- const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m);$('statsMonth').textContent=monthTitle();
- $('statsGross').textContent=money(s.gross);$('statsNet').textContent=money(s.net);$('statsHits').textContent=s.hits;$('statsSpent').textContent=money(s.spent);
- const days=s.days.filter(d=>d.entry),last=days.slice(-7),top=Math.max(1,...last.map(d=>d.earned));
- $('chartTitle').textContent='Last 7 logged days';
- const renderBars=last.length?last:[];
- $('bars').innerHTML=renderBars.map(d=>'<div class="bar-col '+(!d.earned?'zero':'')+'"><div class="bar-stand"><div class="bar-fill" style="height:'+Math.max(2,Math.round(d.earned/top*100))+'%" title="'+money(d.earned)+'"></div></div></div>').join('');
- $('barLabels').innerHTML=renderBars.map(d=>'<span>'+d.date.getDate()+'</span>').join('');
- $('chartCaption').textContent=last.length?'Gold bars show gross earnings by logged date ('+monthTitle()+').':'Log a day to start seeing your earnings chart.';
- const avg=days.length?s.gross/days.length:0,expenseRatio=s.gross?Math.round(s.spent/s.gross*100):0;
- const highest=days.slice().sort((a,b)=>b.earned-a.earned)[0];
- const cats={};CATS.forEach(c=>cats[c]=0);days.forEach(d=>d.entry.expenses.forEach(e=>cats[e.category]+=e.amount));
- const biggest=Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
- $('monthlyRecovery').innerHTML='<div class="mini-breakdown"><div><span>Net target protected days</span><b>'+s.secured+'</b></div><div><span>Extra earnings recovered expenses</span><b class="pos">'+money2(s.covered)+'</b></div><div><span>Uncovered same-day expenses</span><b class="neg">'+money2(s.due)+'</b></div><div><span>Gross above monthly goal</span><b>'+money2(s.gross-s.goal)+'</b></div><div><span>Monthly net versus goal</span><b class="'+(s.net>=s.goal?'pos':'neg')+'">'+money2(s.net-s.goal)+'</b></div></div><p class="recover-foot">Recovery is tracked per day; other days’ surplus is reflected in the monthly net result above.</p>';
- $('statsEv').innerHTML=evReport(s,true);
- $('insights').innerHTML='<div class="mini-breakdown"><div><span>Average per logged day</span><b>'+money(avg)+'</b></div><div><span>Best earning day</span><b>'+(highest?money(highest.earned):'—')+'</b></div><div><span>Expenses as % of gross</span><b>'+expenseRatio+'%</b></div><div><span>Largest expense category</span><b>'+(biggest&&biggest[1]>0?biggest[0]+' · '+money(biggest[1]):'—')+'</b></div><div><span>Net after all expenses</span><b>'+money(s.net)+'</b></div></div>';
+function record(event){
+ event.preventDefault();const k=el('shiftDate').value,from=el('startTime').value,to=el('endTime').value,c=validKey(k)&&from&&to?clock(k,from,to):null;
+ if(!c||c.minutes<=0||c.minutes>24*60){notify('Check your shift date and times.');return}
+ if(el('gross').value.trim()===''){notify('Please enter your gross income.');el('gross').focus();return}
+ const ids=['gross','charge','other'];for(const id of ids){const v=el(id).value;if(v.trim()!==''&&(!Number.isFinite(Number(v))||Number(v)<0||Number(v)>1000000)){notify('Enter valid non-negative amounts.');el(id).focus();return}}
+ const rawOverride=el('targetOverride').value.trim();if(rawOverride!==''&&(!Number.isFinite(Number(rawOverride))||Number(rawOverride)<0||Number(rawOverride)>1000000)){notify('Check the custom target.');return}
+ const old=entry(k);state.shifts[k]={gross:n(moneyField('gross')),charge:n(moneyField('charge')),other:n(moneyField('other')),start:from,finish:to,notes:el('notes').value.trim().slice(0,500),override:rawOverride!==''?n(rawOverride):null,imported:false};
+ if(!save()){if(old)state.shifts[k]=old;else delete state.shifts[k];return}
+ historyMonth=new Date(date(k).getFullYear(),date(k).getMonth(),1);
+ notify('✓ Shift saved. All totals updated.');switchTo('home');
 }
-function renderWins(){
- const sc=scores(),lvl=sc.level,names=['Rising Star','Consistent Driver','Road Performer','Elite Driver','Money Machine','Legend'];
- $('levelNumber').textContent=String(lvl).padStart(2,'0');$('levelName').textContent=names[Math.min(names.length-1,lvl-1)];
- $('levelXp').textContent=sc.xp+' XP earned';$('nextXp').textContent=(500-sc.xp%500)+' XP to level '+(lvl+1);
- $('levelProgress').style.width=sc.xp%500/500*100+'%';$('winStreak').textContent=sc.streak+' 🔥';$('winBest').textContent=sc.best+' days';$('winCount').textContent=sc.hits;
- const all=allData(),bigDay=all.some(d=>d.earned>=300),weeklyGross={};all.forEach(d=>{const k=dateKey(startOfWeek(d.date));weeklyGross[k]=(weeklyGross[k]||0)+d.earned;});const powerWeek=Object.values(weeklyGross).some(n=>n>=1500);
- const badges=[
- ['🌱','First Step','Log your first day',sc.logged>=1],
- ['🎯','Target Hunter','Protect your net goal three times',sc.hits>=3],
- ['🔥','On Fire','A 3-day protected-net streak',sc.best>=3],
- ['⚡','Power Driver','Earn £300 in a day',bigDay],
- ['👑','Weekend Warrior','Hit a Fri, Sat or Sun target',all.some(d=>isHit(d)&&weekday(d.date)>=4)],
- ['💸','Money Machine','Earn £1,500 in one week',powerWeek],
- ['💎','Perfect Ten','Protect your net goal on 10 days',sc.hits>=10],
- ['⚡','Charge Conqueror','Earn back the full cost of EV charging',all.some(d=>d.charge>0&&d.chargeDue===0&&d.earned>=d.goal)],
- ['🛡️','Cost Defender','Recover every expense on five days',all.filter(d=>d.spent>0&&d.due===0&&d.earned>=d.goal).length>=5],
- ['🏅','Monthly Champion','Hit 20 goals in one month',(()=>{const m={};all.filter(isHit).forEach(d=>{const k=d.key.slice(0,7);m[k]=(m[k]||0)+1;});return Object.values(m).some(n=>n>=20);})()]
- ];
- $('badges').innerHTML=badges.map(b=>'<div class="achievement '+(b[3]?'':'locked')+'"><div class="emoji">'+b[0]+'</div><b>'+b[1]+'</b><small>'+b[2]+'</small><div class="unlock">'+(b[3]?'✓ UNLOCKED':'🔒 LOCKED')+'</div></div>').join('');
+function renderHistory(){
+ const m=historyMonth,rows=monthRows(m),t=monthNumbers(m);
+ el('historyMonth').textContent=m.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+ el('histGross').textContent=short(t.gross);el('histNet').textContent=short(t.net);el('histCharge').textContent=short(t.charge);el('histHits').textContent=t.hits+' / '+t.count;
+ el('histCount').textContent=t.count+' SHIFT'+(t.count===1?'':'S');
+ const first=(new Date(m.getFullYear(),m.getMonth(),1).getDay()+6)%7,last=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),now=key(new Date());
+ let content=['Mo','Tu','We','Th','Fr','Sa','Su'].map(d=>'<div class="cal-head">'+d+'</div>').join('');
+ for(let i=0;i<first;i++)content+='<div></div>';
+ for(let d=1;d<=last;d++){const k=key(new Date(m.getFullYear(),m.getMonth(),d)),a=stats(k),cls=a.r?(a.net>=a.target?'win':a.gross>=a.target?'has':'low'):'';
+ content+='<button type="button" class="day '+cls+(k===now?' today':'')+'" data-edit="'+k+'" aria-label="'+safe(formatDay(k))+(a.r?', '+amount(a.net)+' net':' not logged')+'"><b>'+d+'</b><small>'+(a.r?short(a.net):'·')+'</small>'+(a.r?'<i class="cal-dot"></i>':'')+'</button>';}
+ el('calendar').innerHTML=content;el('historyList').innerHTML=rows.length?rows.map(rowMarkup).join(''):'<div class="empty">No shifts recorded in this month.</div>';
+ const costsTotal=round(t.charge+t.other);el('histNote').textContent='Recorded '+t.count+' shifts · '+amount(costsTotal)+' total expenses · '+amount(t.net)+' take-home. Monthly totals count each shift on its start date.';
 }
 function renderSettings(){
- $('weekdaySettings').innerHTML=WEEKDAYS.map((n,i)=>'<div class="setting-row"><span>'+n+'</span><div class="field-money"><span>£</span><input id="goal'+i+'" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+state.settings.weekdayTargets[i]+'" aria-label="'+n+' target"></div></div>').join('');
- $('expenseCap').value=state.settings.expenseBudget==null?'':state.settings.expenseBudget;
+ el('targets').innerHTML=DAYS.map((d,i)=>'<div class="target-row"><label for="goal'+i+'">'+d+'</label><div class="target-inner"><b>£</b><input id="goal'+i+'" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+state.targets[i]+'"></div></div>').join('');
+ el('importState').textContent=state.legacyImported?'Your previous Finances records were copied into this version. The original records remain untouched.':'Records are saved only in this browser or installed app. Back up regularly.';
 }
-function navigate(to){if(!['home','calendar','stats','wins','settings'].includes(to))return;page=to;if(to==='calendar'||to==='stats')viewDate=today();render();window.scrollTo({top:0,behavior:'smooth'});}
-function changeMonth(delta){viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+delta,1);render();}
-function closeSheet(){$('overlay').classList.remove('open');document.body.style.overflow='';sheetType='';}
-function showSheet(type,key){
- sheetType=type;sheetDay=key||currentKey();incomeMode='add';selectedCat='Charging';
- $('overlay').classList.add('open');document.body.style.overflow='hidden';fillSheet();setTimeout(()=>{const el=document.querySelector('#sheetBody input[type=number]');if(el)el.focus();},180);
+function render(){const now=new Date();el('headerDay').textContent=now.getDate();el('headerMonth').textContent=now.toLocaleDateString('en-GB',{month:'short'}).toUpperCase();if(tab==='home')renderHome();if(tab==='history')renderHistory();if(tab==='settings')renderSettings();if(tab==='log')updatePreview();}
+function download(filename,body,type){const blob=new Blob([body],{type});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+function csvExport(){
+ const m=historyMonth,rows=monthRows(m).reverse();
+ const grid=[['Shift date','Start','End date','End time','Daily target GBP','Gross income GBP','EV charging GBP','Other expenses GBP','Total costs GBP','Take-home GBP','Gross vs goal GBP','Net vs goal GBP','Notes']];
+ for(const k of rows){const r=entry(k),s=stats(k),c=clock(k,r.start||'13:00',r.finish||'06:00');grid.push([k,r.imported?'unknown':r.start,r.imported?'unknown':c?.endKey,r.imported?'unknown':r.finish,s.target,s.gross,s.charge,s.other,costs(r),s.net,round(s.gross-s.target),round(s.net-s.target),r.notes])}
+ const esc=v=>'"'+String(v??'').replace(/^([=+\-@\t\r])/,"'$1").replace(/"/g,'""')+'"';
+ download('Finances-shifts-'+m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'.csv','\ufeff'+grid.map(r=>r.map(esc).join(',')).join('\r\n'),'text/csv;charset=utf-8');
 }
-function dateInput(){return '<label for="sheetDate">Date</label><input id="sheetDate" class="input-date" type="date" value="'+sheetDay+'" min="2000-01-01" max="2099-12-31">';}
-function fillSheet(){
- const d=dataFor(sheetDay),edit=sheetType==='edit',expense=sheetType==='expense';
- $('sheetTitle').textContent=edit?'Edit your day':expense?'Add expense':'Add income';
- $('sheetSub').textContent=edit?'Everything for '+shortDate(d.date)+'.':expense?'Small costs matter. Keep the net honest.':'Every fare brings your target closer.';
- let s=dateInput();
- if(sheetType==='income'){
-  s+='<div class="segment checkin-income-modes"><button data-mode="add" class="'+(incomeMode==='add'?'selected':'')+'">+ Add a fare</button><button data-mode="cover" class="'+(incomeMode==='cover'?'selected':'')+'">For expenses</button><button data-mode="total" class="'+(incomeMode==='total'?'selected':'')+'">Set total</button></div>';
-  s+='<label for="sheetAmount">'+(incomeMode==='add'?'Fare amount':incomeMode==='cover'?'Extra income for expenses':'Total earned today')+'</label><div class="money-input"><span>£</span><input id="sheetAmount" type="number" min="0" max="10000000" step=".01" placeholder="0.00" inputmode="decimal" value="'+(incomeMode==='total'?d.earned:'')+'"></div>';
-  s+='<div class="amount-chips"><button data-amount="10">£10</button><button data-amount="20">£20</button><button data-amount="30">£30</button><button data-amount="50">£50</button><button data-amount="100">£100</button></div>';
-  s+='<p class="privacy">'+(incomeMode==='add'?'This fare adds to the current gross '+money2(d.earned)+'.':incomeMode==='cover'?'This must be extra income, NOT already entered. It adds to gross exactly once and is allocated to expenses.':'This replaces the entire gross total, including extra income, without duplicating earnings.')+'</p>';
- }else if(expense){
-  s+='<label>What was it for?</label><div class="category-list">'+CATS.map(c=>'<button class="category-chip '+(selectedCat===c?'active':'')+'" data-cat="'+c+'"><span>'+EMOJI[c]+'</span>'+c+'</button>').join('')+'</div>';
-  s+='<div class="charge-kwh" id="chargeKwhBlock"'+(selectedCat==='Charging'?'':' hidden')+'><label for="chargeKwh">Energy added (kWh) · optional</label><div class="money-input"><input id="chargeKwh" type="number" min="0" max="1000000" step=".01" inputmode="decimal" placeholder="e.g. 42.5"></div></div>';
-  s+='<label for="sheetAmount">Amount spent</label><div class="money-input"><span>£</span><input id="sheetAmount" type="number" min="0" max="1000000" step=".01" placeholder="0.00" inputmode="decimal"></div>';
-  s+='<div class="amount-chips"><button data-amount="5">£5</button><button data-amount="10">£10</button><button data-amount="15">£15</button><button data-amount="20">£20</button><button data-amount="30">£30</button></div>';
- }else{
-  s+=sheetRecovery(d);
-  s+='<div class="editor-two"><div><label for="editEarned">Gross earned incl. extra (£)</label><input id="editEarned" type="number" min="0" max="10000000" step=".01" inputmode="decimal" value="'+d.earned+'"></div><div><label for="editTarget">Daily goal (£)</label><input id="editTarget" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+d.goal+'"></div></div>';
-  s+='<label for="editCover">Extra earnings allocated to expenses (£) — already included in the gross figure above</label><input class="input-date" id="editCover" type="number" min="0" max="10000000" step=".01" inputmode="decimal" value="'+d.extra+'">';
-  s+='<label for="editNote">Note (optional)</label><textarea id="editNote" maxlength="400" placeholder="A quick memory of today...">'+safe(d.entry?d.entry.note:'')+'</textarea>';
-  s+='<label>Expenses</label><div id="existingExpenses">'+(d.entry&&d.entry.expenses.length?d.entry.expenses.map((e,i)=>'<div class="expense-line"><span>'+EMOJI[e.category]+' '+e.category+(e.kwh?' · '+e.kwh+' kWh':'')+'</span><b>'+money2(e.amount)+'</b><button class="remove" data-remove="'+i+'" aria-label="Remove expense '+safe(e.category)+'">×</button></div>').join(''):'<p class="sub">No expenses logged.</p>')+'</div>';
-  s+='<button class="secondary-btn" id="addExpenseFromEdit" type="button" style="margin-top:12px">+ Add an expense</button>';
-  if(d.entry)s+='<button class="secondary-btn" id="deleteDay" type="button" style="margin-top:10px;color:#bc5650">Delete day entry</button>';
- }
- s+='<button class="primary-save" id="sheetSave" type="button">'+(edit?'Save day':expense?'Save expense':'Save income')+' →</button>';
- $('sheetBody').innerHTML=s;
+function restoreFile(file){
+ const reader=new FileReader();reader.onerror=()=>notify('Could not read that file.');reader.onload=()=>{
+  try{
+   const data=JSON.parse(String(reader.result));
+   if(!validSaved(data))throw Error('Not a Finances shift backup');
+   for(const [k,r] of Object.entries(data.shifts)){if(!validKey(k)||!r||!['gross','charge','other'].every(x=>Number.isFinite(r[x])&&r[x]>=0&&r[x]<=1000000))throw Error('Invalid shift record')}
+   if(!confirm('Replace the current entries on this device with the backup? Export your current backup first.'))return;
+   const old=state;state=data;if(!save()){state=old;return}notify('Backup restored successfully.');switchTo('home');
+  }catch(err){notify('This is not a valid Finances v3 backup.')}
+ };
+ reader.readAsText(file);
 }
-function updateSheetDate(k){if(!/^\d{4}-\d{2}-\d{2}$/.test(k)||dateKey(fromKey(k))!==k){toast('Choose a valid date.');return;}sheetDay=k;fillSheet();}
-function saveSheet(){
- const saveType=sheetType,k=sheetDay,before=dataFor(k),value=Number(($('sheetAmount')||{}).value);
- if(sheetType==='edit'){
-  const gross=$('editEarned').value,goal=$('editTarget').value,extraCover=$('editCover').value;
-  if(!validMoney(gross)||!validMoney(goal,1000000)||!validMoney(extraCover)||Number(extraCover)>Number(gross)){toast('Enter valid non-negative amounts.');return;}
-  const e=ensureEntry(k);e.earned=round(gross);e.coverEarned=round(extraCover);e.targetOverride=round(goal)===state.settings.weekdayTargets[weekday(fromKey(k))]?null:round(goal);e.note=$('editNote').value.trim().slice(0,400);
- }else{
-  const field=$('sheetAmount');if(!field||!validMoney(field.value,sheetType==='income'?10000000:1000000)){toast('Enter a valid amount.');return;}
-  if(sheetType==='expense'&&value<=0){toast('Enter an expense greater than £0.');return;}
-  const e=ensureEntry(k);
-  if(sheetType==='income'){const next=incomeMode==='total'?round(value):round(e.earned+value);if(!validMoney(next)){toast('Income exceeds the maximum amount.');return;}if(incomeMode==='cover')e.coverEarned=round(Math.min(next,(e.coverEarned===undefined?Math.max(0,e.earned-targetFor(k)):e.coverEarned)+value));else if(e.coverEarned!==undefined&&next<e.coverEarned)e.coverEarned=next;e.earned=next;}
-  else{if(e.expenses.length>=100){toast('Expense limit for this day reached.');return;}const k=$('chargeKwh'),kv=k?k.value.trim():'';if(selectedCat==='Charging'&&kv!==''&&!validMoney(kv,1000000)){toast('Invalid energy value.');return;}e.expenses.push({category:selectedCat,amount:round(value),...(selectedCat==='Charging'&&kv!==''&&Number(kv)>0?{kwh:round(kv)}:{})});}
- }
- if(!persist())return;
- const after=dataFor(k);closeSheet();render();
- if(saveType==='income'&&k===currentKey()&&after.earned>before.earned)showEarnedFlash(round(after.earned-before.earned));
- saveFeedback(before,after,saveType);
- if(navigator.vibrate)navigator.vibrate(15);
-}
-function removeExpense(idx){const e=entryFor(sheetDay);if(!e||!e.expenses[idx])return;e.expenses.splice(idx,1);if(persist()){fillSheet();render();toast('Expense removed.');}}
-function deleteDay(){if(!confirm('Delete the entire entry for '+sheetDay+'?'))return;delete state.entries[sheetDay];if(persist()){closeSheet();render();toast('Day entry deleted.');}}
-function download(name,content,type){const blob=new Blob([content],{type:type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
-function csvEsc(v){const str=String(v==null?'':v);return '"'+( /^[=+@\t\r]/.test(str)?"'"+str:str).replace(/"/g,'""')+'"';}
-function exportCSV(){const y=viewDate.getFullYear(),m=viewDate.getMonth(),s=monthInfo(y,m),rows=[['Date','Day','Target GBP','Base income GBP','Extra earmarked GBP','Gross GBP','Expenses GBP','Costs recovered GBP','Costs outstanding GBP','Net GBP','Vs target GBP','Status','Notes']];
- s.days.forEach(d=>rows.push([d.key,WEEKDAYS[weekday(d.date)],d.goal,d.entry?d.baseIncome:'',d.entry?d.extra:'',d.entry?d.earned:'',d.entry?d.spent:'',d.entry?d.covered:'',d.entry?d.due:'',d.entry?d.net:'',d.entry?d.delta:'',d.status,d.entry?d.entry.note:'']));
- rows.push(['TOTAL','',s.goal,'','',s.gross,s.spent,s.covered,s.due,s.net,'','','']);
- download('Finances-'+y+'-'+String(m+1).padStart(2,'0')+'.csv','\ufeff'+rows.map(r=>r.map(csvEsc).join(',')).join('\r\n'),'text/csv;charset=utf-8');toast('Monthly CSV downloaded.');}
-function backup(){download('Finances-backup-'+currentKey()+'.json',JSON.stringify(state,null,2),'application/json');toast('Backup downloaded. Keep it somewhere safe.');}
-document.addEventListener('click',function(ev){
- const button=ev.target.closest('button');if(!button)return;
- if(button.dataset.go){navigate(button.dataset.go);return;}
- if(button.dataset.forecast){forecastFare=Number(button.dataset.forecast);renderFarePreview();if(navigator.vibrate)navigator.vibrate(8);return;}
- if(button.id==='fareLog'){showSheet('income');const field=$('sheetAmount');if(field)field.value=forecastFare;return;}
- if(button.dataset.month){changeMonth(Number(button.dataset.month));return;}
- if(button.dataset.open){showSheet(button.dataset.open);if(button.dataset.charge==='true'){selectedCat='Charging';fillSheet();}return;}
- if(button.dataset.edit){showSheet('edit',button.dataset.edit);return;}
- if(button.id==='closeSheet'){closeSheet();return;}
- if(button.dataset.mode){incomeMode=button.dataset.mode;fillSheet();return;}
- if(button.dataset.cat){const amount=$('sheetAmount')?.value||'';selectedCat=button.dataset.cat;fillSheet();if($('sheetAmount'))$('sheetAmount').value=amount;return;}
- if(button.dataset.amount){const inp=$('sheetAmount');if(inp){inp.value=button.dataset.amount;inp.focus();}return;}
- if(button.id==='sheetSave'){const type=sheetType;saveSheet();return;}
- if(button.dataset.remove!==undefined){removeExpense(Number(button.dataset.remove));return;}
- if(button.id==='addExpenseFromEdit'){showSheet('expense',sheetDay);return;}
- if(button.id==='deleteDay'){deleteDay();return;}
- if(button.id==='saveGoals'){const vals=WEEKDAYS.map((_,i)=>$('goal'+i).value);if(!vals.every(v=>validMoney(v,1000000))){toast('Enter valid weekly targets.');return;}state.settings.weekdayTargets=vals.map(round);if(persist()){render();toast('Weekly targets updated.');}return;}
- if(button.id==='saveCap'){const v=$('expenseCap').value; if(v!==''&&!validMoney(v,1000000)){toast('Invalid expense cap.');return;}state.settings.expenseBudget=v===''?null:round(v);if(persist()){toast('Expense guardrail saved.');render();}return;}
- if(button.id==='backup'){backup();return;}
- if(button.id==='exportCsv'){exportCSV();return;}
- if(button.id==='restoreBtn'){$('restoreFile').click();return;}
- if(button.id==='installBtn'&&installPrompt){installPrompt.prompt();installPrompt.userChoice.then(()=>{installPrompt=null;button.hidden=true;});return;}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.tab==='log'){prepare(shiftKey());}switchTo(b.dataset.tab)}));
+el('homeLog').addEventListener('click',()=>{prepare(shiftKey());switchTo('log')});
+el('seeHistory').addEventListener('click',()=>switchTo('history'));
+el('newShift').addEventListener('click',()=>prepare(shiftKey(),true));
+el('shiftDate').addEventListener('change',()=>{prepare(el('shiftDate').value);});
+for(const id of ['startTime','endTime','gross','charge','other','targetOverride'])el(id).addEventListener('input',updatePreview);
+el('shiftForm').addEventListener('submit',record);
+el('monthPrev').addEventListener('click',()=>{historyMonth=plusMonth(historyMonth,-1);renderHistory()});
+el('monthNext').addEventListener('click',()=>{historyMonth=plusMonth(historyMonth,1);renderHistory()});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-edit]');if(!b)return;prepare(b.dataset.edit);switchTo('log')});
+el('saveTargets').addEventListener('click',()=>{
+ const values=DAYS.map((d,i)=>Number(el('goal'+i).value));
+ if(values.some(x=>!Number.isFinite(x)||x<0||x>1000000)){notify('Enter valid targets for all seven days.');return}
+ const before=state.targets;state.targets=values.map(round);if(!save()){state.targets=before;return}notify('✓ Weekly targets saved');switchTo('home');
 });
-$('overlay').addEventListener('click',ev=>{if(ev.target===$('overlay'))closeSheet();});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&sheetType)closeSheet();});
-$('sheetBody').addEventListener('change',ev=>{if(ev.target.id==='sheetDate')updateSheetDate(ev.target.value);});
-$('checkinForm').addEventListener('submit',saveCheckin);
-$('checkinForm').addEventListener('input',renderCheckinPreview);
-$('restoreFile').addEventListener('change',async function(){const file=this.files[0];if(!file)return;try{if(file.size>5000000)throw Error('Backup file too large');const incoming=normalize(JSON.parse(await file.text()));if(!confirm('Replace your current entries and settings with this backup?'))return;const old=state;state=incoming;if(!persist()){state=old;return;}render();toast('Backup restored successfully.');}catch(e){toast('Restore failed: '+e.message);}finally{this.value='';}});
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false;});
-window.addEventListener('appinstalled',()=>{$('installBtn').hidden=true;installPrompt=null;});
+el('backup').addEventListener('click',()=>{download('Finances-backup-'+key(new Date())+'.json',JSON.stringify(state,null,2),'application/json');notify('Backup downloaded')});
+el('csv').addEventListener('click',csvExport);
+el('restore').addEventListener('click',()=>el('restoreFile').click());
+el('restoreFile').addEventListener('change',e=>{if(e.target.files?.[0])restoreFile(e.target.files[0]);e.target.value=''});
+el('classic').addEventListener('click',()=>location.assign('./legacy.html'));
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+prepare(shiftKey());
 render();
 })();
 </script>
