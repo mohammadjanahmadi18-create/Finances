@@ -15,6 +15,9 @@ SPECS = (
     ("icon.svg", "icon-192.png", 192),
     ("icon.svg", "icon-512.png", 512),
     ("icon-maskable.svg", "icon-512-maskable.png", 512),
+    ("icon.svg", "liberty-192.png", 192),
+    ("icon.svg", "liberty-512.png", 512),
+    ("icon-maskable.svg", "liberty-512-maskable.png", 512),
 )
 
 def build():

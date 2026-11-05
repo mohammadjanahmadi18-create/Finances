@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#073d30">
+<meta name="description" content="Finances — a beautiful, fast shift ledger for London private-hire drivers.">
+<link rel="manifest" href="./manifest-gold.webmanifest?v=12">
+<link rel="icon" type="image/svg+xml" href="./icons/icon.svg?v=12">
+<link rel="apple-touch-icon" href="./icons/liberty-192.png?v=12">
+<title>Finances Gold · Your shift, sorted</title>
+<style>
+:root{--forest:#083b2e;--deep:#06281f;--emerald:#187657;--lime:#b8e4c7;--orange:#f4a044;--gold:#efd19a;--paper:#fffefa;--cream:#f6f7f2;--ink:#17392f;--muted:#7d9489;--line:#e1eae3;--red:#d35c58;--shadow:0 9px 27px #0e462716;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+*{box-sizing:border-box}
+html{background:var(--cream)}
+body{margin:0;-webkit-font-smoothing:antialiased;background:linear-gradient(160deg,#f3f8f2,#fffefa 50%,#f6f7f2);min-height:100dvh}
+button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+button:active{transform:scale(.987)}
+a{color:var(--emerald)}
+.shell{max-width:570px;margin:0 auto;min-height:100dvh;padding:0 18px calc(112px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:24px 2px 19px}
+.identity{display:flex;align-items:center;gap:12px}.mark{width:49px;height:49px;object-fit:cover;border-radius:15px;box-shadow:0 6px 16px #143e2a30;border:1px solid #d2ab57}
+.wordmark{font:800 22px Georgia,serif;letter-spacing:-.5px}.wordmark small{display:block;font:750 9px Inter,system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.header-date{background:white;border:1px solid var(--line);border-radius:16px;padding:9px 12px;text-align:center;min-width:60px;box-shadow:var(--shadow)}.header-date b{display:block;font-size:18px}.header-date small{font-weight:800;font-size:10px;color:var(--muted)}
+section.page{display:none;animation:appear .22s ease}section.page.active{display:block}@keyframes appear{from{opacity:.65;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.kicker{font-size:10px;font-weight:850;letter-spacing:1.8px;text-transform:uppercase;color:#66947f}
+h1{font:600 clamp(28px,7vw,35px)/1.16 Georgia,serif;letter-spacing:-.8px;margin:6px 0 5px}h2{font:600 22px Georgia,serif;letter-spacing:-.4px;margin:0}
+.muted{color:var(--muted)}.subtitle{font-size:13px;color:var(--muted);line-height:1.5;margin:6px 0 0}.section-title{display:flex;align-items:center;justify-content:space-between;margin:25px 0 13px;gap:12px}
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 100% -24%,#2b805e,transparent 50%),linear-gradient(138deg,#145b42,#08382d 67%,#05241c);color:white;border-radius:28px;padding:23px 22px 21px;box-shadow:0 18px 34px #0e452a30;border:1px solid #327d5b}
+.hero:after{content:"";width:230px;height:230px;border:1px solid #ffffff13;border-radius:50%;position:absolute;right:-120px;top:-105px;pointer-events:none}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
+.hero-label{font-size:10px;letter-spacing:1.7px;font-weight:850;color:#c3e7d1}
+.pill{padding:6px 10px;font-size:10px;border-radius:999px;background:#ffffff18;color:#f9dcac;font-weight:850}
+.hero-date{font-size:12px;color:#e4f2e6;margin:16px 0 5px;position:relative;z-index:1}
+.hero-value{font-size:clamp(42px,12vw,62px);font-weight:850;letter-spacing:-2.3px;line-height:1.14;font-variant-numeric:tabular-nums;position:relative;z-index:1}
+.hero-value small{font-size:12px;letter-spacing:0;color:#b7d8c5;font-weight:600;display:block;margin-top:4px}
+.progress-track{height:9px;border-radius:100px;background:#ffffff2a;margin:21px 0 16px;overflow:hidden;position:relative;z-index:1}.progress-track i{display:block;width:0;height:100%;background:linear-gradient(90deg,#f2b263,#ffdda0);border-radius:100px;transition:width .32s}
+.hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));position:relative;z-index:1}.hero-stats div{min-width:0}.hero-stats div+div{border-left:1px solid #ffffff29;padding-left:11px}.hero-stats small{display:block;font-size:10px;color:#bedbcc;margin-bottom:6px}.hero-stats strong{display:block;font-size:clamp(14px,4vw,18px);font-variant-numeric:tabular-nums}
+.hero-foot{position:relative;z-index:1;font-size:11px;color:#f2dba9;margin-top:18px;line-height:1.4}
+.primary{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;border:0;border-radius:19px;min-height:60px;background:linear-gradient(125deg,#ffc77d,#f1a149 52%,#e48b2b);color:#4c2b0c;box-shadow:0 10px 24px #d38a3030,inset 0 2px #ffffff90;font-weight:900;font-size:15px}
+.primary.dark{background:linear-gradient(125deg,#1f815c,#0c553f 70%,#093d30);color:#fff;box-shadow:0 10px 25px #13573e2a}
+.cta{margin-top:15px}.cta-icon{font-size:25px;line-height:1}
+.tile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.tile{background:white;border:1px solid var(--line);border-radius:20px;padding:17px 16px;min-width:0;box-shadow:var(--shadow)}
+.tile .symbol{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:11px;background:#f0f6ed;font-size:18px;margin-bottom:10px}
+.tile small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.tile strong{display:block;font-size:clamp(21px,6vw,29px);font-weight:850;letter-spacing:-.9px;line-height:1.12;font-variant-numeric:tabular-nums}
+.tile.green{background:linear-gradient(160deg,#e5f7eb,#f6fff9);border-color:#b5dfc6}.tile.green strong{color:#086943}
+.tile.gold{background:linear-gradient(155deg,#fff1d8,#fffdf6);border-color:#ecd4a3}
+.card{background:white;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:23px;padding:19px}
+.small-note{font-size:11px;color:var(--muted);line-height:1.5}
+.row-list{display:flex;flex-direction:column}.shift-row{border:0;background:transparent;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 0;border-bottom:1px solid var(--line);width:100%}.shift-row:last-child{border-bottom:0}.shift-row b{display:block;font-size:14px}.shift-row small{display:block;font-size:11px;color:var(--muted);margin-top:5px}.shift-row .amount{text-align:right}.shift-row .amount strong{font-size:17px;display:block}.shift-row .amount span{display:block;font-size:10px;font-weight:800;margin-top:3px}
+.positive{color:#16845a}.negative{color:var(--red)}.amber{color:#b67b2a}
+.empty{text-align:center;padding:19px 9px;color:var(--muted);font-size:13px}
+.weekbars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;align-items:end;padding-top:7px}
+.bar-col{text-align:center;min-width:0}.bar-wrap{height:105px;display:flex;align-items:flex-end;justify-content:center;gap:3px;position:relative;border-bottom:1px solid #ccd9cc}
+.bar{width:33%;border-radius:6px 6px 0 0;min-height:2px}.bar.target{background:#f2d4a4}.bar.earned{background:linear-gradient(#50bf84,#0a6d4f)}
+.bar-col small{font-weight:750;font-size:9px;color:var(--muted);margin-top:9px;display:block}.bar-col.today small{color:var(--forest)}.legend{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:13px}.legend i{display:inline-block;width:8px;height:8px;border-radius:3px;margin-right:4px;background:#0b875e}.legend .target-dot{background:#eccb91}
+.form-panel{background:white;border:1px solid var(--line);border-radius:24px;padding:19px;margin-top:18px;box-shadow:var(--shadow)}
+.form-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.step{font-size:11px;font-weight:850;color:#11805b;letter-spacing:1.1px}
+label.field{display:block;margin-top:13px;font-size:12px;font-weight:800;color:#395c4d}
+.input{display:block;margin-top:8px;width:100%;min-width:0;height:52px;border:1px solid #dce6dc;background:#fbfdf9;border-radius:13px;padding:0 13px;color:#163b30;font-weight:700;font-size:16px}
+.input:focus{outline:2px solid #efb063;outline-offset:1px;border-color:#edbb7c}
+.input[type=date],.input[type=time]{font-size:14px}
+.field-row{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:11px}
+.money-field{position:relative}.money-field .input{padding-left:34px;font-size:22px;font-weight:850;font-variant-numeric:tabular-nums}.currency{position:absolute;left:13px;bottom:14px;font-size:17px;color:#769182;font-weight:800}
+.caption{color:#91a496;font-size:11px;line-height:1.5;margin:10px 2px 0}
+.money-preview{background:linear-gradient(150deg,#0f5c42,#073e30);color:#fff;border-radius:20px;padding:17px 18px;margin-top:17px;box-shadow:0 8px 22px #165d3920}
+.preview-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0}.preview-row small{color:#b9dcc9;font-size:11px}.preview-row b{font-size:16px;font-variant-numeric:tabular-nums}.preview-row.large{padding-top:14px;border-top:1px solid #ffffff25;margin-top:8px}.preview-row.large b{font-size:27px;letter-spacing:-1px}.preview-status{font-size:11px;color:#ffe0a9;margin-top:11px}
+.fold{border-top:1px solid var(--line);margin-top:14px;padding-top:13px}.fold summary{cursor:pointer;font-size:12px;font-weight:850;color:var(--emerald);min-height:28px}
+textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;font-size:14px}
+.form-actions{display:flex;gap:9px;align-items:center;margin-top:15px}.form-actions .primary{flex:1}.secondary{border:1px solid #d5e2d7;color:#2c7056;background:#f4faf3;border-radius:15px;min-height:52px;padding:0 16px;font-weight:850;font-size:13px}
+.month-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:19px 0 14px}.month-nav strong{font-size:16px}.round-btn{border:1px solid var(--line);border-radius:13px;background:white;min-width:43px;height:42px;font-size:24px;color:var(--forest)}
+.calendar{padding:14px 10px 12px}.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.cal-head{text-align:center;font-size:9px;font-weight:900;color:var(--muted);padding:5px 0 8px}.day{min-width:0;min-height:62px;padding:7px 2px 6px;border:1px solid #e6ece5;border-radius:10px;text-align:center;background:#f8faf6;color:#758a7f}.day b{font-size:11px;display:block}.day small{font-size:9px;display:block;margin-top:8px;font-weight:800;overflow:hidden;text-overflow:clip}.day.has{background:#e7f3e9;border-color:#c6e3d1;color:#145e40}.day.win{background:#f9edd3;border-color:#ddbc75;color:#77501d}.day.low{background:#fbeae8;border-color:#f1cfcb;color:#a14c43}.day.today{box-shadow:inset 0 0 0 2px #f0a650}.day:disabled{visibility:hidden}.day .cal-dot{width:5px;height:5px;border-radius:50%;background:currentColor;margin:4px auto 0}
+.month-summary{font-size:12px;color:var(--muted);margin:9px 0 18px}
+.week-targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.target-row{border:1px solid var(--line);border-radius:15px;padding:10px 13px;background:#fbfdf9}.target-row label{display:block;color:var(--muted);font-size:11px;font-weight:850;margin-bottom:6px}.target-row .target-inner{display:flex;align-items:center;gap:5px}.target-row input{width:100%;min-width:0;border:0;background:transparent;color:var(--forest);font-size:19px;font-weight:900;outline:0}
+.settings-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:15px}.settings-actions button{min-height:49px}
+.nav{position:fixed;z-index:20;bottom:0;left:0;right:0;padding:10px max(14px,calc((100vw - 570px)/2)) calc(10px + env(safe-area-inset-bottom));background:#ffffffed;backdrop-filter:blur(18px);border-top:1px solid #dce9de;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));box-shadow:0 -7px 29px #113b2516}
+.nav button{min-height:58px;border:0;background:transparent;color:#83978b;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:10px;font-weight:850}.nav button .ico{font-size:21px;line-height:1}.nav button.active{color:#084734;background:linear-gradient(155deg,#e8f6e7,#fff0d8)}
+.toast{position:fixed;z-index:50;left:50%;transform:translateX(-50%);bottom:calc(93px + env(safe-area-inset-bottom));max-width:calc(100vw - 34px);background:#104f39;color:#fff;padding:13px 17px;border-radius:14px;box-shadow:0 13px 25px #0a442b44;font-size:13px;font-weight:750;text-align:center;display:none}
+.notice{padding:13px 14px;border:1px solid #efdcb8;border-radius:16px;background:#fff9e9;color:#795b2d;font-size:12px;line-height:1.5;margin-top:12px}
+.between{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hidden{display:none!important}
+@media(max-width:365px){.shell{padding-left:12px;padding-right:12px}.tile{padding:13px}.hero{padding:19px}.field-row{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="./atelier.css?v=12">
+</head>
+<body>
+<div class="shell">
+<header><div class="identity"><img class="mark" src="./icons/liberty-192.png?v=12" alt="Personalised Liberty portrait"><div class="wordmark">Finances<small>Your shift, sorted</small></div></div><div class="header-date"><b id="headerDay">—</b><small id="headerMonth">NOV</small></div></header>
+<section class="page active" id="home">
+  <div class="kicker">YOUR MONEY AT A GLANCE</div><h1>Drive. Earn. Done.</h1><p class="subtitle">One quick entry after your shift. The rest is automatic.</p>
+  <div class="hero"><img class="hero-portrait" src="./icons/liberty-512.png?v=12" alt="" aria-hidden="true">
+    <div class="hero-top"><span class="hero-label">YOUR DRIVING DAY</span><span class="pill" id="heroBadge">READY TO GO</span></div>
+    <p class="hero-date" id="heroDate">Today</p>
+    <div class="hero-value" id="heroIncome">£0<small>Gross earnings</small></div>
+    <div class="progress-track"><i id="heroProgress"></i></div>
+    <div class="hero-stats"><div><small>Daily goal</small><strong id="heroTarget">£0</strong></div><div><small>EV + costs</small><strong id="heroCosts">£0</strong></div><div><small>Take-home</small><strong id="heroNet">£0</strong></div></div>
+    <div class="hero-foot" id="heroMessage">Your next shift is waiting.</div>
+  </div>
+  <section class="gold-win-card" aria-label="Gold target streak"><div class="gold-win-head"><div><small>YOUR GOLD STANDARD</small><h2>Target champions.</h2></div><strong id="goldCount">4 GOLD WINS</strong></div><div id="goldDays" class="gold-days"></div><p>Gold ticks show targets you confirmed. Missing earnings stay unrecorded.</p></section><button class="primary cta" id="homeLog"><span class="cta-icon">＋</span><span>Log a finished shift</span><span>→</span></button>
+  <div class="section-title"><h2>This month</h2><span class="kicker" id="homeMonth">NOVEMBER</span></div>
+  <div class="tile-grid">
+    <div class="tile green"><span class="symbol">💷</span><small>Gross earnings</small><strong id="monthGross">£0</strong></div>
+    <div class="tile"><span class="symbol">⚡</span><small>EV charging</small><strong id="monthCharge">£0</strong></div>
+    <div class="tile"><span class="symbol">🧾</span><small>Other expenses</small><strong id="monthOther">£0</strong></div>
+    <div class="tile gold"><span class="symbol">✦</span><small>Take-home</small><strong id="monthNet">£0</strong></div>
+  </div>
+  <div class="section-title"><h2>Last 7 driving days</h2><span class="legend"><span><i></i>Earned</span><span><i class="target-dot"></i>Target</span></span></div>
+  <div class="card"><div id="weekBars" class="weekbars"></div><div class="small-note" style="margin-top:14px">Each shift belongs to the date it started, even if you finish after midnight.</div></div>
+  <div class="section-title"><h2>Recent shifts</h2><button class="secondary" id="seeHistory" style="min-height:36px">See all →</button></div>
+  <div class="card row-list" id="recentList"></div>
+</section>
+<section class="page" id="log">
+  <div class="kicker" id="logKicker">YOUR END-OF-SHIFT CHECK-IN</div><h1 id="logTitle">Three numbers. Done.</h1><p class="subtitle">Income. EV charging. Other expenses. No dates or times to select.</p>
+  <form id="shiftForm" novalidate>
+  <div class="auto-day-panel">
+    <span class="auto-day-icon">✦</span><div><small>AUTOMATIC DRIVING DAY</small><strong id="logDayLabel">Your driving day</strong><p id="shiftClock">Entered before 11 am? This belongs to yesterday.</p></div><span class="auto-day-tick">✓</span>
+    <input type="hidden" id="shiftDate" required><input type="hidden" id="startTime"><input type="hidden" id="endTime">
+  </div>
+    <div class="form-panel">
+      <div class="form-title"><h2>Your money</h2><span class="step">02 / 02</span></div>
+      <label class="field money-field">Gross income (before costs)<span class="currency">£</span><input id="gross" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="230.00" required></label>
+      <div class="field-row" style="grid-template-columns:1fr 1fr">
+        <label class="field money-field">⚡ EV charging<span class="currency">£</span><input id="charge" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+        <label class="field money-field">🧾 Other expenses<span class="currency">£</span><input id="other" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+      </div>
+      <p class="caption">Other expenses can include food, parking, tolls or anything else. Don't include EV charging twice.</p>
+      <div class="money-preview" aria-live="polite">
+        <div class="preview-row"><small>Daily income target</small><b id="previewTarget">£0</b></div>
+        <div class="preview-row"><small>Total costs</small><b id="previewCosts">£0</b></div>
+        <div class="preview-row large"><small>Estimated take-home</small><b id="previewNet">£0</b></div>
+        <div class="preview-status" id="previewStatus">Enter your earnings to see your result.</div>
+      </div>
+      <details class="fold"><summary>✎ Add a note or adjust this day's target</summary><label class="field">Notes (optional)<textarea id="notes" class="input" maxlength="500" placeholder="e.g. busy evening, charging stop, parking"></textarea></label><label class="field money-field">Override this day's target<span class="currency">£</span><input id="targetOverride" class="input" type="number" step=".01" min="0" max="1000000" inputmode="decimal" placeholder="Leave blank for weekday goal"></label></details>
+      <p class="caption hidden" id="importedWarning">This entry was imported from the previous app. Its actual shift times were never recorded there.</p>
+      <div class="form-actions"><button type="submit" class="primary dark" id="saveShift">✓ Save this shift</button><button type="button" class="secondary" id="newShift">New</button></div>
+    </div>
+  </form>
+  <p class="small-note" style="text-align:center;margin:16px 0">Saved on this phone. Update or correct any shift later in History.</p>
+</section>
+<section class="page" id="history">
+  <div class="kicker">YOUR FINANCIAL JOURNEY</div><h1>Every shift matters.</h1><p class="subtitle">Daily records, monthly totals and the progress you made.</p>
+  <div class="month-nav"><button class="round-btn" id="monthPrev" aria-label="Previous month">‹</button><strong id="historyMonth">November 2026</strong><button class="round-btn" id="monthNext" aria-label="Next month">›</button></div>
+  <div class="tile-grid">
+    <div class="tile green"><span class="symbol">💷</span><small>Gross earned</small><strong id="histGross">£0</strong></div>
+    <div class="tile gold"><span class="symbol">✦</span><small>Take-home</small><strong id="histNet">£0</strong></div>
+    <div class="tile"><span class="symbol">⚡</span><small>EV costs</small><strong id="histCharge">£0</strong></div>
+    <div class="tile"><span class="symbol">🎯</span><small>Targets hit</small><strong id="histHits">0 / 0</strong></div>
+  </div>
+  <div class="section-title"><h2>Shift calendar</h2><span class="kicker">TAP A DATE TO EDIT</span></div>
+  <div class="card calendar"><div id="calendar" class="cal-grid"></div><p class="small-note" style="margin:14px 3px 0">Gold = net hit goal · Green = gross hit goal · Rose = below goal.</p></div>
+  <div class="section-title"><h2>Shift breakdown</h2><span class="kicker" id="histCount">0 SHIFTS</span></div>
+  <div class="card row-list" id="historyList"></div>
+  <div class="month-summary" id="histNote"></div>
+</section>
+<section class="page" id="settings">
+  <div class="kicker">YOUR RULES</div><h1>Set your pace.</h1><p class="subtitle">Your normal target is applied automatically based on the day your shift starts.</p>
+  <div class="form-panel"><div class="between"><h2>Daily targets</h2><span class="step">£ / DAY</span></div><div class="week-targets" id="targets" style="margin-top:15px"></div><button class="primary dark" id="saveTargets" style="margin-top:16px">Save my weekly targets</button></div>
+  <div class="form-panel"><h2>Your records</h2><p class="subtitle">Your data stays on this device. Back it up before changing phones, deleting the app or clearing browser storage.</p>
+    <div class="settings-actions"><button class="secondary" id="backup">↓ JSON backup</button><button class="secondary" id="csv">↓ Month CSV</button><button class="secondary" id="restore">↑ Restore backup</button><button class="secondary" id="classic">Classic app ↗</button></div><input type="file" id="restoreFile" accept=".json,application/json" hidden>
+    <p class="small-note" style="margin-top:15px" id="importState">Existing data is kept on this device.</p>
+  </div>
+  <div class="notice"><strong>About your numbers:</strong> Gross income is what you earned before costs. Take-home is gross income minus charging and other expenses. A gross target win is different from a net target win.</div>
+</section>
+</div>
+<nav class="nav" aria-label="Main navigation">
+ <button data-tab="home" class="active"><span class="ico">⌂</span>Home</button>
+ <button data-tab="log"><span class="ico">＋</span>Log shift</button>
+ <button data-tab="history"><span class="ico">▦</span>History</button>
+ <button data-tab="settings"><span class="ico">⚙</span>Settings</button>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+'use strict';
+const STORE='finances-shifts-v3';
+const LEGACY='finances-local-v1';
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const DEFAULT=[160,160,200,230,250,300,250];
+const el=id=>document.getElementById(id);
+const amount=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:2}).format(Number(n)||0);
+const short=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(Number(n)||0);
+const round=n=>Math.round((Number(n)+Number.EPSILON)*100)/100;
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const key=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const date=k=>{const p=k.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const validKey=k=>/^\d{4}-(0[1-9]|1[0-2])-([012]\d|3[01])$/.test(k)&&key(date(k))===k;
+const weekday=k=>(date(k).getDay()+6)%7;
+const n=v=>round(Number(v)||0);
+function shiftKey(){const d=new Date();if(d.getHours()<11)d.setDate(d.getDate()-1);return key(d);}
+function plusMonth(d,v){return new Date(d.getFullYear(),d.getMonth()+v,1)}
+function moneyField(id){const x=el(id).value.trim();return x===''?0:Number(x)}
+function clock(k,from,to){const start=new Date(k+'T'+from+':00');if(!Number.isFinite(start.getTime()))return null;const end=new Date(k+'T'+to+':00');if(end<=start)end.setDate(end.getDate()+1);return {endKey:key(end),minutes:Math.round((end-start)/60000)}}
+function goal(k,record){return record&&record.override!=null?record.override:state.targets[weekday(k)]}
+function net(record){return round(record.gross-record.charge-record.other)}
+function costs(record){return round(record.charge+record.other)}
+const VERIFIED_WINS=['2026-11-01','2026-11-02','2026-11-03','2026-11-04'];
+const starterWins=()=>Object.fromEntries(VERIFIED_WINS.map(k=>[k,true]));
+function newState(){return {version:3,targets:DEFAULT.slice(),shifts:{},legacyImported:false,confirmedDays:starterWins()}}
+function migrate(){
+ const value=localStorage.getItem(LEGACY);
+ const s=newState();if(!value)return s;
+ try{
+  const old=JSON.parse(value);if(!old||!old.entries||typeof old.entries!=='object')return s;
+  for(const [k,e] of Object.entries(old.entries)){
+   if(!validKey(k)||!e||typeof e!=='object')continue;
+   const ex=Array.isArray(e.expenses)?e.expenses:[];
+   const charging=round(ex.filter(x=>x.category==='Charging').reduce((a,x)=>a+(Number(x.amount)||0),0));
+   const spending=round(ex.reduce((a,x)=>a+(Number(x.amount)||0),0));
+   const gross=Number(e.earned);
+   if(!Number.isFinite(gross)||gross<0||gross>1000000)continue;
+   s.shifts[k]={gross:round(gross),charge:Math.max(0,charging),other:Math.max(0,round(spending-charging)),start:'13:00',finish:'06:00',notes:String(e.note||'').slice(0,500),override:e.targetOverride!=null&&Number.isFinite(Number(e.targetOverride))?Math.max(0,Number(e.targetOverride)):null,imported:true};
+  }
+  s.legacyImported=Object.keys(s.shifts).length>0;return s;
+ }catch(err){console.warn('Legacy migration skipped',err);return s}
+}
+function validSaved(s){return s&&s.version===3&&Array.isArray(s.targets)&&s.targets.length===7&&s.targets.every(x=>Number.isFinite(x)&&x>=0&&x<=1000000)&&s.shifts&&typeof s.shifts==='object'&&!Array.isArray(s.shifts);}
+function load(){
+ try{const saved=localStorage.getItem(STORE);if(saved){const parsed=JSON.parse(saved);if(validSaved(parsed)){if(!parsed.confirmedDays||typeof parsed.confirmedDays!=='object')parsed.confirmedDays=starterWins();return parsed;}}}
+ catch(err){console.warn('Cannot read saved shifts',err)}
+ return migrate();
+}
+let state=load(),tab='home',focus=shiftKey(),historyMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1),toastTimer=0;
+function save(){try{localStorage.setItem(STORE,JSON.stringify(state));return true}catch(err){notify('Could not save. Check your phone storage.');return false}}
+function notify(message){const t=el('toast');t.textContent=message;t.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',3500)}
+function switchTo(next){tab=next;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===tab));document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));render();window.scrollTo({top:0,behavior:'instant'})}
+function entry(k){return state.shifts[k]||null}
+function targetHit(k){const a=stats(k);return !!state.confirmedDays?.[k]||!!(a.r&&a.gross>=a.target)}
+function manualOnly(k){return !!state.confirmedDays?.[k]&&!entry(k)}
+function stats(k){const r=entry(k),target=goal(k,r);return {r,target,gross:r?r.gross:0,charge:r?r.charge:0,other:r?r.other:0,net:r?net(r):0}}
+function monthRows(m){const prefix=m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-';return Object.keys(state.shifts).filter(k=>k.startsWith(prefix)&&validKey(k)).sort((a,b)=>b.localeCompare(a))}
+function monthNumbers(m){const rows=monthRows(m),prefix=m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-';const a=rows.reduce((s,k)=>{const v=stats(k);s.gross+=v.gross;s.charge+=v.charge;s.other+=v.other;s.net+=v.net;return s},{gross:0,charge:0,other:0,net:0,hits:0,count:rows.length});const marked=Object.keys(state.confirmedDays||{}).filter(k=>k.startsWith(prefix)&&state.confirmedDays[k]);a.hits=new Set([...rows.filter(targetHit),...marked]).size;return a}
+function formatDay(k){return date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
+function rowMarkup(k){const a=stats(k);if(manualOnly(k))return '<button class="shift-row win-row" data-edit="'+k+'"><span><b>✦ '+safe(formatDay(k))+'</b><small>Gold target achieved · Amount not logged</small></span><span class="amount"><strong class="gold-text">✓</strong><span class="gold-text">Confirmed</span></span></button>';const hit=targetHit(k),status=hit?'✦ Target achieved':a.net>=a.target?'Net goal reached':a.gross>=a.target?'Gross goal hit':'In progress',cl=hit?'gold-text':a.gross>=a.target?'positive':'negative';return '<button class="shift-row'+(hit?' win-row':'')+'" data-edit="'+k+'"><span><b>'+safe(formatDay(k))+'</b><small>'+short(a.gross)+' earned · '+short(a.charge+a.other)+' costs'+(a.r.imported?' · imported':'')+'</small></span><span class="amount"><strong>'+short(a.net)+'</strong><span class="'+cl+'">'+status+'</span></span></button>'}
+function renderGoldDays(){const now=shiftKey(),d=date(now),first=new Date(d);first.setDate(first.getDate()-Math.min(6,d.getDate()-1));const keys=[];for(let day=new Date(first);day<=d;day.setDate(day.getDate()+1))keys.push(key(day));const count=keys.filter(targetHit).length;el('goldCount').textContent=count+' GOLD WIN'+(count===1?'':'S');el('goldDays').innerHTML=keys.map(k=>{const hit=targetHit(k),label=date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});return '<button class="gold-day'+(hit?' achieved':'')+(k===now?' current':'')+'" data-edit="'+k+'" aria-label="'+safe(label)+(hit?', target achieved':', not yet achieved')+'"><b>'+(hit?'✓':'·')+'</b><small>'+safe(label)+'</small></button>'}).join('')}
+
+function renderHome(){
+ const k=shiftKey(),a=stats(k),m=new Date();const totals=monthNumbers(m);
+ el('heroDate').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+' · DRIVING DAY';
+ renderGoldDays();
+ el('heroBadge').textContent=targetHit(k)?'✦ GOLD ACHIEVED':a.r?'SHIFT RECORDED':'READY TO LOG';
+ el('heroIncome').innerHTML=short(a.gross)+'<small>Gross earnings</small>';el('heroTarget').textContent=short(a.target);el('heroCosts').textContent=short(a.charge+a.other);el('heroNet').textContent=short(a.net);
+ el('heroProgress').style.width=Math.min(100,a.target>0?a.gross/a.target*100:100)+'%';
+ el('heroMessage').textContent=!a.r?'Finish your shift, then enter three amounts.':a.net>=a.target?'Excellent. You protected your net target.':a.gross>=a.target?'Gross target hit. '+short(Math.max(0,a.target-a.net))+' more would protect your net goal.':short(Math.max(0,a.target-a.gross))+' more to reach your gross target.';
+ el('monthGross').textContent=short(totals.gross);el('monthCharge').textContent=short(totals.charge);el('monthOther').textContent=short(totals.other);el('monthNet').textContent=short(totals.net);
+ el('homeMonth').textContent=m.toLocaleDateString('en-GB',{month:'long'}).toUpperCase();
+ const now=date(k),dates=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dates.push(key(d))}
+ const max=Math.max(1,...dates.map(k=>Math.max(stats(k).gross,stats(k).target)));
+ el('weekBars').innerHTML=dates.map(d=>{const a=stats(d);return '<div class="bar-col'+(d===k?' today':'')+'"><div class="bar-wrap"><i class="bar target" style="height:'+Math.max(2,a.target/max*100)+'%"></i><i class="bar earned" style="height:'+Math.max(2,a.gross/max*100)+'%"></i></div><small>'+date(d).toLocaleDateString('en-GB',{weekday:'short'}).slice(0,2)+'</small></div>'}).join('');
+ const recent=[...new Set([...Object.keys(state.shifts),...Object.keys(state.confirmedDays||{}).filter(k=>state.confirmedDays[k])])].filter(validKey).sort((a,b)=>b.localeCompare(a)).slice(0,5);
+ el('recentList').innerHTML=recent.length?recent.map(rowMarkup).join(''):'<div class="empty">No shifts yet. Your first check-in starts here.</div>';
+}
+function prepare(k,reset){
+ if(!validKey(k))k=shiftKey();focus=k;el('shiftDate').value=k;
+ const r=!reset?entry(k):null;
+ el('startTime').value=r?.start||'13:00';el('endTime').value=r?.finish||'06:00';
+ el('gross').value=r?String(r.gross):'';el('charge').value=r?String(r.charge):'';el('other').value=r?String(r.other):'';
+ el('notes').value=r?.notes||'';el('targetOverride').value=r?.override==null?'':r.override;
+ el('logKicker').textContent=r?'EDIT A SAVED SHIFT':'YOUR END-OF-SHIFT CHECK-IN';
+ el('logTitle').textContent=r?'Make a correction.':'Three numbers. Done.';
+ el('saveShift').textContent=r?'✓ Update this shift':'✓ Save this shift';
+ el('importedWarning').classList.toggle('hidden',!r?.imported);
+ el('logDayLabel').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+ updatePreview();
+}
+function updatePreview(){
+ const k=el('shiftDate').value,r=entry(k);
+ el('shiftClock').textContent='Automatically assigned. Entries before 11 am count towards the previous day.';
+ const override=el('targetOverride').value.trim();const target=validKey(k)?override!==''&&Number.isFinite(Number(override))?Number(override):goal(k,r):0;
+ const gross=moneyField('gross'),charge=moneyField('charge'),other=moneyField('other'),takehome=round(gross-charge-other);
+ el('previewTarget').textContent=amount(target);el('previewCosts').textContent=amount(charge+other);el('previewNet').textContent=amount(takehome);
+ el('previewStatus').textContent=el('gross').value.trim()===''?'Enter your earnings to see your result.':takehome>=target?'✦ You have protected your net target.':gross>=target?'Gross goal reached; costs bring take-home below target.':amount(Math.max(0,target-gross))+' to reach your gross target.';
+}
+function record(event){
+ event.preventDefault();const k=el('shiftDate').value,from='',to='';
+ if(!validKey(k)){notify('Invalid driving day.');return}
+ if(el('gross').value.trim()===''){notify('Please enter your gross income.');el('gross').focus();return}
+ const ids=['gross','charge','other'];for(const id of ids){const v=el(id).value;if(v.trim()!==''&&(!Number.isFinite(Number(v))||Number(v)<0||Number(v)>1000000)){notify('Enter valid non-negative amounts.');el(id).focus();return}}
+ const rawOverride=el('targetOverride').value.trim();if(rawOverride!==''&&(!Number.isFinite(Number(rawOverride))||Number(rawOverride)<0||Number(rawOverride)>1000000)){notify('Check the custom target.');return}
+ const old=entry(k);state.shifts[k]={gross:n(moneyField('gross')),charge:n(moneyField('charge')),other:n(moneyField('other')),start:from,finish:to,notes:el('notes').value.trim().slice(0,500),override:rawOverride!==''?n(rawOverride):null,imported:false};
+ if(!save()){if(old)state.shifts[k]=old;else delete state.shifts[k];return}
+ historyMonth=new Date(date(k).getFullYear(),date(k).getMonth(),1);
+ notify('✓ Shift saved. All totals updated.');switchTo('home');
+}
+function renderHistory(){
+ const m=historyMonth,t=monthNumbers(m),rows=[...new Set([...monthRows(m),...Object.keys(state.confirmedDays||{}).filter(k=>state.confirmedDays[k]&&k.startsWith(m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-'))])].filter(validKey).sort((a,b)=>b.localeCompare(a));
+ el('historyMonth').textContent=m.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+ el('histGross').textContent=short(t.gross);el('histNet').textContent=short(t.net);el('histCharge').textContent=short(t.charge);el('histHits').textContent=t.hits+' ✓';
+ el('histCount').textContent=rows.length+' DAY'+(rows.length===1?'':'S');
+ const first=(new Date(m.getFullYear(),m.getMonth(),1).getDay()+6)%7,last=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),now=key(new Date());
+ let content=['Mo','Tu','We','Th','Fr','Sa','Su'].map(d=>'<div class="cal-head">'+d+'</div>').join('');
+ for(let i=0;i<first;i++)content+='<div></div>';
+ for(let d=1;d<=last;d++){const k=key(new Date(m.getFullYear(),m.getMonth(),d)),a=stats(k),cls=targetHit(k)?'win':a.r?'low':'';
+ content+='<button type="button" class="day '+cls+(k===now?' today':'')+'" data-edit="'+k+'" aria-label="'+safe(formatDay(k))+(a.r?', '+amount(a.net)+' net':' not logged')+'"><b>'+d+'</b><small>'+(a.r?short(a.net):targetHit(k)?'✓':'·')+'</small>'+(a.r||targetHit(k)?'<i class="cal-dot"></i>':'')+'</button>';}
+ el('calendar').innerHTML=content;el('historyList').innerHTML=rows.length?rows.map(rowMarkup).join(''):'<div class="empty">No shifts recorded in this month.</div>';
+ const costsTotal=round(t.charge+t.other);el('histNote').textContent=t.count+' money entries · '+t.hits+' verified targets · '+amount(costsTotal)+' costs · '+amount(t.net)+' take-home. Confirmed targets without amounts do not add fictitious earnings.';
+}
+function renderSettings(){
+ el('targets').innerHTML=DAYS.map((d,i)=>'<div class="target-row"><label for="goal'+i+'">'+d+'</label><div class="target-inner"><b>£</b><input id="goal'+i+'" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+state.targets[i]+'"></div></div>').join('');
+ el('importState').textContent=state.legacyImported?'Your previous Finances records were copied into this version. The original records remain untouched.':'Records are saved only in this browser or installed app. Back up regularly.';
+}
+function render(){const now=new Date();el('headerDay').textContent=now.getDate();el('headerMonth').textContent=now.toLocaleDateString('en-GB',{month:'short'}).toUpperCase();if(tab==='home')renderHome();if(tab==='history')renderHistory();if(tab==='settings')renderSettings();if(tab==='log')updatePreview();}
+function download(filename,body,type){const blob=new Blob([body],{type});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+function csvExport(){
+ const m=historyMonth,rows=monthRows(m).reverse();
+ const grid=[['Shift date','Start','End date','End time','Daily target GBP','Gross income GBP','EV charging GBP','Other expenses GBP','Total costs GBP','Take-home GBP','Gross vs goal GBP','Net vs goal GBP','Notes']];
+ for(const k of rows){const r=entry(k),s=stats(k),c=r.start&&r.finish?clock(k,r.start,r.finish):null;grid.push([k,r.imported?'unknown':r.start||'',r.imported?'unknown':c?.endKey||'',r.imported?'unknown':r.finish||'',s.target,s.gross,s.charge,s.other,costs(r),s.net,round(s.gross-s.target),round(s.net-s.target),r.notes])}
+ const esc=v=>'"'+String(v??'').replace(/^([=+\-@\t\r])/,"'$1").replace(/"/g,'""')+'"';
+ download('Finances-shifts-'+m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'.csv','\ufeff'+grid.map(r=>r.map(esc).join(',')).join('\r\n'),'text/csv;charset=utf-8');
+}
+function restoreFile(file){
+ const reader=new FileReader();reader.onerror=()=>notify('Could not read that file.');reader.onload=()=>{
+  try{
+   const data=JSON.parse(String(reader.result));
+   if(!validSaved(data))throw Error('Not a Finances shift backup');
+   for(const [k,r] of Object.entries(data.shifts)){if(!validKey(k)||!r||!['gross','charge','other'].every(x=>Number.isFinite(r[x])&&r[x]>=0&&r[x]<=1000000))throw Error('Invalid shift record')}
+   if(!confirm('Replace the current entries on this device with the backup? Export your current backup first.'))return;
+   const old=state;state=data;if(!save()){state=old;return}notify('Backup restored successfully.');switchTo('home');
+  }catch(err){notify('This is not a valid Finances v3 backup.')}
+ };
+ reader.readAsText(file);
+}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.tab==='log'){prepare(shiftKey());}switchTo(b.dataset.tab)}));
+el('homeLog').addEventListener('click',()=>{prepare(shiftKey());switchTo('log')});
+el('seeHistory').addEventListener('click',()=>switchTo('history'));
+el('newShift').addEventListener('click',()=>prepare(shiftKey(),true));
+el('shiftDate').addEventListener('change',()=>{prepare(el('shiftDate').value);});
+for(const id of ['startTime','endTime','gross','charge','other','targetOverride'])el(id).addEventListener('input',updatePreview);
+el('shiftForm').addEventListener('submit',record);
+el('monthPrev').addEventListener('click',()=>{historyMonth=plusMonth(historyMonth,-1);renderHistory()});
+el('monthNext').addEventListener('click',()=>{historyMonth=plusMonth(historyMonth,1);renderHistory()});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-edit]');if(!b)return;prepare(b.dataset.edit);switchTo('log')});
+el('saveTargets').addEventListener('click',()=>{
+ const values=DAYS.map((d,i)=>Number(el('goal'+i).value));
+ if(values.some(x=>!Number.isFinite(x)||x<0||x>1000000)){notify('Enter valid targets for all seven days.');return}
+ const before=state.targets;state.targets=values.map(round);if(!save()){state.targets=before;return}notify('✓ Weekly targets saved');switchTo('home');
+});
+el('backup').addEventListener('click',()=>{download('Finances-backup-'+key(new Date())+'.json',JSON.stringify(state,null,2),'application/json');notify('Backup downloaded')});
+el('csv').addEventListener('click',csvExport);
+el('restore').addEventListener('click',()=>el('restoreFile').click());
+el('restoreFile').addEventListener('change',e=>{if(e.target.files?.[0])restoreFile(e.target.files[0]);e.target.value=''});
+el('classic').addEventListener('click',()=>location.assign('./legacy.html'));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+prepare(shiftKey());
+render();
+})();
+</script>
+</body>
+</html>
