@@ -240,7 +240,7 @@ function migrate(){
 }
 function validSaved(s){return s&&s.version===3&&Array.isArray(s.targets)&&s.targets.length===7&&s.targets.every(x=>Number.isFinite(x)&&x>=0&&x<=1000000)&&s.shifts&&typeof s.shifts==='object'&&!Array.isArray(s.shifts);}
 function load(){
- try{const saved=localStorage.getItem(STORE);if(saved){const parsed=JSON.parse(saved);if(validSaved(parsed)){if(!parsed.confirmedDays||typeof parsed.confirmedDays!=='object')parsed.confirmedDays=starterWins();return parsed;}}}
+ try{const saved=localStorage.getItem(STORE);if(saved){const parsed=JSON.parse(saved);if(validSaved(parsed)){parsed.confirmedDays={...parsed.confirmedDays,...starterWins()};return parsed;}}}
  catch(err){console.warn('Cannot read saved shifts',err)}
  return migrate();
 }
