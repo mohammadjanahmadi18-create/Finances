@@ -85,6 +85,13 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
 .hidden{display:none!important}
 @media(max-width:365px){.shell{padding-left:12px;padding-right:12px}.tile{padding:13px}.hero{padding:19px}.field-row{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.fresh-reset{margin:15px 0 18px;border:1px solid #f4ca7a;border-radius:22px;padding:16px;background:linear-gradient(135deg,#725124,#224b36 58%,#0a3b2d);box-shadow:inset 0 1px #fff3b95b,0 9px 24px #001a1477;display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:center;color:#fff4db}
+.fresh-reset-icon{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#ffe5a6,#c48225);color:#462b0d;font-size:23px;box-shadow:0 0 16px #ffd77855}
+.fresh-reset-copy strong{font:italic 700 17px Georgia,serif;display:block;color:#fff0bb}.fresh-reset-copy small,.fresh-done small{display:block;font-size:11px;color:#e4ddc8;line-height:1.55;margin-top:5px}
+.fresh-reset-button{grid-column:1/-1;border:1px solid #ffeba6;background:linear-gradient(145deg,#ffeca9,#f4bd5c,#df9034);color:#453016;border-radius:15px;min-height:46px;font-weight:900;box-shadow:0 4px #694017}
+.fresh-done{margin:15px 0;border:1px solid #e9c268ad;border-radius:18px;padding:13px 15px;background:#164a36;color:#ffeda8}
+.fresh-done strong{font-weight:850;font-size:13px}
 </style>
 <link rel="stylesheet" href="./atelier.css?v=11">
 </head>
@@ -93,6 +100,15 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
 <header><div class="identity"><img class="mark" src="./icons/icon-192.png?v=11" alt="Personalised Liberty portrait"><div class="wordmark">Finances<small>Your shift, sorted</small></div></div><div class="header-date"><b id="headerDay">—</b><small id="headerMonth">NOV</small></div></header>
 <section class="page active" id="home">
   <div class="kicker">YOUR MONEY AT A GLANCE</div><h1>Drive. Earn. Done.</h1><p class="subtitle">The previous driving day is selected automatically, even in the afternoon.</p>
+  <section class="fresh-reset" id="freshResetPanel">
+    <div class="fresh-reset-icon">✦</div>
+    <div class="fresh-reset-copy"><strong>Fresh start • Saturday 7 November</strong>
+    <small>Clear previous income and expenses. Keep six gold target ticks for 1–6 November. Start recording Saturday’s earnings on Sunday.</small></div>
+    <button type="button" class="fresh-reset-button" id="freshStartBtn">Reset & start fresh</button>
+  </section>
+  <section class="fresh-done hidden" id="freshDonePanel">
+    <strong>✓ Fresh start active</strong><small>Earlier figures cleared. First new driving day: Saturday 7 November. Record it on Sunday.</small>
+  </section>
   <div class="hero"><img class="hero-portrait" src="./icons/icon-512.png?v=11" alt="" aria-hidden="true">
     <div class="hero-top"><span class="hero-label">YOUR DRIVING DAY</span><span class="pill" id="heroBadge">READY TO GO</span></div>
     <p class="hero-date" id="heroDate">Today</p>
@@ -202,9 +218,9 @@ function clock(k,from,to){const start=new Date(k+'T'+from+':00');if(!Number.isFi
 function goal(k,record){return record&&record.override!=null?record.override:state.targets[weekday(k)]}
 function net(record){return round(record.gross-record.charge-record.other)}
 function costs(record){return round(record.charge+record.other)}
-const VERIFIED_WINS=['2026-11-01','2026-11-02','2026-11-03','2026-11-04'];
+const VERIFIED_WINS=['2026-11-01','2026-11-02','2026-11-03','2026-11-04','2026-11-05','2026-11-06'];
 const starterWins=()=>Object.fromEntries(VERIFIED_WINS.map(k=>[k,true]));
-function newState(){return {version:3,targets:DEFAULT.slice(),shifts:{},legacyImported:false,confirmedDays:starterWins()}}
+function newState(){return {version:3,targets:DEFAULT.slice(),shifts:{},legacyImported:false,confirmedDays:starterWins(),freshStartComplete:false}}
 function migrate(){
  const value=localStorage.getItem(LEGACY);
  const s=newState();if(!value)return s;
@@ -270,10 +286,28 @@ function relocateShift(source,destination){
  notify('✓ Shift safely moved to '+formatDay(destination));
  switchTo('home');
 }
+function performFreshStart(){
+ if(state.freshStartComplete){notify('Your fresh start is already active.');return;}
+ const message='Start fresh from Saturday 7 November 2026?\n\nThis clears ALL recorded income, EV charging, expenses and notes on this device, including entries for 7 November.\n\nYour weekly targets stay the same, and gold ticks remain for 1–6 November. A backup download will be requested before clearing.\n\nThis cannot be undone without restoring a backup.';
+ if(!confirm(message))return;
+ const original=state;
+ try{download('Finances-before-reset-'+key(new Date())+'.json',JSON.stringify(original,null,2),'application/json')}
+ catch(err){notify('Could not prepare your backup. No records were erased.');return}
+ const resetState={version:3,targets:original.targets.slice(),shifts:{},legacyImported:false,confirmedDays:starterWins(),freshStartComplete:true,startedOn:'2026-11-07'};
+ state=resetState;
+ if(!save()){state=original;return}
+ try{localStorage.removeItem(LEGACY)}catch(err){console.warn('Legacy data could not be removed',err)}
+ historyMonth=new Date(2026,10,1);
+ prepare(shiftKey(),true);
+ notify('✓ Fresh start active. Old amounts cleared; 1–6 Nov gold ticks preserved.');
+ switchTo('home');
+}
 function renderGoldDays(){const now=shiftKey(),d=date(now),first=new Date(d);first.setDate(first.getDate()-Math.min(6,d.getDate()-1));const keys=[];for(let day=new Date(first);day<=d;day.setDate(day.getDate()+1))keys.push(key(day));const count=keys.filter(targetHit).length;el('goldCount').textContent=count+' GOLD WIN'+(count===1?'':'S');el('goldDays').innerHTML=keys.map(k=>{const hit=targetHit(k),label=date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});return '<button class="gold-day'+(hit?' achieved':'')+(k===now?' current':'')+'" data-edit="'+k+'" aria-label="'+safe(label)+(hit?', target achieved':', not yet achieved')+'"><b>'+(hit?'✓':'·')+'</b><small>'+safe(label)+'</small></button>'}).join('')}
 
 function renderHome(){
  const k=shiftKey(),a=stats(k),m=date(k);const totals=monthNumbers(m);
+ el('freshResetPanel').classList.toggle('hidden',Boolean(state.freshStartComplete));
+ el('freshDonePanel').classList.toggle('hidden',!state.freshStartComplete);
  renderDateCorrection();
  el('heroDate').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+' · DRIVING DAY';
  renderGoldDays();
@@ -338,7 +372,7 @@ function renderHistory(){
 }
 function renderSettings(){
  el('targets').innerHTML=DAYS.map((d,i)=>'<div class="target-row"><label for="goal'+i+'">'+d+'</label><div class="target-inner"><b>£</b><input id="goal'+i+'" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+state.targets[i]+'"></div></div>').join('');
- el('importState').textContent=state.legacyImported?'Your previous Finances records were copied into this version. The original records remain untouched.':'Records are saved only in this browser or installed app. Back up regularly.';
+ el('importState').textContent=state.freshStartComplete?'Fresh start active from 7 November 2026. Earlier income and expense entries were cleared on this device. The earlier gold ticks remain.':state.legacyImported?'Your previous Finances records were copied into this version. The original records remain untouched.':'Records are saved only in this browser or installed app. Back up regularly.';
 }
 function render(){const drivingDay=date(shiftKey());el('headerDay').textContent=drivingDay.getDate();el('headerMonth').textContent=drivingDay.toLocaleDateString('en-GB',{month:'short'}).toUpperCase();if(tab==='home')renderHome();if(tab==='history')renderHistory();if(tab==='settings')renderSettings();if(tab==='log')updatePreview();}
 function download(filename,body,type){const blob=new Blob([body],{type});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
@@ -363,6 +397,7 @@ function restoreFile(file){
 }
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.tab==='log'){prepare(shiftKey());}switchTo(b.dataset.tab)}));
 el('homeLog').addEventListener('click',()=>{prepare(shiftKey());switchTo('log')});
+el('freshStartBtn').addEventListener('click',performFreshStart);
 el('correctToday').addEventListener('click',()=>relocateShift(key(new Date()),shiftKey()));
 el('moveEntryBack').addEventListener('click',()=>{const from=el('shiftDate').value;if(!validKey(from))return;const prior=date(from);prior.setDate(prior.getDate()-1);relocateShift(from,key(prior));});
 el('seeHistory').addEventListener('click',()=>switchTo('history'));
