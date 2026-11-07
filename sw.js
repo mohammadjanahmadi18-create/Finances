@@ -1,4 +1,4 @@
-const CACHE='finances-six-gold-wins-v16';
+const CACHE='finances-closed-shifts-v17';
 const ASSETS=['./','./index.html','./gold.html','./atelier.css?v=11','./atelier.css?v=12','./manifest.webmanifest?v=11','./manifest-gold.webmanifest?v=12','./icons/icon.svg?v=11','./icons/liberty-192.png?v=12','./icons/liberty-512.png?v=12','./icons/liberty-512-maskable.png?v=12'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
