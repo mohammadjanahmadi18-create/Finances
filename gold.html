@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#073d30">
 <meta name="description" content="Finances — a beautiful, fast shift ledger for London private-hire drivers.">
-<link rel="manifest" href="./manifest-gold.webmanifest?v=12">
+<link rel="manifest" href="./manifest-gold.webmanifest?v=18">
 <link rel="icon" type="image/svg+xml" href="./icons/icon.svg?v=12">
-<link rel="apple-touch-icon" href="./icons/liberty-192.png?v=12">
+<link rel="apple-touch-icon" href="./icons/icon-512.png?v=18">
 <title>Finances Gold · Your shift, sorted</title>
 <style>
 :root{--forest:#083b2e;--deep:#06281f;--emerald:#187657;--lime:#b8e4c7;--orange:#f4a044;--gold:#efd19a;--paper:#fffefa;--cream:#f6f7f2;--ink:#17392f;--muted:#7d9489;--line:#e1eae3;--red:#d35c58;--shadow:0 9px 27px #0e462716;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
@@ -94,10 +94,11 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
 .fresh-done strong{font-weight:850;font-size:13px}
 </style>
 <link rel="stylesheet" href="./atelier.css?v=12">
+<link rel="stylesheet" href="./crystal.css?v=18">
 </head>
 <body>
 <div class="shell">
-<header><div class="identity"><img class="mark" src="./icons/liberty-192.png?v=12" alt="Personalised Liberty portrait"><div class="wordmark">Finances<small>Your shift, sorted</small></div></div><div class="header-date"><b id="headerDay">—</b><small id="headerMonth">NOV</small></div></header>
+<header><div class="identity"><img class="mark" src="./icons/icon-512.png?v=18" alt="Personalised Liberty portrait"><div class="wordmark">Finances<small>Your shift, sorted</small></div></div><div class="header-date"><b id="headerDay">—</b><small id="headerMonth">NOV</small></div></header>
 <section class="page active" id="home">
   <div class="kicker">YOUR MONEY AT A GLANCE</div><h1>Drive. Earn. Done.</h1><p class="subtitle">The previous driving day is selected automatically, even in the afternoon.</p>
   <section class="fresh-reset" id="freshResetPanel">
@@ -109,7 +110,7 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
   <section class="fresh-done hidden" id="freshDonePanel">
     <strong>✓ Fresh start active</strong><small>Earlier figures cleared. First new driving day: Saturday 7 November. Record it on Sunday.</small>
   </section>
-  <div class="hero"><img class="hero-portrait" src="./icons/liberty-512.png?v=12" alt="" aria-hidden="true">
+  <div class="hero"><img class="hero-portrait" src="./icons/icon-512.png?v=18" alt="" aria-hidden="true">
     <div class="hero-top"><span class="hero-label">TODAY’S DRIVING DAY</span><span class="pill" id="heroBadge">READY TO GO</span></div>
     <p class="hero-date" id="heroDate">Today</p>
     <div class="hero-value" id="heroIncome">£0<small>Gross earnings</small></div>
@@ -192,10 +193,10 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
 </section>
 </div>
 <nav class="nav" aria-label="Main navigation">
- <button data-tab="home" class="active"><span class="ico">⌂</span>Home</button>
- <button data-tab="log"><span class="ico">＋</span>Log shift</button>
- <button data-tab="history"><span class="ico">▦</span>History</button>
- <button data-tab="settings"><span class="ico">⚙</span>Settings</button>
+ <button data-tab="home" class="active"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span>Home</button>
+ <button data-tab="log"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></span>Log shift</button>
+ <button data-tab="history"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9h17M9 9v11M15 9v11"/></svg></span>History</button>
+ <button data-tab="settings"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.7 3.5.5-1h3.6l.5 1 1 1.1 1.4.3 1.4-.3 2.4 2.5-.4 1.3.3 1.4 1.1 1 .9.5v3.5l-1 .5-1.1 1 .1 1.5.4 1.3-2.5 2.5-1.3-.4-1.4.2-1.1 1-.5 1h-3.6l-.5-1-1-1.1-1.4-.2-1.4.4-2.4-2.5.4-1.3-.2-1.4-1-1-.9-.5v-3.5l1-.5 1.1-1-.2-1.5-.4-1.3 2.5-2.5 1.3.4 1.4-.3z"/><circle cx="12" cy="12" r="3"/></svg></span>Settings</button>
 </nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
