@@ -95,12 +95,16 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
 </style>
 <link rel="stylesheet" href="./atelier.css?v=12">
 <link rel="stylesheet" href="./crystal.css?v=18">
+<link rel="stylesheet" href="./sunrise.css?v=19">
 </head>
 <body>
 <div class="shell">
 <header><div class="identity"><img class="mark" src="./icons/icon-512.png?v=18" alt="Personalised Liberty portrait"><div class="wordmark">Finances<small>Your shift, sorted</small></div></div><div class="header-date"><b id="headerDay">—</b><small id="headerMonth">NOV</small></div></header>
 <section class="page active" id="home">
-  <div class="kicker">YOUR MONEY AT A GLANCE</div><h1>Drive. Earn. Done.</h1><p class="subtitle">The previous driving day is selected automatically, even in the afternoon.</p>
+  <div class="kicker">YOUR MONEY AT A GLANCE</div><h1>Drive. Earn. Done.</h1><p class="subtitle">Your clear, simple money dashboard. Every target, every cost and every pound you keep.</p>
+ <section class="morning-card"><div class="morning-top"><span class="sun-pill">☀ 6 AM CHECK-IN</span><span class="morning-time">YOUR MORNING ROUTINE</span></div>
+ <h2>Three numbers.<br>You're done.</h2><p>Enter total income, other expenses and EV charging for the driving day you just finished.</p>
+ <button class="primary morning-action" id="morningLog" type="button">Log my finished shift →</button><div class="morning-stamp"><span id="morningDate">Last driving day</span><span>·</span><span id="morningStatus">Ready</span></div></section>
   <section class="fresh-reset" id="freshResetPanel">
     <div class="fresh-reset-icon">✦</div>
     <div class="fresh-reset-copy"><strong>Fresh start • Saturday 7 November</strong>
@@ -118,7 +122,10 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
     <div class="hero-stats"><div><small>Daily goal</small><strong id="heroTarget">£0</strong></div><div><small>EV + costs</small><strong id="heroCosts">£0</strong></div><div><small>Take-home</small><strong id="heroNet">£0</strong></div></div>
     <div class="hero-foot" id="heroMessage">Your next shift is waiting.</div>
   </div>
-  <div id="lastShiftCard" class="card" style="margin-top:15px;border:1px solid #e5bf73">
+  <section id="smartOverview"><div class="section-title"><h2>Your momentum</h2><span class="kicker">LAST 7 DRIVING DAYS</span></div>
+ <div class="smart-grid"><div class="smart-stat sun"><small>Income goals reached</small><strong id="smartHits">—</strong><span id="smartHitSub">Of logged shifts</span></div>
+ <div class="smart-stat"><small>Actual take-home</small><strong id="smartNet">—</strong><span id="smartNetSub">After costs</span></div></div><div class="smart-advice" id="smartTip"></div></section>
+<div id="lastShiftCard" class="card" style="margin-top:15px;border:1px solid #e5bf73">
     <div class="between"><div><div class="kicker" id="lastShiftEyebrow">LAST SHIFT</div><h2 id="lastShiftTitle" style="margin-top:6px">Yesterday</h2></div><span class="pill" id="lastShiftStatus" style="background:#876322;color:#fff4c8">CLOSED ✓</span></div>
     <p id="lastShiftDetail" style="margin:10px 0 0;font-size:13px;color:#e3d9b7;line-height:1.5"></p>
   </div>
@@ -139,7 +146,7 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
   <div class="card row-list" id="recentList"></div>
 </section>
 <section class="page" id="log">
-  <div class="kicker" id="logKicker">YOUR END-OF-SHIFT CHECK-IN</div><h1 id="logTitle">Three numbers. Done.</h1><p class="subtitle">No dates or times to enter. Just log the shift you finished this morning.</p>
+  <div class="kicker" id="logKicker">☀ MORNING CHECK-IN</div><h1 id="logTitle">Three numbers. Done.</h1><p class="subtitle">The previous driving day is selected automatically. Just enter what you earned and spent.</p>
   <form id="shiftForm" novalidate>
   <div class="auto-day-panel">
     <span class="auto-day-icon">✦</span><div><small>AUTOMATIC DRIVING DAY</small><strong id="logDayLabel">Your driving day</strong><p id="shiftClock">Your last completed overnight shift counts towards the previous day.</p></div><span class="auto-day-tick">✓</span>
@@ -147,10 +154,10 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
   </div>
     <div class="form-panel">
       <div class="form-title"><h2>Your money</h2><span class="step">QUICK CHECK-IN</span></div>
-      <label class="field money-field">Gross income (before costs)<span class="currency">£</span><input id="gross" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="230.00" required></label>
+      <label class="field money-field">1 · Total income<span class="currency">£</span><input id="gross" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="230.00" required></label>
       <div class="field-row" style="grid-template-columns:1fr 1fr">
-        <label class="field money-field">⚡ EV charging<span class="currency">£</span><input id="charge" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="0.00"></label>
-        <label class="field money-field">🧾 Other expenses<span class="currency">£</span><input id="other" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+        <label class="field money-field">2 · Other expenses<span class="currency">£</span><input id="other" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+        <label class="field money-field">3 · EV charging<span class="currency">£</span><input id="charge" class="input" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="0.00"></label>
       </div>
       <p class="caption">Other expenses can include food, parking, tolls or anything else. Don't include EV charging twice.</p>
       <div class="money-preview" aria-live="polite">
@@ -159,6 +166,12 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
         <div class="preview-row large"><small>Estimated take-home</small><b id="previewNet">£0</b></div>
         <div class="preview-status" id="previewStatus">Enter your earnings to see your result.</div>
       </div>
+      <section class="flow-board" aria-label="Income allocation" aria-live="polite"><div class="flow-title"><h3>Your money, in order</h3><span>LIVE BREAKDOWN</span></div>
+ <div class="flow-step"><span class="number">1</span><div><strong>Daily income target</strong><small>Protect the goal first</small></div><b id="flowGoal">—</b></div>
+ <div class="flow-step"><span class="number">2</span><div><strong>Other expenses</strong><small>Covered by extra earnings</small></div><b id="flowOther">—</b></div>
+ <div class="flow-step"><span class="number">3</span><div><strong>EV charging</strong><small>Covered after expenses</small></div><b id="flowEV">—</b></div>
+ <div class="flow-left"><small>Extra after goal and costs</small><strong id="flowExtra">—</strong></div>
+ <p class="flow-helper" id="flowTip">Enter income to see the breakdown.</p><p class="flow-helper">This is a planning allocation, not another deduction. Actual take-home = income − expenses − charging.</p></section>
       <details class="fold"><summary>✎ Add a note or adjust this day's target</summary><label class="field">Notes (optional)<textarea id="notes" class="input" maxlength="500" placeholder="e.g. busy evening, charging stop, parking"></textarea></label><label class="field money-field">Override this day's target<span class="currency">£</span><input id="targetOverride" class="input" type="number" step=".01" min="0" max="1000000" inputmode="decimal" placeholder="Leave blank for weekday goal"></label></details>
       <p class="caption hidden" id="importedWarning">This entry was imported from the previous app. Its actual shift times were never recorded there.</p>
       <div class="form-actions"><button type="submit" class="primary dark" id="saveShift">✓ Save this shift</button><button type="button" class="secondary" id="newShift">New</button></div>
@@ -176,8 +189,11 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
     <div class="tile"><span class="symbol">⚡</span><small>EV costs</small><strong id="histCharge">£0</strong></div>
     <div class="tile"><span class="symbol">🎯</span><small>Targets hit</small><strong id="histHits">0 / 0</strong></div>
   </div>
-  <div class="section-title"><h2>Shift calendar</h2><span class="kicker">TAP A DATE TO EDIT</span></div>
-  <div class="card calendar"><div id="calendar" class="cal-grid"></div><p class="small-note" style="margin:14px 3px 0">Gold = net hit goal · Green = gross hit goal · Rose = below goal.</p></div>
+  <section id="historyPulse"><div class="section-title"><h2>Monthly insights</h2><span class="kicker">SAVED RECORDS</span></div>
+ <div class="smart-grid"><div class="smart-stat sun"><small>Income goals hit</small><strong id="historyGoals">—</strong><span id="historyGoalsSub">Of logged shifts</span></div>
+ <div class="smart-stat"><small>Average shift income</small><strong id="historyAverage">—</strong><span id="historyAverageSub">Gross per shift</span></div></div><div class="smart-advice" id="historyTip"></div></section>
+<div class="section-title"><h2>Shift calendar</h2><span class="kicker">TAP A DATE TO EDIT</span></div>
+  <div class="card calendar"><div id="calendar" class="cal-grid"></div><p class="small-note" style="margin:14px 3px 0">Yellow = income target reached · Grey = logged below target · Empty = no entry.</p></div>
   <div class="section-title"><h2>Shift breakdown</h2><span class="kicker" id="histCount">0 SHIFTS</span></div>
   <div class="card row-list" id="historyList"></div>
   <div class="month-summary" id="histNote"></div>
@@ -261,6 +277,36 @@ function stats(k){const r=entry(k),target=goal(k,r);return {r,target,gross:r?r.g
 function monthRows(m){const prefix=m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-';return Object.keys(state.shifts).filter(k=>k.startsWith(prefix)&&validKey(k)).sort((a,b)=>b.localeCompare(a))}
 function monthNumbers(m){const rows=monthRows(m),prefix=m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-';const a=rows.reduce((s,k)=>{const v=stats(k);s.gross+=v.gross;s.charge+=v.charge;s.other+=v.other;s.net+=v.net;return s},{gross:0,charge:0,other:0,net:0,hits:0,count:rows.length});const marked=Object.keys(state.confirmedDays||{}).filter(k=>k.startsWith(prefix)&&state.confirmedDays[k]);a.hits=new Set([...rows.filter(targetHit),...marked]).size;return a}
 function formatDay(k){return date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
+
+function allocation(g,t,o,e){const a=Math.min(g,t),b=Math.max(0,g-a),c=Math.min(b,o),d=Math.min(Math.max(0,b-c),e);return{a:round(a),c:round(c),d:round(d),extra:round(Math.max(0,b-c-d)),goalGap:round(Math.max(0,t-a)),costGap:round(o-c+e-d)}}
+function paintFlow(g,t,o,e,entered){
+ const a=allocation(g,t,o,e),set=(id,v)=>el(id).textContent=v;
+ set('flowGoal',amount(a.a)+' / '+amount(t));set('flowOther',amount(a.c)+' / '+amount(o));set('flowEV',amount(a.d)+' / '+amount(e));set('flowExtra',entered?amount(a.extra):'—');
+ const p=el('flowTip');p.classList.toggle('warn',entered&&(a.goalGap>0||a.costGap>0));
+ p.textContent=!entered?'Enter total income to see your allocation.':a.goalGap>0?amount(a.goalGap)+' still needed for the income goal. Actual take-home always deducts every cost.':a.costGap>0?'Your income goal is covered, but '+amount(a.costGap)+' of costs are not covered by earnings above the goal.':'Goal, other expenses and EV charging covered. '+amount(a.extra)+' extra remains after the goal and costs.';
+}
+function smartHome(end){
+ const keys=[];for(let i=6;i>=0;i--){const d=date(end);d.setDate(d.getDate()-i);const k=key(d);if(entry(k))keys.push(k)}
+ const hits=keys.filter(k=>stats(k).gross>=stats(k).target).length;
+ const total=round(keys.reduce((a,k)=>a+stats(k).net,0)),saved=!!entry(end);
+ el('morningDate').textContent=date(end).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+ el('morningLog').textContent=saved?'✓ Review or edit this shift':'Log my finished shift →';
+ el('morningStatus').textContent=saved?'Saved on this device':'Ready for your three numbers';
+ el('smartHits').textContent=keys.length?hits+' / '+keys.length:'—';
+ el('smartHitSub').textContent=keys.length?Math.round(hits/keys.length*100)+'% of logged shifts':'No recorded shifts yet';
+ el('smartNet').textContent=keys.length?short(total):'—';
+ el('smartNetSub').textContent=keys.length?'After expenses and charging':'Your first check-in starts here';
+ el('smartTip').textContent=keys.length?hits+' of '+keys.length+' shifts reached their gross income goal. Take-home already deducts all expenses and EV charging.':'One short check-in each morning builds your saved record automatically.';
+}
+function smartHistory(rows){
+ const k=rows.filter(k=>!!entry(k)),hit=k.filter(k=>stats(k).gross>=stats(k).target).length,total=k.reduce((v,d)=>v+stats(d).gross,0),cost=k.reduce((v,d)=>v+stats(d).charge+stats(d).other,0);
+ el('historyGoals').textContent=k.length?hit+' / '+k.length:'—';
+ el('historyGoalsSub').textContent=k.length?Math.round(hit/k.length*100)+'% of recorded shifts':'No entries yet';
+ el('historyAverage').textContent=k.length?short(total/k.length):'—';
+ el('historyAverageSub').textContent='Average gross per logged shift';
+ el('historyTip').textContent=k.length?amount(cost)+' spent on EV charging and other expenses this month. Tap a saved day to edit it.':'Your first saved entry starts the monthly insights.';
+}
+
 function rowMarkup(k){const a=stats(k);if(manualOnly(k))return '<button class="shift-row win-row" data-edit="'+k+'"><span><b>✦ '+safe(formatDay(k))+'</b><small>Gold confirmed · No amounts entered</small></span><span class="amount"><strong class="gold-text">✓</strong><span class="gold-text">GOLD ONLY</span></span></button>';const hit=targetHit(k);return '<button class="shift-row'+(hit?' win-row':'')+'" data-edit="'+k+'"><span><b>'+safe(formatDay(k))+'</b><small>'+short(a.gross)+' earned · '+short(a.charge+a.other)+' costs'+(a.r.imported?' · imported':'')+'</small></span><span class="amount"><strong>'+short(a.net)+'</strong><span class="'+(hit?'gold-text':'positive')+'">✓ CLOSED'+(hit?' · GOLD':'')+'</span></span></button>'}
 
 function renderDateCorrection(){
@@ -312,7 +358,7 @@ function performFreshStart(){
 function renderGoldDays(){const now=todayKey(),d=date(now),first=new Date(d);first.setDate(first.getDate()-Math.min(6,d.getDate()-1));const keys=[];for(let day=new Date(first);day<=d;day.setDate(day.getDate()+1))keys.push(key(day));const count=keys.filter(targetHit).length;el('goldCount').textContent=count+' GOLD WIN'+(count===1?'':'S');el('goldDays').innerHTML=keys.map(k=>{const hit=targetHit(k),label=date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});return '<button class="gold-day'+(hit?' achieved':'')+(k===now?' current':'')+'" data-edit="'+k+'" aria-label="'+safe(label)+(hit?', target achieved':', not yet achieved')+'"><b>'+(hit?'✓':'·')+'</b><small>'+safe(label)+'</small></button>'}).join('')}
 
 function renderHome(){
- const k=todayKey(),a=stats(k),m=date(k);const totals=monthNumbers(m);
+ const k=shiftKey(),a=stats(k),m=date(k);const totals=monthNumbers(m);
  const previous=shiftKey(),last=stats(previous),closed=Boolean(last.r);
  el('lastShiftStatus').textContent=closed?'✓ CLOSED':'NOT LOGGED';
  el('lastShiftEyebrow').textContent=closed?'LAST COMPLETED SHIFT':'PREVIOUS DRIVING DAY';
@@ -324,12 +370,12 @@ function renderHome(){
  el('freshResetPanel').classList.toggle('hidden',Boolean(state.freshStartComplete));
  el('freshDonePanel').classList.toggle('hidden',!state.freshStartComplete);
  renderDateCorrection();
- el('heroDate').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+' · TODAY';
+ el('heroDate').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+' · LAST COMPLETED DAY';
  renderGoldDays();
- el('heroBadge').textContent=a.r?'✓ CLOSED':'○ OPEN';
- el('heroIncome').innerHTML=short(a.r?a.gross:a.target)+'<small>'+(a.r?'Gross earnings':'Today’s income target')+'</small>';el('heroTarget').textContent=short(a.target);el('heroCosts').textContent=a.r?short(a.charge+a.other):'—';el('heroNet').textContent=a.r?short(a.net):'—';
+ el('heroBadge').textContent=a.r?'✓ SAVED':'○ TO LOG';
+ el('heroIncome').innerHTML=short(a.r?a.gross:a.target)+'<small>'+(a.r?'Gross earnings':'Income target to reach')+'</small>';el('heroTarget').textContent=short(a.target);el('heroCosts').textContent=a.r?short(a.charge+a.other):'—';el('heroNet').textContent=a.r?short(a.net):'—';
  el('heroProgress').style.width=a.r?Math.min(100,a.target>0?a.gross/a.target*100:100)+'%':'0%';
- el('heroMessage').textContent=a.r?'✓ Closed and saved in History.':'Today is open. After your overnight shift, log its final figures tomorrow to close it.';
+ el('heroMessage').textContent=a.r?'✓ Saved. Review or edit this shift anytime.':'Enter the three numbers from your last completed shift.';
  el('monthGross').textContent=short(totals.gross);el('monthCharge').textContent=short(totals.charge);el('monthOther').textContent=short(totals.other);el('monthNet').textContent=short(totals.net);
  el('homeMonth').textContent=m.toLocaleDateString('en-GB',{month:'long'}).toUpperCase();
  const now=date(k),dates=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dates.push(key(d))}
@@ -337,6 +383,7 @@ function renderHome(){
  el('weekBars').innerHTML=dates.map(d=>{const a=stats(d);return '<div class="bar-col'+(d===k?' today':'')+'"><div class="bar-wrap"><i class="bar target" style="height:'+Math.max(2,a.target/max*100)+'%"></i><i class="bar earned" style="height:'+Math.max(2,a.gross/max*100)+'%"></i></div><small>'+date(d).toLocaleDateString('en-GB',{weekday:'short'}).slice(0,2)+'</small></div>'}).join('');
  const recent=[...new Set([...Object.keys(state.shifts),...Object.keys(state.confirmedDays||{}).filter(k=>state.confirmedDays[k])])].filter(validKey).sort((a,b)=>b.localeCompare(a)).slice(0,5);
  el('recentList').innerHTML=recent.length?recent.map(rowMarkup).join(''):'<div class="empty">No shifts yet. Your first check-in starts here.</div>';
+smartHome(k);
 }
 function prepare(k,reset){
  if(!validKey(k))k=shiftKey();focus=k;el('shiftDate').value=k;
@@ -360,6 +407,7 @@ function updatePreview(){
  const gross=moneyField('gross'),charge=moneyField('charge'),other=moneyField('other'),takehome=round(gross-charge-other);
  el('previewTarget').textContent=amount(target);el('previewCosts').textContent=amount(charge+other);el('previewNet').textContent=amount(takehome);
  el('previewStatus').textContent=el('gross').value.trim()===''?'Enter your earnings to see your result.':takehome>=target?'✦ You have protected your net target.':gross>=target?'Gross goal reached; costs bring take-home below target.':amount(Math.max(0,target-gross))+' to reach your gross target.';
+  paintFlow(gross,target,other,charge,el('gross').value.trim()!=='');
 }
 function record(event){
  event.preventDefault();const k=el('shiftDate').value,from='',to='';
@@ -384,6 +432,7 @@ function renderHistory(){
  content+='<button type="button" class="day '+cls+(k===now?' today':'')+'" data-edit="'+k+'" aria-label="'+safe(formatDay(k))+(a.r?', '+amount(a.net)+' net':' not logged')+'"><b>'+d+'</b><small>'+(a.r?short(a.net):targetHit(k)?'✓':'·')+'</small>'+(a.r||targetHit(k)?'<i class="cal-dot"></i>':'')+'</button>';}
  el('calendar').innerHTML=content;el('historyList').innerHTML=rows.length?rows.map(rowMarkup).join(''):'<div class="empty">No shifts recorded in this month.</div>';
  const costsTotal=round(t.charge+t.other);el('histNote').textContent=t.count+' money entries · '+t.hits+' verified targets · '+amount(costsTotal)+' costs · '+amount(t.net)+' take-home. Confirmed targets without amounts do not add fictitious earnings.';
+smartHistory(rows);
 }
 function renderSettings(){
  el('targets').innerHTML=DAYS.map((d,i)=>'<div class="target-row"><label for="goal'+i+'">'+d+'</label><div class="target-inner"><b>£</b><input id="goal'+i+'" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+state.targets[i]+'"></div></div>').join('');
@@ -413,6 +462,9 @@ function restoreFile(file){
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.tab==='log'){prepare(shiftKey());}switchTo(b.dataset.tab)}));
 el('homeLog').addEventListener('click',()=>{prepare(shiftKey());switchTo('log')});
 el('freshStartBtn').addEventListener('click',performFreshStart);
+el('morningLog').addEventListener('click',()=>{prepare(shiftKey());switchTo('log')});
+el('settings').appendChild(el('freshResetPanel'));
+el('settings').appendChild(el('freshDonePanel'));
 el('correctToday').addEventListener('click',()=>relocateShift(key(new Date()),shiftKey()));
 el('moveEntryBack').addEventListener('click',()=>{const from=el('shiftDate').value;if(!validKey(from))return;const prior=date(from);prior.setDate(prior.getDate()-1);relocateShift(from,key(prior));});
 el('seeHistory').addEventListener('click',()=>switchTo('history'));
