@@ -366,7 +366,7 @@ function smartHome(end){
  el('morningStatus').textContent=saved?'Saved on this device':'Ready for your three numbers';
  el('smartHits').textContent=keys.length?hits+' / '+keys.length:'—';
  el('smartHitSub').textContent=keys.length?Math.round(hits/keys.length*100)+'% of logged shifts':'No recorded shifts yet';
- el('smartNet').textContent=keys.length?short(total):'—';
+ el('smartNet').textContent=keys.length?amount(total):'—';
  el('smartNetSub').textContent=keys.length?'After expenses and charging':'Your first check-in starts here';
  el('smartTip').textContent=keys.length?hits+' of '+keys.length+' shifts reached their gross income goal. Take-home already deducts all expenses and EV charging.':'One short check-in each morning builds your saved record automatically.';
 }
@@ -384,7 +384,7 @@ function rowMarkup(k){
  if(manualOnly(k))return '<button class="shift-row win-row" data-edit="'+k+'"><span><b>✦ '+safe(formatDay(k))+'</b><small>Target confirmed · No money entry</small></span><span class="amount"><strong class="gold-text">✓</strong><span class="reward-row-tag">GOAL ONLY</span></span></button>';
  const level=rewardLevel(a.gross,a.target,a.other,a.charge,true);
  const tag=['LOGGED','GREAT','SUPERB','MEGA'][level];
- return '<button class="shift-row'+(level?' win-row':'')+'" data-edit="'+k+'"><span><b>'+safe(formatDay(k))+'</b><small>'+short(a.gross)+' income · '+short(a.other)+' expenses · '+short(a.charge)+' EV'+(a.r.imported?' · imported':'')+'</small></span><span class="amount"><strong>'+short(a.net)+'</strong><span class="reward-row-tag" data-level="'+level+'">'+tag+'</span></span></button>';
+ return '<button class="shift-row'+(level?' win-row':'')+'" data-edit="'+k+'"><span><b>'+safe(formatDay(k))+'</b><small>'+amount(a.gross)+' income · '+amount(a.other)+' expenses · '+amount(a.charge)+' EV'+(a.r.imported?' · imported':'')+'</small></span><span class="amount"><strong>'+amount(a.net)+'</strong><span class="reward-row-tag" data-level="'+level+'">'+tag+'</span></span></button>';
 }
 
 function renderDateCorrection(){
@@ -451,10 +451,10 @@ function renderHome(){
  el('heroDate').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+' · LAST COMPLETED DAY';
  renderGoldDays();
  el('heroBadge').textContent=a.r?'✓ SAVED':'○ TO LOG';
- el('heroIncome').innerHTML=short(a.r?a.gross:a.target)+'<small>'+(a.r?'Gross earnings':'Income target to reach')+'</small>';el('heroTarget').textContent=short(a.target);el('heroCosts').textContent=a.r?short(a.charge+a.other):'—';el('heroNet').textContent=a.r?short(a.net):'—';
+ el('heroIncome').innerHTML=short(a.r?a.gross:a.target)+'<small>'+(a.r?'Gross earnings':'Income target to reach')+'</small>';el('heroTarget').textContent=short(a.target);el('heroCosts').textContent=a.r?amount(a.charge+a.other):'—';el('heroNet').textContent=a.r?amount(a.net):'—';
  el('heroProgress').style.width=a.r?Math.min(100,a.target>0?a.gross/a.target*100:100)+'%':'0%';
  el('heroMessage').textContent=a.r?'✓ Saved. Review or edit this shift anytime.':'Enter the three numbers from your last completed shift.';
- el('monthGross').textContent=short(totals.gross);el('monthCharge').textContent=short(totals.charge);el('monthOther').textContent=short(totals.other);el('monthNet').textContent=short(totals.net);
+ el('monthGross').textContent=amount(totals.gross);el('monthCharge').textContent=amount(totals.charge);el('monthOther').textContent=amount(totals.other);el('monthNet').textContent=amount(totals.net);
  el('homeMonth').textContent=m.toLocaleDateString('en-GB',{month:'long'}).toUpperCase();
  const now=date(k),dates=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);dates.push(key(d))}
  const max=Math.max(1,...dates.map(k=>Math.max(stats(k).gross,stats(k).target)));
@@ -503,7 +503,7 @@ function record(event){
 function renderHistory(){
  const m=historyMonth,t=monthNumbers(m),rows=[...new Set([...monthRows(m),...Object.keys(state.confirmedDays||{}).filter(k=>state.confirmedDays[k]&&k.startsWith(m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0')+'-'))])].filter(validKey).sort((a,b)=>b.localeCompare(a));
  el('historyMonth').textContent=m.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
- el('histGross').textContent=short(t.gross);el('histNet').textContent=short(t.net);el('histCharge').textContent=short(t.charge);el('histHits').textContent=t.hits+' ✓';
+ el('histGross').textContent=amount(t.gross);el('histNet').textContent=amount(t.net);el('histCharge').textContent=amount(t.charge);el('histHits').textContent=t.hits+' ✓';
  el('histCount').textContent=rows.length+' DAY'+(rows.length===1?'':'S');
  const first=(new Date(m.getFullYear(),m.getMonth(),1).getDay()+6)%7,last=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),now=shiftKey();
  let content=['Mo','Tu','We','Th','Fr','Sa','Su'].map(d=>'<div class="cal-head">'+d+'</div>').join('');
