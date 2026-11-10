@@ -133,7 +133,7 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
   <div id="dateCorrection" class="notice hidden" style="margin-top:14px">
 <strong id="dateCorrectionTitle"></strong><p id="dateCorrectionText" style="margin:8px 0 12px"></p>
 <button type="button" class="secondary" id="correctToday">↶ Move saved shift to previous day</button></div>
-<section class="gold-win-card" aria-label="Gold target streak"><div class="gold-win-head"><div><small>YOUR GOLD STANDARD</small><h2>Target champions.</h2></div><strong id="goldCount">4 GOLD WINS</strong></div><div id="goldDays" class="gold-days"></div><p>Gold ticks show targets you confirmed. Missing earnings stay unrecorded.</p></section><button class="primary cta" id="homeLog"><span class="cta-icon">＋</span><span id="homeLogLabel">Log a finished shift</span><span>→</span></button>
+<section class="gold-win-card" aria-label="Gold target streak"><div class="gold-win-head"><div><small>MONTHLY GOLD STANDARD</small><h2>Target champions.</h2></div><strong id="goldCount">4 GOLD WINS</strong></div><div id="goldDays" class="gold-days"></div><p>Gold marks 1–8 November as achieved, without adding made-up income or costs. New wins start with Monday 9 November's real entries.</p></section><button class="primary cta" id="homeLog"><span class="cta-icon">＋</span><span id="homeLogLabel">Log a finished shift</span><span>→</span></button>
   <div class="section-title"><h2>This month</h2><span class="kicker" id="homeMonth">NOVEMBER</span></div>
   <div class="tile-grid">
     <div class="tile green"><span class="symbol">💷</span><small>Gross earnings</small><strong id="monthGross">£0</strong></div>
@@ -460,7 +460,7 @@ function performFreshStart(){
  notify('✓ Gold through Sunday 8 Nov. Monday 9 Nov starts fresh.');
  switchTo('home');
 }
-function renderGoldDays(){const now=shiftKey(),d=date(now),first=new Date(d);first.setDate(first.getDate()-Math.min(6,d.getDate()-1));const keys=[];for(let day=new Date(first);day<=d;day.setDate(day.getDate()+1))keys.push(key(day));const count=keys.filter(targetHit).length;el('goldCount').textContent=count+' GOLD WIN'+(count===1?'':'S');el('goldDays').innerHTML=keys.map(k=>{const hit=targetHit(k),label=date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});return '<button class="gold-day'+(hit?' achieved':'')+(k===now?' current':'')+'" data-edit="'+k+'" aria-label="'+safe(label)+(hit?', target achieved':', not yet achieved')+'"><b>'+(hit?'✓':'·')+'</b><small>'+safe(label)+'</small></button>'}).join('')}
+function renderGoldDays(){const now=shiftKey(),d=date(now),first=new Date(d);first.setDate(first.getDate()-Math.min(6,d.getDate()-1));const keys=[];for(let day=new Date(first);day<=d;day.setDate(day.getDate()+1))keys.push(key(day));const monthKeys=[];for(let day=new Date(d.getFullYear(),d.getMonth(),1);day<=d;day.setDate(day.getDate()+1))monthKeys.push(key(day));const count=monthKeys.filter(targetHit).length;el('goldCount').textContent=count+' GOLD WIN'+(count===1?'':'S');el('goldDays').innerHTML=keys.map(k=>{const hit=targetHit(k),label=date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});return '<button class="gold-day'+(hit?' achieved':'')+(k===now?' current':'')+'" data-edit="'+k+'" aria-label="'+safe(label)+(hit?', target achieved':', not yet achieved')+'"><b>'+(hit?'✓':'·')+'</b><small>'+safe(label)+'</small></button>'}).join('')}
 
 function renderHome(){
  const k=shiftKey(),a=stats(k),m=date(k);const totals=monthNumbers(m);
