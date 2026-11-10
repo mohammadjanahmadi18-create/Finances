@@ -167,3 +167,16 @@ header {padding:22px 1px 15px;gap:13px;}
 @media(min-width:540px){.morning-card {padding:26px 27px;}.morning-card h2 {max-width:none;}.hero {padding:26px;}.smart-grid {gap:15px;}}
 @media(max-width:360px){.morning-card {padding:18px;}.morning-card h2 {font-size:24px;}.hero-stats small {font-size:10px;}.smart-stat {padding:15px 12px;}.gold-win-head h2 {font-size:18px;}}
 @media(prefers-reduced-motion:reduce){.morning-card,.flow-board,.hero,.smart-stat {animation:none!important;transition:none!important;}}
+
+/* Fixed, user-approved Nov 1–8 opening balance; actual data continues Nov 9 onward. */
+.opening-snapshot{background:#fff;border:1px solid #e2e4e9;border-radius:24px;padding:19px 17px 17px;margin-top:18px;box-shadow:0 8px 24px #2227330d;}
+.opening-overline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px;}
+.opening-overline .sun-pill{font-size:11px;letter-spacing:.035em;padding:7px 10px;}
+.opening-overline small{font-size:11px;color:#6b737d;font-weight:800;letter-spacing:.05em;}
+.opening-figures{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.opening-figure{border-radius:18px;background:#f1f2f5;border:1px solid #e8e9ed;padding:15px 12px 14px;min-width:0;}
+.opening-figure:first-child{background:#fff5c8;border-color:#efdf8c;}
+.opening-figure small{display:block;color:#505761;font-size:12px;line-height:1.4;font-weight:750;min-height:34px;}
+.opening-figure strong{display:block;margin-top:9px;color:#242930;font:850 clamp(24px,6.6vw,35px)/1.18 Inter,ui-sans-serif,system-ui,sans-serif;letter-spacing:-.045em;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.opening-caption{color:#747a83;font-size:11px;line-height:1.5;margin:13px 2px 0;}
+@media(max-width:380px){.opening-snapshot{padding:15px 12px;}.opening-figures{gap:8px;}.opening-figure{padding:13px 10px;}.opening-figure strong{font-size:clamp(22px,6.6vw,28px)}}
