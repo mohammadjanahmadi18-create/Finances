@@ -1,6 +1,6 @@
 /* Offline shell: precache only paths that exist; runtime cache remains network-first. */
-const CACHE='finances-budget-v20';
-const ASSETS=['./','./index.html','./gold.html','./atelier.css?v=11','./atelier.css?v=12','./crystal.css?v=18','./sunrise.css?v=19','./budget-ladder.css?v=20','./manifest.webmanifest?v=18','./manifest-gold.webmanifest?v=18','./icons/icon.svg?v=11','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='finances-opening-v21';
+const ASSETS=['./','./index.html','./gold.html','./atelier.css?v=11','./atelier.css?v=12','./crystal.css?v=18','./sunrise.css?v=21','./budget-ladder.css?v=20','./manifest.webmanifest?v=18','./manifest-gold.webmanifest?v=18','./icons/icon.svg?v=11','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(
   caches.open(CACHE).then(cache=>Promise.all(ASSETS.map(url=>cache.add(url).catch(()=>{})))).then(()=>self.skipWaiting())
 ));
