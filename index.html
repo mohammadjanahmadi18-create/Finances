@@ -108,12 +108,12 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
  <button class="primary morning-action" id="morningLog" type="button">Log my finished shift →</button><div class="morning-stamp"><span id="morningDate">Last driving day</span><span>·</span><span id="morningStatus">Ready</span></div></section>
   <section class="fresh-reset" id="freshResetPanel">
     <div class="fresh-reset-icon">✦</div>
-    <div class="fresh-reset-copy"><strong>Fresh start • Saturday 7 November</strong>
-    <small>Clear previous income and expenses. Keep six gold target ticks for 1–6 November. Start recording Saturday’s earnings on Sunday.</small></div>
+    <div class="fresh-reset-copy"><strong>Fresh start • Monday 9 November</strong>
+    <small>Gold for every day from 1–8 November. Start real income, expenses and charging records on Monday 9 November.</small></div>
     <button type="button" class="fresh-reset-button" id="freshStartBtn">Reset & start fresh</button>
   </section>
   <section class="fresh-done hidden" id="freshDonePanel">
-    <strong>✓ Fresh start active</strong><small>Earlier figures cleared. First new driving day: Saturday 7 November. Record it on Sunday.</small>
+    <strong>✓ Fresh start active</strong><small>Gold through Sunday 8 November. Monday 9 November is the first day for detailed income, expenses and EV charging.</small>
   </section>
   <div class="hero"><img class="hero-portrait" src="./icons/icon-512.png?v=11" alt="" aria-hidden="true">
     <div class="hero-top"><span class="hero-label">LAST COMPLETED DRIVING DAY</span><span class="pill" id="heroBadge">READY TO GO</span></div>
@@ -234,7 +234,8 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
     <div class="settings-actions"><button class="secondary" id="backup">↓ JSON backup</button><button class="secondary" id="csv">↓ Month CSV</button><button class="secondary" id="restore">↑ Restore backup</button><button class="secondary" id="classic">Classic app ↗</button></div><input type="file" id="restoreFile" accept=".json,application/json" hidden>
     <p class="small-note" style="margin-top:15px" id="importState">Existing data is kept on this device.</p>
   </div>
-  <div class="notice"><strong>About your numbers:</strong> Gross income is what you earned before costs. Take-home is gross income minus charging and other expenses. A gross target win is different from a net target win.</div>
+  <div class="form-panel" id="preResetArchivePanel"><h2>Previous records backup</h2><p class="subtitle">Your old records were archived on this device before the fresh start. You can download them if needed.</p><button class="secondary" type="button" id="downloadPreResetArchive">↓ Download pre-reset records</button></div>
+   <div class="notice"><strong>About your numbers:</strong> Gross income is what you earned before costs. Take-home is gross income minus charging and other expenses. A gross target win is different from a net target win.</div>
 </section>
 </div>
 <nav class="nav" aria-label="Main navigation">
@@ -269,9 +270,11 @@ function clock(k,from,to){const start=new Date(k+'T'+from+':00');if(!Number.isFi
 function goal(k,record){return record&&record.override!=null?record.override:state.targets[weekday(k)]}
 function net(record){return round(record.gross-record.charge-record.other)}
 function costs(record){return round(record.charge+record.other)}
-const VERIFIED_WINS=['2026-11-01','2026-11-02','2026-11-03','2026-11-04','2026-11-05','2026-11-06'];
+const VERIFIED_WINS=Array.from({length:8},(_,i)=>'2026-11-'+String(i+1).padStart(2,'0'));
+const START_RESET_FLAG='finances-baseline-nov9-2026';
+const START_ARCHIVE='finances-before-nov9-2026';
 const starterWins=()=>Object.fromEntries(VERIFIED_WINS.map(k=>[k,true]));
-function newState(){return {version:3,targets:DEFAULT.slice(),shifts:{},legacyImported:false,confirmedDays:starterWins(),freshStartComplete:false}}
+function newState(){return {version:3,targets:DEFAULT.slice(),shifts:{},legacyImported:false,confirmedDays:starterWins(),freshStartComplete:true,startedOn:'2026-11-09'}}
 function migrate(){
  const value=localStorage.getItem(LEGACY);
  const s=newState();if(!value)return s;
@@ -291,9 +294,33 @@ function migrate(){
 }
 function validSaved(s){return s&&s.version===3&&Array.isArray(s.targets)&&s.targets.length===7&&s.targets.every(x=>Number.isFinite(x)&&x>=0&&x<=1000000)&&s.shifts&&typeof s.shifts==='object'&&!Array.isArray(s.shifts);}
 function load(){
- try{const saved=localStorage.getItem(STORE);if(saved){const parsed=JSON.parse(saved);if(validSaved(parsed)){parsed.confirmedDays={...parsed.confirmedDays,...starterWins()};return parsed;}}}
- catch(err){console.warn('Cannot read saved shifts',err)}
- return migrate();
+ // One-time user-requested baseline: gold to Sun 8 Nov; all detailed tracking begins Mon 9 Nov.
+ // Save an on-device backup before replacing the old ledger. Do not reset on later opens.
+ let existing;
+ try {
+   const raw=localStorage.getItem(STORE);
+   if(raw){
+     const parsed=JSON.parse(raw);
+     if(validSaved(parsed))existing=parsed;
+   }
+ } catch(err){console.warn('Could not read prior Finances entries',err)}
+ if(!existing)existing=migrate();
+ if(localStorage.getItem(START_RESET_FLAG)==='complete'){
+   existing.confirmedDays={...(existing.confirmedDays||{}),...starterWins()};
+   return existing;
+ }
+ const fresh=newState();
+ try {
+   if(Object.keys(existing.shifts||{}).length || Object.keys(existing.confirmedDays||{}).length){
+     if(!localStorage.getItem(START_ARCHIVE))localStorage.setItem(START_ARCHIVE,JSON.stringify(existing));
+   }
+   localStorage.setItem(STORE,JSON.stringify(fresh));
+   localStorage.setItem(START_RESET_FLAG,'complete');
+   return fresh;
+ } catch(err){
+   console.warn('Fresh-start storage was unavailable; old records were preserved',err);
+   return existing;
+ }
 }
 let state=load(),tab='home',focus=shiftKey(),historyMonth=new Date(date(shiftKey()).getFullYear(),date(shiftKey()).getMonth(),1),toastTimer=0;
 function save(){try{localStorage.setItem(STORE,JSON.stringify(state));return true}catch(err){notify('Could not save. Check your phone storage.');return false}}
@@ -418,22 +445,22 @@ function relocateShift(source,destination){
  switchTo('home');
 }
 function performFreshStart(){
- if(state.freshStartComplete){notify('Your fresh start is already active.');return;}
- const message='Start fresh from Saturday 7 November 2026?\n\nThis clears ALL recorded income, EV charging, expenses and notes on this device, including entries for 7 November.\n\nYour weekly targets stay the same, and gold ticks remain for 1–6 November. A backup download will be requested before clearing.\n\nThis cannot be undone without restoring a backup.';
+ if(state.freshStartComplete){notify('Fresh tracking is already active from Monday 9 November.');return}
+ const message='Reset all old income, expenses and EV charging entries, and begin detailed tracking on Monday 9 November 2026?\n\n1–8 November will all show gold, without inventing earnings or costs.\n\nThe app will keep an archived copy of your old entries on this phone.';
  if(!confirm(message))return;
  const original=state;
- try{download('Finances-before-reset-'+key(new Date())+'.json',JSON.stringify(original,null,2),'application/json')}
- catch(err){notify('Could not prepare your backup. No records were erased.');return}
- const resetState={version:3,targets:original.targets.slice(),shifts:{},legacyImported:false,confirmedDays:starterWins(),freshStartComplete:true,startedOn:'2026-11-07'};
- state=resetState;
+ try{
+   if(!localStorage.getItem(START_ARCHIVE))localStorage.setItem(START_ARCHIVE,JSON.stringify(original));
+ }catch(err){notify('Could not save an archive. Your data was not changed.');return}
+ state=newState();
  if(!save()){state=original;return}
- try{localStorage.removeItem(LEGACY)}catch(err){console.warn('Legacy data could not be removed',err)}
+ try{localStorage.setItem(START_RESET_FLAG,'complete')}catch(err){console.warn(err)}
  historyMonth=new Date(2026,10,1);
  prepare(shiftKey(),true);
- notify('✓ Fresh start active. Old amounts cleared; 1–6 Nov gold ticks preserved.');
+ notify('✓ Gold through Sunday 8 Nov. Monday 9 Nov starts fresh.');
  switchTo('home');
 }
-function renderGoldDays(){const now=todayKey(),d=date(now),first=new Date(d);first.setDate(first.getDate()-Math.min(6,d.getDate()-1));const keys=[];for(let day=new Date(first);day<=d;day.setDate(day.getDate()+1))keys.push(key(day));const count=keys.filter(targetHit).length;el('goldCount').textContent=count+' GOLD WIN'+(count===1?'':'S');el('goldDays').innerHTML=keys.map(k=>{const hit=targetHit(k),label=date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});return '<button class="gold-day'+(hit?' achieved':'')+(k===now?' current':'')+'" data-edit="'+k+'" aria-label="'+safe(label)+(hit?', target achieved':', not yet achieved')+'"><b>'+(hit?'✓':'·')+'</b><small>'+safe(label)+'</small></button>'}).join('')}
+function renderGoldDays(){const now=shiftKey(),d=date(now),first=new Date(d);first.setDate(first.getDate()-Math.min(6,d.getDate()-1));const keys=[];for(let day=new Date(first);day<=d;day.setDate(day.getDate()+1))keys.push(key(day));const count=keys.filter(targetHit).length;el('goldCount').textContent=count+' GOLD WIN'+(count===1?'':'S');el('goldDays').innerHTML=keys.map(k=>{const hit=targetHit(k),label=date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});return '<button class="gold-day'+(hit?' achieved':'')+(k===now?' current':'')+'" data-edit="'+k+'" aria-label="'+safe(label)+(hit?', target achieved':', not yet achieved')+'"><b>'+(hit?'✓':'·')+'</b><small>'+safe(label)+'</small></button>'}).join('')}
 
 function renderHome(){
  const k=shiftKey(),a=stats(k),m=date(k);const totals=monthNumbers(m);
@@ -447,6 +474,7 @@ function renderHome(){
    'Log '+date(previous).toLocaleDateString('en-GB',{weekday:'long'})+' shift';
  el('freshResetPanel').classList.toggle('hidden',Boolean(state.freshStartComplete));
  el('freshDonePanel').classList.toggle('hidden',!state.freshStartComplete);
+  el('preResetArchivePanel').classList.toggle('hidden',!localStorage.getItem(START_ARCHIVE));
  renderDateCorrection();
  el('heroDate').textContent=date(k).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+' · LAST COMPLETED DAY';
  renderGoldDays();
@@ -517,7 +545,7 @@ smartHistory(rows);
 }
 function renderSettings(){
  el('targets').innerHTML=DAYS.map((d,i)=>'<div class="target-row"><label for="goal'+i+'">'+d+'</label><div class="target-inner"><b>£</b><input id="goal'+i+'" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+state.targets[i]+'"></div></div>').join('');
- el('importState').textContent=state.freshStartComplete?'Fresh start active from 7 November 2026. Earlier income and expense entries were cleared on this device. The earlier gold ticks remain.':state.legacyImported?'Your previous Finances records were copied into this version. The original records remain untouched.':'Records are saved only in this browser or installed app. Back up regularly.';
+ el('importState').textContent=state.freshStartComplete?'Fresh tracking starts Monday 9 November 2026. All dates 1–8 November are marked gold, with no fabricated income or costs.':state.legacyImported?'Your previous Finances records were copied into this version. The original records remain untouched.':'Records are saved only in this browser or installed app. Back up regularly.';
 }
 function render(){const drivingDay=date(todayKey());el('headerDay').textContent=drivingDay.getDate();el('headerMonth').textContent=drivingDay.toLocaleDateString('en-GB',{month:'short'}).toUpperCase();if(tab==='home')renderHome();if(tab==='history')renderHistory();if(tab==='settings')renderSettings();if(tab==='log')updatePreview();}
 function download(filename,body,type){const blob=new Blob([body],{type});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
@@ -543,6 +571,7 @@ function restoreFile(file){
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.tab==='log'){prepare(shiftKey());}switchTo(b.dataset.tab)}));
 el('homeLog').addEventListener('click',()=>{prepare(shiftKey());switchTo('log')});
 el('freshStartBtn').addEventListener('click',performFreshStart);
+el('downloadPreResetArchive').addEventListener('click',()=>{const raw=localStorage.getItem(START_ARCHIVE);if(!raw){notify('No earlier backup is saved on this device.');return}download('Finances-before-Mon-9-Nov-2026.json',raw,'application/json');notify('Pre-reset records downloaded')});
 el('morningLog').addEventListener('click',()=>{prepare(shiftKey());switchTo('log')});
 el('settings').appendChild(el('freshResetPanel'));
 el('settings').appendChild(el('freshDonePanel'));
