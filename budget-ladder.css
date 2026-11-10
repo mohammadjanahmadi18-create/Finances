@@ -1,0 +1,56 @@
+/* FINANCES • Morning Budget Ladder — 2026-11
+   Lightweight, density-independent typography and status cards.
+   No bitmap enlargements; preserves all existing shift data. */
+.budget-board{
+ margin:16px 0 21px;padding:20px 17px 16px;
+ border:1px solid #e4e6ea;border-radius:24px;background:#fff;
+ box-shadow:0 7px 24px #1f25370d;
+ color:#292d33;font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.budget-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.budget-top .kicker{color:#636a74;font-size:10px;letter-spacing:.13em;margin:0 0 5px}
+.budget-top h2{font:850 clamp(21px,5.5vw,26px)/1.16 Inter,ui-rounded,system-ui,sans-serif;letter-spacing:-.04em;color:#20252b;margin:0}
+.budget-count{display:inline-block;white-space:nowrap;align-self:center;border-radius:100px;background:#f0f1f4;color:#5e6670;padding:7px 10px;font-size:11px;font-weight:850}
+.budget-description{font-size:12px;line-height:1.55;color:#6d737d;margin:11px 0 16px}
+.budget-pool{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px}
+.budget-pool>div{background:#f4f5f7;border:1px solid #ecedf0;border-radius:16px;padding:13px 12px;min-width:0}
+.budget-pool small{display:block;font-weight:700;font-size:11px;color:#676c75;line-height:1.4}
+.budget-pool strong{display:block;color:#262b31;font-size:clamp(23px,6vw,30px);line-height:1.25;letter-spacing:-.035em;font-weight:850;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.tier-steps{display:grid;gap:8px}
+.tier-step{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px;border:1px solid #e7e8ed;border-radius:16px;background:#fafafb;min-height:72px}
+.tier-step[data-hit="true"]{background:#fff7cf;border-color:#f4dc86}
+.tier-number{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;color:#636973;font-size:15px;font-weight:850;background:#e9ebef}
+.tier-step[data-hit="true"] .tier-number{background:#ffd322;color:#463910}
+.tier-copy{min-width:0}
+.tier-copy strong{display:block;color:#242931;font-size:15px;line-height:1.2;letter-spacing:-.025em;font-weight:850}
+.tier-copy small{display:block;color:#646b75;font-size:11px;line-height:1.45;margin-top:4px}
+.tier-required{text-align:right;white-space:nowrap;font:850 clamp(13px,3.5vw,16px)/1.2 Inter,system-ui,sans-serif;color:#363b44;font-variant-numeric:tabular-nums}
+.tier-required small{display:block;color:#6d727a;font-size:10px;font-weight:700;margin-top:5px}
+.budget-next{margin:13px 0 5px;padding:11px 13px;border-radius:13px;background:#f2f3f6;color:#454d56;font-size:12px;font-weight:750;line-height:1.5}
+.budget-next[data-level="3"]{background:#ffed9d;color:#544009}
+.budget-wins{margin:12px 0 0;color:#6a7079;font-size:11px;line-height:1.45}
+.reward-live{display:grid;grid-template-columns:41px minmax(0,1fr);gap:11px;align-items:center;padding:14px;border:1px solid #e3e5e9;border-radius:18px;margin:15px 0 0;background:#f5f6f8}
+.reward-live .reward-token{width:41px;height:41px;border-radius:14px;display:grid;place-items:center;background:#e3e6ea;color:#575e68;font-size:23px;font-weight:850}
+.reward-live strong{display:block;font-weight:850;font-size:16px;line-height:1.2;letter-spacing:-.025em;color:#2b3037}
+.reward-live small{display:block;font-size:12px;color:#656c76;line-height:1.45;margin-top:5px}
+.reward-live[data-level="1"]{background:#fffae5;border-color:#f3e5a3}
+.reward-live[data-level="2"]{background:#fff4d2;border-color:#edd57e}
+.reward-live[data-level="3"]{background:#fff0ac;border-color:#e2bd35}
+.reward-live[data-level="1"] .reward-token,.reward-live[data-level="2"] .reward-token,.reward-live[data-level="3"] .reward-token{background:#ffce13;color:#423306}
+.reward-row-tag{font-size:10px;font-weight:850;letter-spacing:.045em;color:#6c737d}
+.reward-row-tag[data-level="1"]{color:#8a6712}
+.reward-row-tag[data-level="2"]{color:#886000}
+.reward-row-tag[data-level="3"]{color:#806100}
+#log .caption{font-size:12px;color:#656d76}
+#log .field-row label{min-width:0}
+#log .field-row .input{width:100%}
+#history .budget-board{margin-top:19px}
+@media(max-width:390px){
+ .tier-step{grid-template-columns:32px minmax(0,1fr) auto;gap:7px;padding:10px 9px}
+ .tier-number{width:31px;height:31px}
+ .tier-copy strong{font-size:14px}
+ .tier-copy small{font-size:10px}
+ .tier-required{font-size:13px}
+ .budget-board{padding:17px 13px}
+}
+@media(prefers-reduced-motion:reduce){.budget-board,.tier-step,.reward-live{transition:none!important;animation:none!important}}
