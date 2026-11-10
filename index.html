@@ -95,14 +95,22 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
 </style>
 <link rel="stylesheet" href="./atelier.css?v=11">
 <link rel="stylesheet" href="./crystal.css?v=18">
-<link rel="stylesheet" href="./sunrise.css?v=19">
+<link rel="stylesheet" href="./sunrise.css?v=21">
 <link rel="stylesheet" href="./budget-ladder.css?v=20">
 </head>
 <body>
 <div class="shell">
 <header><div class="identity"><img class="mark" src="./icons/icon-512.png?v=18" alt="Personalised Liberty portrait"><div class="wordmark">Finances<small>Your shift, sorted</small></div></div><div class="header-date"><b id="headerDay">—</b><small id="headerMonth">NOV</small></div></header>
 <section class="page active" id="home">
-  <div class="kicker">YOUR MONEY AT A GLANCE</div><h1>Drive. Earn. Done.</h1><p class="subtitle">Your clear, simple money dashboard. Every target, every cost and every pound you keep.</p>
+  <div class="kicker">YOUR MONEY AT A GLANCE</div><h1>Drive. Earn. Done.</h1><p class="subtitle">Your income and Tesla charging totals, clearly tracked.</p>
+<section class="opening-snapshot" aria-label="Opening balance through Sunday 8 November">
+  <div class="opening-overline"><span class="sun-pill">✓ 8 GOLD DAYS</span><small>1–8 NOV 2026</small></div>
+  <div class="opening-figures">
+    <div class="opening-figure"><small>Total income to Sunday</small><strong id="openingIncome">£1,800.00</strong></div>
+    <div class="opening-figure"><small>Tesla charging bills</small><strong id="openingCharge">£167.53</strong></div>
+  </div>
+  <p class="opening-caption">Income assumes every daily target was achieved. Tesla amount totals the supplied receipts, including combined congestion fees where shown.</p>
+</section>
  <section class="morning-card"><div class="morning-top"><span class="sun-pill">☀ 6 AM CHECK-IN</span><span class="morning-time">YOUR MORNING ROUTINE</span></div>
  <h2>Three numbers.<br>You're done.</h2><p>Enter total income, other expenses and EV charging for the driving day you just finished.</p>
  <button class="primary morning-action" id="morningLog" type="button">Log my finished shift →</button><div class="morning-stamp"><span id="morningDate">Last driving day</span><span>·</span><span id="morningStatus">Ready</span></div></section>
@@ -113,7 +121,7 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
     <button type="button" class="fresh-reset-button" id="freshStartBtn">Reset & start fresh</button>
   </section>
   <section class="fresh-done hidden" id="freshDonePanel">
-    <strong>✓ Fresh start active</strong><small>Gold through Sunday 8 November. Monday 9 November is the first day for detailed income, expenses and EV charging.</small>
+    <strong>✓ Opening balance loaded</strong><small>1–8 November: targets counted as income, Tesla charging bills recorded, other expenses £0. Real tracking begins Monday 9 November.</small>
   </section>
   <div class="hero"><img class="hero-portrait" src="./icons/icon-512.png?v=11" alt="" aria-hidden="true">
     <div class="hero-top"><span class="hero-label">LAST COMPLETED DRIVING DAY</span><span class="pill" id="heroBadge">READY TO GO</span></div>
@@ -133,7 +141,7 @@ textarea.input{padding:12px 13px;height:auto;min-height:81px;resize:vertical;fon
   <div id="dateCorrection" class="notice hidden" style="margin-top:14px">
 <strong id="dateCorrectionTitle"></strong><p id="dateCorrectionText" style="margin:8px 0 12px"></p>
 <button type="button" class="secondary" id="correctToday">↶ Move saved shift to previous day</button></div>
-<section class="gold-win-card" aria-label="Gold target streak"><div class="gold-win-head"><div><small>MONTHLY GOLD STANDARD</small><h2>Target champions.</h2></div><strong id="goldCount">4 GOLD WINS</strong></div><div id="goldDays" class="gold-days"></div><p>Gold marks 1–8 November as achieved, without adding made-up income or costs. New wins start with Monday 9 November's real entries.</p></section><button class="primary cta" id="homeLog"><span class="cta-icon">＋</span><span id="homeLogLabel">Log a finished shift</span><span>→</span></button>
+<section class="gold-win-card" aria-label="Gold target streak"><div class="gold-win-head"><div><small>MONTHLY GOLD STANDARD</small><h2>Target champions.</h2></div><strong id="goldCount">4 GOLD WINS</strong></div><div id="goldDays" class="gold-days"></div><p>Gold marks 1–8 November as achieved at each daily target. Charging is entered from the Tesla receipts. From Monday 9 November, use your real figures.</p></section><button class="primary cta" id="homeLog"><span class="cta-icon">＋</span><span id="homeLogLabel">Log a finished shift</span><span>→</span></button>
   <div class="section-title"><h2>This month</h2><span class="kicker" id="homeMonth">NOVEMBER</span></div>
   <div class="tile-grid">
     <div class="tile green"><span class="symbol">💷</span><small>Gross earnings</small><strong id="monthGross">£0</strong></div>
@@ -323,6 +331,47 @@ function load(){
  }
 }
 let state=load(),tab='home',focus=shiftKey(),historyMonth=new Date(date(shiftKey()).getFullYear(),date(shiftKey()).getMonth(),1),toastTimer=0;
+
+/* One-time historical opening balance, per user: all eight targets met, no other costs.
+   Tesla receipt totals include any combined Supercharging & Congestion Fee invoices. */
+const OPENING_FLAG='finances-opening-balance-2026-11-08-v2';
+const OPENING_ARCHIVE='finances-before-opening-balance-v2';
+const OPENING_CHARGES=[9.96,12.33,30.24,24.33,15.36,15.20,30.42,29.69];
+function seedOpeningBalance(){
+ try{
+   if(localStorage.getItem(OPENING_FLAG)==='complete')return;
+   const old=state;
+   if(!localStorage.getItem(OPENING_ARCHIVE))
+     localStorage.setItem(OPENING_ARCHIVE,JSON.stringify(old));
+   const next={...old,version:3,targets:DEFAULT.slice(),
+     shifts:{...(old.shifts||{})},confirmedDays:{...(old.confirmedDays||{}),...starterWins()},
+     freshStartComplete:true,startedOn:'2026-11-09'};
+   for(let i=0;i<8;i++){
+     const k='2026-11-'+String(i+1).padStart(2,'0');
+     const target=DEFAULT[weekday(k)];
+     next.shifts[k]={
+       gross:target,other:0,charge:OPENING_CHARGES[i],
+       start:'',finish:'',
+       notes:'Opening balance: achieved daily income target (assumed); Tesla receipts combined total.',
+       override:null,imported:false,baseline:true
+     };
+   }
+   localStorage.setItem(STORE,JSON.stringify(next));
+   localStorage.setItem(OPENING_FLAG,'complete');
+   state=next;
+ }catch(err){console.warn('Opening balance could not be saved; existing records are unchanged',err)}
+}
+seedOpeningBalance();
+function renderOpeningBalance(){
+ const dates=VERIFIED_WINS,values=dates.reduce((sum,k)=>{
+   const r=entry(k);
+   if(r){sum.income+=r.gross;sum.charge+=r.charge}
+   return sum;
+ },{income:0,charge:0});
+ el('openingIncome').textContent=amount(values.income);
+ el('openingCharge').textContent=amount(values.charge);
+}
+
 function save(){try{localStorage.setItem(STORE,JSON.stringify(state));return true}catch(err){notify('Could not save. Check your phone storage.');return false}}
 function notify(message){const t=el('toast');t.textContent=message;t.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',3500)}
 function switchTo(next){tab=next;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===tab));document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));render();window.scrollTo({top:0,behavior:'instant'})}
@@ -446,18 +495,20 @@ function relocateShift(source,destination){
 }
 function performFreshStart(){
  if(state.freshStartComplete){notify('Fresh tracking is already active from Monday 9 November.');return}
- const message='Reset all old income, expenses and EV charging entries, and begin detailed tracking on Monday 9 November 2026?\n\n1–8 November will all show gold, without inventing earnings or costs.\n\nThe app will keep an archived copy of your old entries on this phone.';
+ const message='Restore the opening baseline for 1–8 November? Each day is recorded at its target, £0 other expenses and Tesla charges from the screenshots. Entries from Monday 9 November onward will be preserved.';
  if(!confirm(message))return;
  const original=state;
  try{
    if(!localStorage.getItem(START_ARCHIVE))localStorage.setItem(START_ARCHIVE,JSON.stringify(original));
  }catch(err){notify('Could not save an archive. Your data was not changed.');return}
- state=newState();
+ const reset=newState();reset.shifts={...(original.shifts||{})};for(const k of VERIFIED_WINS)delete reset.shifts[k];state=reset;
+ try{localStorage.removeItem(OPENING_FLAG)}catch(err){console.warn(err)}
+ seedOpeningBalance();
  if(!save()){state=original;return}
  try{localStorage.setItem(START_RESET_FLAG,'complete')}catch(err){console.warn(err)}
  historyMonth=new Date(2026,10,1);
  prepare(shiftKey(),true);
- notify('✓ Gold through Sunday 8 Nov. Monday 9 Nov starts fresh.');
+ notify('✓ Income and Tesla charges restored through Sunday 8 November.');
  switchTo('home');
 }
 function renderGoldDays(){const now=shiftKey(),d=date(now),first=new Date(d);first.setDate(first.getDate()-Math.min(6,d.getDate()-1));const keys=[];for(let day=new Date(first);day<=d;day.setDate(day.getDate()+1))keys.push(key(day));const monthKeys=[];for(let day=new Date(d.getFullYear(),d.getMonth(),1);day<=d;day.setDate(day.getDate()+1))monthKeys.push(key(day));const count=monthKeys.filter(targetHit).length;el('goldCount').textContent=count+' GOLD WIN'+(count===1?'':'S');el('goldDays').innerHTML=keys.map(k=>{const hit=targetHit(k),label=date(k).toLocaleDateString('en-GB',{weekday:'short',day:'numeric'});return '<button class="gold-day'+(hit?' achieved':'')+(k===now?' current':'')+'" data-edit="'+k+'" aria-label="'+safe(label)+(hit?', target achieved':', not yet achieved')+'"><b>'+(hit?'✓':'·')+'</b><small>'+safe(label)+'</small></button>'}).join('')}
@@ -491,6 +542,7 @@ function renderHome(){
  el('recentList').innerHTML=recent.length?recent.map(rowMarkup).join(''):'<div class="empty">No shifts yet. Your first check-in starts here.</div>';
 smartHome(k);
   renderBudget('home',m);
+ renderOpeningBalance();
 }
 function prepare(k,reset){
  if(!validKey(k))k=shiftKey();focus=k;el('shiftDate').value=k;
@@ -545,7 +597,7 @@ smartHistory(rows);
 }
 function renderSettings(){
  el('targets').innerHTML=DAYS.map((d,i)=>'<div class="target-row"><label for="goal'+i+'">'+d+'</label><div class="target-inner"><b>£</b><input id="goal'+i+'" type="number" min="0" max="1000000" step=".01" inputmode="decimal" value="'+state.targets[i]+'"></div></div>').join('');
- el('importState').textContent=state.freshStartComplete?'Fresh tracking starts Monday 9 November 2026. All dates 1–8 November are marked gold, with no fabricated income or costs.':state.legacyImported?'Your previous Finances records were copied into this version. The original records remain untouched.':'Records are saved only in this browser or installed app. Back up regularly.';
+ el('importState').textContent=state.freshStartComplete?'Opening balance 1–8 November: income assumes achieved targets, EV charging from Tesla screenshots, other expenses £0. Actual entries from 9 November onward.':state.legacyImported?'Your previous Finances records were copied into this version. The original records remain untouched.':'Records are saved only in this browser or installed app. Back up regularly.';
 }
 function render(){const drivingDay=date(todayKey());el('headerDay').textContent=drivingDay.getDate();el('headerMonth').textContent=drivingDay.toLocaleDateString('en-GB',{month:'short'}).toUpperCase();if(tab==='home')renderHome();if(tab==='history')renderHistory();if(tab==='settings')renderSettings();if(tab==='log')updatePreview();}
 function download(filename,body,type){const blob=new Blob([body],{type});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
